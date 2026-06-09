@@ -121,29 +121,37 @@
 \contentsline {subsubsection}{Fase 1: Construcción de la rutina}{76}{subsection.13.2.2}%
 \contentsline {subsubsection}{Fase 2: Asignación a pacientes}{77}{Item.34}%
 \contentsline {subsection}{\numberline {13.2.3}Aspectos destacados}{79}{subsection.13.2.3}%
-\contentsline {section}{\numberline {13.3}Código PlantUML de los diagramas}{79}{section.13.3}%
-\contentsline {chapter}{\numberline {14}Modelo de Base de Datos (ERD)}{80}{chapter.14}%
-\contentsline {section}{\numberline {14.1}Tablas del modelo}{80}{section.14.1}%
-\contentsline {subsection}{\numberline {14.1.1}Dominio de Usuarios}{80}{subsection.14.1.1}%
-\contentsline {subsection}{\numberline {14.1.2}Dominio Clínico}{80}{subsection.14.1.2}%
-\contentsline {subsection}{\numberline {14.1.3}Dominio de Rutinas y Ejercicios}{81}{subsection.14.1.3}%
-\contentsline {subsection}{\numberline {14.1.4}Dominio de Seguimiento}{81}{subsection.14.1.4}%
-\contentsline {subsection}{\numberline {14.1.5}Dominio de Agenda}{81}{subsection.14.1.5}%
-\contentsline {section}{\numberline {14.2}Diagrama ERD}{83}{section.14.2}%
-\contentsline {section}{\numberline {14.3}Convenciones aplicadas}{83}{section.14.3}%
-\contentsline {section}{\numberline {14.4}Código PlantUML del diagrama}{83}{section.14.4}%
-\contentsline {chapter}{\numberline {A}Codigo fuente de los diagramas UML}{84}{chapter.A}%
-\contentsline {section}{\numberline {A.1}Lista de archivos}{84}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Como compilar los diagramas}{84}{section.A.2}%
-\contentsline {section}{\numberline {A.3}Diagrama de Clases Conceptuales}{85}{section.A.3}%
-\contentsline {section}{\numberline {A.4}C4 Nivel 1: Contexto}{89}{section.A.4}%
-\contentsline {section}{\numberline {A.5}C4 Nivel 2: Contenedores}{90}{section.A.5}%
-\contentsline {section}{\numberline {A.6}C4 Nivel 3: Componentes}{93}{section.A.6}%
-\contentsline {section}{\numberline {A.7}Casos de Uso}{94}{section.A.7}%
-\contentsline {section}{\numberline {A.8}CRC Cards}{97}{section.A.8}%
-\contentsline {section}{\numberline {A.9}Diagrama de Objetos}{101}{section.A.9}%
-\contentsline {section}{\numberline {A.10}Diagrama de Robustez}{105}{section.A.10}%
-\contentsline {section}{\numberline {A.11}Diagrama de Estados}{108}{section.A.11}%
-\contentsline {section}{\numberline {A.12}Secuencia: Asignación de Rutina}{109}{section.A.12}%
-\contentsline {section}{\numberline {A.13}Secuencia: Registro de Feedback}{111}{section.A.13}%
-\contentsline {section}{\numberline {A.14}Modelo ERD}{114}{section.A.14}%
+\contentsline {section}{\numberline {13.3}Flujo 3: Gestión de Citas (Administrador)}{79}{section.13.3}%
+\contentsline {subsection}{\numberline {13.3.1}Participantes}{79}{subsection.13.3.1}%
+\contentsline {subsection}{\numberline {13.3.2}Descripción del flujo}{79}{subsection.13.3.2}%
+\contentsline {subsubsection}{Fase 1: Consulta de agenda}{80}{subsection.13.3.2}%
+\contentsline {subsubsection}{Fase 2: Creación de nueva cita}{80}{Item.42}%
+\contentsline {subsubsection}{Fase 3: Envío manual de recordatorio}{80}{Item.47}%
+\contentsline {subsection}{\numberline {13.3.3}Aspectos destacados}{82}{subsection.13.3.3}%
+\contentsline {section}{\numberline {13.4}Código PlantUML de los diagramas}{82}{section.13.4}%
+\contentsline {chapter}{\numberline {14}Modelo de Base de Datos (ERD)}{83}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Tablas del modelo}{83}{section.14.1}%
+\contentsline {subsection}{\numberline {14.1.1}Dominio de Usuarios}{83}{subsection.14.1.1}%
+\contentsline {subsection}{\numberline {14.1.2}Dominio Clínico}{83}{subsection.14.1.2}%
+\contentsline {subsection}{\numberline {14.1.3}Dominio de Rutinas y Ejercicios}{84}{subsection.14.1.3}%
+\contentsline {subsection}{\numberline {14.1.4}Dominio de Seguimiento}{84}{subsection.14.1.4}%
+\contentsline {subsection}{\numberline {14.1.5}Dominio de Agenda}{84}{subsection.14.1.5}%
+\contentsline {section}{\numberline {14.2}Diagrama ERD}{86}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Convenciones aplicadas}{86}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Código PlantUML del diagrama}{86}{section.14.4}%
+\contentsline {chapter}{\numberline {A}Codigo fuente de los diagramas UML}{87}{chapter.A}%
+\contentsline {section}{\numberline {A.1}Lista de archivos}{87}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Como compilar los diagramas}{87}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Diagrama de Clases Conceptuales}{88}{section.A.3}%
+\contentsline {section}{\numberline {A.4}C4 Nivel 1: Contexto}{92}{section.A.4}%
+\contentsline {section}{\numberline {A.5}C4 Nivel 2: Contenedores}{93}{section.A.5}%
+\contentsline {section}{\numberline {A.6}C4 Nivel 3: Componentes}{96}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Casos de Uso}{97}{section.A.7}%
+\contentsline {section}{\numberline {A.8}CRC Cards}{100}{section.A.8}%
+\contentsline {section}{\numberline {A.9}Diagrama de Objetos}{104}{section.A.9}%
+\contentsline {section}{\numberline {A.10}Diagrama de Robustez}{108}{section.A.10}%
+\contentsline {section}{\numberline {A.11}Diagrama de Estados}{111}{section.A.11}%
+\contentsline {section}{\numberline {A.12}Secuencia: Asignación de Rutina}{112}{section.A.12}%
+\contentsline {section}{\numberline {A.13}Secuencia: Registro de Feedback}{114}{section.A.13}%
+\contentsline {section}{\numberline {A.14}Secuencia: Gestión de Citas (Admin)}{117}{section.A.14}%
+\contentsline {section}{\numberline {A.15}Modelo ERD}{120}{section.A.15}%

@@ -1,4 +1,4 @@
-PWD /home/xishay/Documents/Materias/Análisis y Diseño de Sistemas/Fisio_Manager
+PWD /home/xishay/Documents/Materias/Análisis y Diseño de Sistemas/FisioManager
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
@@ -581,6 +581,10 @@ INPUT ./figuras/FisioManager_Secuencia_AsignacionRutina.png
 INPUT ./figuras/FisioManager_Secuencia_AsignacionRutina.png
 INPUT ./figuras/FisioManager_Secuencia_AsignacionRutina.png
 INPUT ./figuras/FisioManager_Secuencia_AsignacionRutina.png
+INPUT ./figuras/FisioManager_Secuencia_GestionCitas.png
+INPUT ./figuras/FisioManager_Secuencia_GestionCitas.png
+INPUT ./figuras/FisioManager_Secuencia_GestionCitas.png
+INPUT ./figuras/FisioManager_Secuencia_GestionCitas.png
 INPUT ./capitulos/14_modelo_erd.tex
 INPUT ./capitulos/14_modelo_erd.tex
 INPUT ./capitulos/14_modelo_erd.tex
@@ -630,6 +634,9 @@ INPUT puml/10_secuencia_asignacion_rutina.puml
 INPUT ./puml/11_secuencia_registro_feedback.puml
 INPUT ./puml/11_secuencia_registro_feedback.puml
 INPUT puml/11_secuencia_registro_feedback.puml
+INPUT ./puml/13_secuencia_gestion_citas.puml
+INPUT ./puml/13_secuencia_gestion_citas.puml
+INPUT puml/13_secuencia_gestion_citas.puml
 INPUT ./puml/12_modelo_erd.puml
 INPUT ./puml/12_modelo_erd.puml
 INPUT puml/12_modelo_erd.puml

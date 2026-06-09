@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  9 JUN 2026 13:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  9 JUN 2026 13:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1103,12 +1103,12 @@ Package hyperref Info: Link coloring ON on input line 261.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  (./capitulos/00_portada.tex
-<ipn.png, id=630, 401.5pt x 401.5pt>
+<ipn.png, id=650, 401.5pt x 401.5pt>
 File: ipn.png Graphic file (type png)
 <use ipn.png>
 Package pdftex.def Info: ipn.png  used on input line 6.
 (pdftex.def)             Requested size: 70.8018pt x 70.80267pt.
-<escom.png, id=632, 481.8pt x 367.3725pt>
+<escom.png, id=652, 481.8pt x 367.3725pt>
 File: escom.png Graphic file (type png)
 <use escom.png>
 Package pdftex.def Info: escom.png  used on input line 10.
@@ -1302,7 +1302,7 @@ Package tcolorbox Warning: Using nobreak failed. Try to enlarge `lines before b
 reak' or set page breaks manually on input line 119.
 
 [17] [18] [19] [20] [21]
-<figuras/FisioManager_CRC_Cards.png, id=935, 708.6475pt x 1632.0975pt>
+<figuras/FisioManager_CRC_Cards.png, id=960, 708.6475pt x 1632.0975pt>
 File: figuras/FisioManager_CRC_Cards.png Graphic file (type png)
 <use figuras/FisioManager_CRC_Cards.png>
 Package pdftex.def Info: figuras/FisioManager_CRC_Cards.png  used on input line
@@ -1313,7 +1313,7 @@ LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
 ) (./capitulos/05_modelo_c4.tex [22] [23 <./figuras/FisioManager_CRC_Cards.png 
 (PNG copy)>]
 Cap\'{\i }tulo 5.
-<figuras/FisioManager_C4_Contexto.png, id=948, 720.6925pt x 640.3925pt>
+<figuras/FisioManager_C4_Contexto.png, id=973, 720.6925pt x 640.3925pt>
 File: figuras/FisioManager_C4_Contexto.png Graphic file (type png)
 <use figuras/FisioManager_C4_Contexto.png>
 Package pdftex.def Info: figuras/FisioManager_C4_Contexto.png  used on input li
@@ -1322,14 +1322,14 @@ ne 14.
 [24
 
  <./figuras/FisioManager_C4_Contexto.png>]
-<figuras/FisioManager_C4_Contenedores.png, id=956, 1246.6575pt x 867.24pt>
+<figuras/FisioManager_C4_Contenedores.png, id=981, 1246.6575pt x 867.24pt>
 File: figuras/FisioManager_C4_Contenedores.png Graphic file (type png)
 <use figuras/FisioManager_C4_Contenedores.png>
 Package pdftex.def Info: figuras/FisioManager_C4_Contenedores.png  used on inpu
 t line 38.
 (pdftex.def)             Requested size: 448.42822pt x 311.95474pt.
  [25 <./figuras/FisioManager_C4_Contenedores.png>]
-<figuras/FisioManager_C4_Componentes.png, id=964, 806.01125pt x 785.93625pt>
+<figuras/FisioManager_C4_Componentes.png, id=989, 806.01125pt x 785.93625pt>
 File: figuras/FisioManager_C4_Componentes.png Graphic file (type png)
 <use figuras/FisioManager_C4_Componentes.png>
 Package pdftex.def Info: figuras/FisioManager_C4_Componentes.png  used on input
@@ -1344,7 +1344,7 @@ LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10.95> not available
 
 ] [30] [31]) (./capitulos/07_diagrama_clases.tex [32]
 Cap\'{\i }tulo 7.
-<figuras/FisioManager_DiagramaClases.png, id=1005, 2228.325pt x 1282.7925pt>
+<figuras/FisioManager_DiagramaClases.png, id=1031, 2228.325pt x 1282.7925pt>
 File: figuras/FisioManager_DiagramaClases.png Graphic file (type png)
 <use figuras/FisioManager_DiagramaClases.png>
 Package pdftex.def Info: figuras/FisioManager_DiagramaClases.png  used on input
@@ -1366,7 +1366,7 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 ))
 (./capitulos/08_diagrama_objetos.tex [34]
 Cap\'{\i }tulo 8.
-<figuras/FisioManager_DiagramaObjetos.png, id=1023, 1914.15125pt x 1419.3025pt>
+<figuras/FisioManager_DiagramaObjetos.png, id=1048, 1914.15125pt x 1419.3025pt>
 
 File: figuras/FisioManager_DiagramaObjetos.png Graphic file (type png)
 <use figuras/FisioManager_DiagramaObjetos.png>
@@ -1378,7 +1378,7 @@ t line 21.
 ] [36 <./figuras/FisioManager_DiagramaObjetos.png>])
 (./capitulos/09_diagrama_robustez.tex [37]
 Cap\'{\i }tulo 9.
-<figuras/FisioManager_DiagramaRobustez.png, id=1045, 2250.4075pt x 653.44125pt>
+<figuras/FisioManager_DiagramaRobustez.png, id=1070, 2250.4075pt x 653.44125pt>
 
 File: figuras/FisioManager_DiagramaRobustez.png Graphic file (type png)
 <use figuras/FisioManager_DiagramaRobustez.png>
@@ -1390,7 +1390,7 @@ ut line 27.
 ]) (./capitulos/10_casos_uso.tex [39 <./figuras/FisioManager_DiagramaRobustez.p
 ng (PNG copy)>]
 Cap\'{\i }tulo 10.
-<figuras/FisioManager_CasosDeUso.png, id=1066, 803.0pt x 2169.10374pt>
+<figuras/FisioManager_CasosDeUso.png, id=1091, 803.0pt x 2169.10374pt>
 File: figuras/FisioManager_CasosDeUso.png Graphic file (type png)
 <use figuras/FisioManager_CasosDeUso.png>
 Package pdftex.def Info: figuras/FisioManager_CasosDeUso.png  used on input lin
@@ -1406,41 +1406,41 @@ LaTeX Font Info:    Font shape `T1/phv/b/it' in size <10.95> not available
 [43
 
 ] [44]
-<figuras/maqueta_M01_home.jpg, id=1098, 442.65375pt x 1606.0pt>
+<figuras/maqueta_M01_home.jpg, id=1123, 442.65375pt x 1606.0pt>
 File: figuras/maqueta_M01_home.jpg Graphic file (type jpg)
 <use figuras/maqueta_M01_home.jpg>
 Package pdftex.def Info: figuras/maqueta_M01_home.jpg  used on input line 96.
 (pdftex.def)             Requested size: 140.32147pt x 509.10292pt.
  [45] [46 <./figuras/maqueta_M01_home.jpg>]
-<figuras/maqueta_M02_ejercicio.jpg, id=1110, 432.61626pt x 1606.0pt>
+<figuras/maqueta_M02_ejercicio.jpg, id=1136, 432.61626pt x 1606.0pt>
 File: figuras/maqueta_M02_ejercicio.jpg Graphic file (type jpg)
 <use figuras/maqueta_M02_ejercicio.jpg>
 Package pdftex.def Info: figuras/maqueta_M02_ejercicio.jpg  used on input line 
 110.
 (pdftex.def)             Requested size: 137.13959pt x 509.10292pt.
  [47] [48 <./figuras/maqueta_M02_ejercicio.jpg>]
-<figuras/maqueta_M03_lowerback.jpg, id=1124, 407.5225pt x 1606.0pt>
+<figuras/maqueta_M03_lowerback.jpg, id=1150, 407.5225pt x 1606.0pt>
 File: figuras/maqueta_M03_lowerback.jpg Graphic file (type jpg)
 <use figuras/maqueta_M03_lowerback.jpg>
 Package pdftex.def Info: figuras/maqueta_M03_lowerback.jpg  used on input line 
 124.
 (pdftex.def)             Requested size: 129.18486pt x 509.10292pt.
  [49 <./figuras/maqueta_M03_lowerback.jpg>]
-<figuras/maqueta_M04_progreso.jpg, id=1132, 311.1625pt x 1606.0pt>
+<figuras/maqueta_M04_progreso.jpg, id=1157, 311.1625pt x 1606.0pt>
 File: figuras/maqueta_M04_progreso.jpg Graphic file (type jpg)
 <use figuras/maqueta_M04_progreso.jpg>
 Package pdftex.def Info: figuras/maqueta_M04_progreso.jpg  used on input line 1
 40.
 (pdftex.def)             Requested size: 98.63869pt x 509.10292pt.
  [50] [51 <./figuras/maqueta_M04_progreso.jpg>]
-<figuras/maqueta_M05_feedback.jpg, id=1145, 605.26125pt x 1606.0pt>
+<figuras/maqueta_M05_feedback.jpg, id=1170, 605.26125pt x 1606.0pt>
 File: figuras/maqueta_M05_feedback.jpg Graphic file (type jpg)
 <use figuras/maqueta_M05_feedback.jpg>
 Package pdftex.def Info: figuras/maqueta_M05_feedback.jpg  used on input line 1
 56.
 (pdftex.def)             Requested size: 191.86815pt x 509.10292pt.
  [52 <./figuras/maqueta_M05_feedback.jpg>]
-<figuras/maqueta_M06_wellness.jpg, id=1152, 409.53pt x 1606.0pt>
+<figuras/maqueta_M06_wellness.jpg, id=1177, 409.53pt x 1606.0pt>
 File: figuras/maqueta_M06_wellness.jpg Graphic file (type jpg)
 <use figuras/maqueta_M06_wellness.jpg>
 Package pdftex.def Info: figuras/maqueta_M06_wellness.jpg  used on input line 1
@@ -1448,35 +1448,35 @@ Package pdftex.def Info: figuras/maqueta_M06_wellness.jpg  used on input line 1
 (pdftex.def)             Requested size: 129.82123pt x 509.10292pt.
 
 [53] [54 <./figuras/maqueta_M06_wellness.jpg>] [55]
-<figuras/maqueta_W01_directory.jpg, id=1169, 1606.0pt x 1284.8pt>
+<figuras/maqueta_W01_directory.jpg, id=1194, 1606.0pt x 1284.8pt>
 File: figuras/maqueta_W01_directory.jpg Graphic file (type jpg)
 <use figuras/maqueta_W01_directory.jpg>
 Package pdftex.def Info: figuras/maqueta_W01_directory.jpg  used on input line 
 232.
 (pdftex.def)             Requested size: 472.02602pt x 377.6208pt.
  [56] [57 <./figuras/maqueta_W01_directory.jpg>]
-<figuras/maqueta_W02_detail.jpg, id=1182, 1465.475pt x 1606.0pt>
+<figuras/maqueta_W02_detail.jpg, id=1207, 1465.475pt x 1606.0pt>
 File: figuras/maqueta_W02_detail.jpg Graphic file (type jpg)
 <use figuras/maqueta_W02_detail.jpg>
 Package pdftex.def Info: figuras/maqueta_W02_detail.jpg  used on input line 250
 .
 (pdftex.def)             Requested size: 472.02509pt x 517.28777pt.
  [58 <./figuras/maqueta_W02_detail.jpg>]
-<figuras/maqueta_W03_builder.jpg, id=1189, 1606.0pt x 1284.8pt>
+<figuras/maqueta_W03_builder.jpg, id=1214, 1606.0pt x 1284.8pt>
 File: figuras/maqueta_W03_builder.jpg Graphic file (type jpg)
 <use figuras/maqueta_W03_builder.jpg>
 Package pdftex.def Info: figuras/maqueta_W03_builder.jpg  used on input line 26
 6.
 (pdftex.def)             Requested size: 472.02602pt x 377.6208pt.
  [59] [60 <./figuras/maqueta_W03_builder.jpg>]
-<figuras/maqueta_W04_builder_drag.jpg, id=1201, 1606.0pt x 1284.8pt>
+<figuras/maqueta_W04_builder_drag.jpg, id=1226, 1606.0pt x 1284.8pt>
 File: figuras/maqueta_W04_builder_drag.jpg Graphic file (type jpg)
 <use figuras/maqueta_W04_builder_drag.jpg>
 Package pdftex.def Info: figuras/maqueta_W04_builder_drag.jpg  used on input li
 ne 283.
 (pdftex.def)             Requested size: 472.02602pt x 377.6208pt.
  [61 <./figuras/maqueta_W04_builder_drag.jpg>]
-<figuras/maqueta_W05_library.jpg, id=1208, 1308.89pt x 1606.0pt>
+<figuras/maqueta_W05_library.jpg, id=1233, 1308.89pt x 1606.0pt>
 File: figuras/maqueta_W05_library.jpg Graphic file (type jpg)
 <use figuras/maqueta_W05_library.jpg>
 Package pdftex.def Info: figuras/maqueta_W05_library.jpg  used on input line 29
@@ -1484,7 +1484,7 @@ Package pdftex.def Info: figuras/maqueta_W05_library.jpg  used on input line 29
 (pdftex.def)             Requested size: 452.1667pt x 554.80577pt.
 
 [62] [63 <./figuras/maqueta_W05_library.jpg>]
-<figuras/maqueta_W06_analytics.jpg, id=1221, 1406.25375pt x 1606.0pt>
+<figuras/maqueta_W06_analytics.jpg, id=1246, 1406.25375pt x 1606.0pt>
 File: figuras/maqueta_W06_analytics.jpg Graphic file (type jpg)
 <use figuras/maqueta_W06_analytics.jpg>
 Package pdftex.def Info: figuras/maqueta_W06_analytics.jpg  used on input line 
@@ -1493,7 +1493,7 @@ Package pdftex.def Info: figuras/maqueta_W06_analytics.jpg  used on input line
  [64] [65 <./figuras/maqueta_W06_analytics.jpg>] [66] [67]) (./capitulos/12_dia
 grama_estados.tex [68]
 Cap\'{\i }tulo 12.
-<figuras/FisioManager_DiagramaEstados.png, id=1254, 773.89125pt x 2553.54pt>
+<figuras/FisioManager_DiagramaEstados.png, id=1279, 773.89125pt x 2553.54pt>
 File: figuras/FisioManager_DiagramaEstados.png Graphic file (type png)
 <use figuras/FisioManager_DiagramaEstados.png>
 Package pdftex.def Info: figuras/FisioManager_DiagramaEstados.png  used on inpu
@@ -1507,7 +1507,7 @@ Cap\'{\i }tulo 13.
 [73
 
 ]
-<figuras/FisioManager_Secuencia_RegistroFeedback.png, id=1300, 1262.7175pt x 29
+<figuras/FisioManager_Secuencia_RegistroFeedback.png, id=1325, 1262.7175pt x 29
 50.02126pt>
 File: figuras/FisioManager_Secuencia_RegistroFeedback.png Graphic file (type pn
 g)
@@ -1519,7 +1519,7 @@ sed on input line 45.
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 54.
  [76]
-<figuras/FisioManager_Secuencia_AsignacionRutina.png, id=1329, 1079.03125pt x 2
+<figuras/FisioManager_Secuencia_AsignacionRutina.png, id=1354, 1079.03125pt x 2
 116.90875pt>
 File: figuras/FisioManager_Secuencia_AsignacionRutina.png Graphic file (type pn
 g)
@@ -1527,38 +1527,48 @@ g)
 Package pdftex.def Info: figuras/FisioManager_Secuencia_AsignacionRutina.png  u
 sed on input line 107.
 (pdftex.def)             Requested size: 292.77477pt x 574.38322pt.
- [77] [78 <./figuras/FisioManager_Secuencia_AsignacionRutina.png (PNG copy)>]) 
-(./capitulos/14_modelo_erd.tex [79]
+ [77] [78 <./figuras/FisioManager_Secuencia_AsignacionRutina.png (PNG copy)>] [
+79]
+<figuras/FisioManager_Secuencia_GestionCitas.png, id=1380, 1165.35374pt x 3174.
+86125pt>
+File: figuras/FisioManager_Secuencia_GestionCitas.png Graphic file (type png)
+<use figuras/FisioManager_Secuencia_GestionCitas.png>
+Package pdftex.def Info: figuras/FisioManager_Secuencia_GestionCitas.png  used 
+on input line 180.
+(pdftex.def)             Requested size: 210.82153pt x 574.35704pt.
+ [80] [81 <./figuras/FisioManager_Secuencia_GestionCitas.png (PNG copy)>]) (./c
+apitulos/14_modelo_erd.tex [82]
 Cap\'{\i }tulo 14.
-[80
+[83
 
 ]
-<figuras/FisioManager_ERD.png, id=1366, 2945.0025pt x 2051.665pt>
+<figuras/FisioManager_ERD.png, id=1423, 2945.0025pt x 2051.665pt>
 File: figuras/FisioManager_ERD.png Graphic file (type png)
 <use figuras/FisioManager_ERD.png>
 Package pdftex.def Info: figuras/FisioManager_ERD.png  used on input line 75.
 (pdftex.def)             Requested size: 652.71083pt x 454.71742pt.
- [81] [82 <./figuras/FisioManager_ERD.png>]) (./capitulos/A_anexos_puml.tex [83
+ [84] [85 <./figuras/FisioManager_ERD.png>]) (./capitulos/A_anexos_puml.tex [86
 ]
 Ap\'{e}ndice A.
-[84
+[87
 
 ]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 56.
+nput line 57.
  (./puml/01_diagrama_clases.puml
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <9> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 1.
- [85] [86] [87] [88])
-(./puml/02_c4_nivel1_contexto.puml [89]) (./puml/03_c4_nivel2_contenedores.puml
-[90] [91]) [92] (./puml/04_c4_nivel3_componentes.puml [93])
-(./puml/05_diagrama_casos_uso.puml [94] [95]) [96] (./puml/06_crc_cards.puml
-[97] [98] [99] [100]) (./puml/07_diagrama_objetos.puml [101] [102] [103]
-[104]) (./puml/08_diagrama_robustez.puml [105] [106] [107])
-(./puml/09_diagrama_estados.puml [108])
-(./puml/10_secuencia_asignacion_rutina.puml [109] [110])
-(./puml/11_secuencia_registro_feedback.puml [111] [112] [113])
-(./puml/12_modelo_erd.puml [114] [115] [116] [117] [118])) [119]
+ [88] [89] [90] [91])
+(./puml/02_c4_nivel1_contexto.puml [92]) (./puml/03_c4_nivel2_contenedores.puml
+[93] [94]) [95] (./puml/04_c4_nivel3_componentes.puml [96])
+(./puml/05_diagrama_casos_uso.puml [97] [98]) [99] (./puml/06_crc_cards.puml
+[100] [101] [102] [103]) (./puml/07_diagrama_objetos.puml [104] [105] [106]
+[107]) (./puml/08_diagrama_robustez.puml [108] [109] [110])
+(./puml/09_diagrama_estados.puml [111])
+(./puml/10_secuencia_asignacion_rutina.puml [112] [113])
+(./puml/11_secuencia_registro_feedback.puml [114] [115] [116])
+(./puml/13_secuencia_gestion_citas.puml [117] [118] [119])
+(./puml/12_modelo_erd.puml [120] [121] [122] [123] [124])) [125]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./main.aux
@@ -1570,13 +1580,13 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: BF0E64FB0E0C031AC2CFF3BFBFC0AB1F;26399.
+(rerunfilecheck)             Checksum: 2E5917E3DB6D6C2C071149872ED1F51A;27411.
  ) 
 Here is how much of TeX's memory you used:
- 38511 strings out of 467363
- 740367 string characters out of 5419001
- 1863271 words of memory out of 6000000
- 64151 multiletter control sequences out of 15000+600000
+ 38803 strings out of 467363
+ 745401 string characters out of 5419001
+ 1852453 words of memory out of 6000000
+ 64246 multiletter control sequences out of 15000+600000
  706702 words of font info for 414 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  98i,12n,108p,1001b,2210s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1593,10 +1603,10 @@ sftt1095.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on main.pdf (124 pages, 4541201 bytes).
+Output written on main.pdf (130 pages, 4800107 bytes).
 PDF statistics:
- 4087 PDF objects out of 4296 (max. 8388607)
- 3836 compressed objects within 39 object streams
- 2317 named destinations out of 2487 (max. 500000)
- 81839 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 4369 PDF objects out of 5155 (max. 8388607)
+ 4108 compressed objects within 42 object streams
+ 2511 named destinations out of 2984 (max. 500000)
+ 81884 words of extra memory for PDF output out of 89155 (max. 10000000)
 

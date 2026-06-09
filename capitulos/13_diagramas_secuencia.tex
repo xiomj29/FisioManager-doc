@@ -4,7 +4,7 @@
 
 Los diagramas de secuencia modelan la interacción entre objetos a lo largo del tiempo para un flujo específico del sistema. A diferencia del diagrama de robustez (Capítulo~\ref{ch:diagramarobustez}), que identifica las clases de software participantes, los diagramas de secuencia detallan el \emph{orden exacto} de los mensajes, las respuestas y los fragmentos combinados (loops, alternativas, opciones) que ocurren durante la ejecución de un caso de uso.
 
-Se presentan dos flujos críticos de FisioManager: el registro de feedback post-rutina y la asignación de rutinas a pacientes.
+Se presentan tres flujos críticos de FisioManager: el registro de feedback post-rutina, la asignación de rutinas a pacientes y la gestión de citas desde el rol de Administrador.
 
 % ---------------------------------------------------------------
 \section{Flujo 1: Registro de Feedback}\label{sec:sec-feedback}
@@ -118,13 +118,88 @@ El flujo se divide en dos fases claramente diferenciadas:
   \item \textbf{Notificación integrada:} cada asignación dispara automáticamente una notificación al paciente, garantizando que esté informado de su nueva rutina.
 \end{itemize}
 
+% ---------------------------------------------------------------
+\section{Flujo 3: Gestión de Citas (Administrador)}\label{sec:sec-citas}
+
+Este diagrama modela la secuencia completa desde que el Administrador consulta la agenda del día, crea una nueva cita validando la disponibilidad del terapeuta, hasta el envío de recordatorios al paciente. Refleja el rol simplificado de Administrador como único responsable operativo de la clínica.
+
+\subsection{Participantes}
+
+\begin{itemize}
+  \item \actor{Administrador}: actor único que gestiona la agenda de toda la clínica; concentra las funciones operativas y técnicas.
+  \item \codeinline{UIAgenda}: interfaz de usuario (boundary) que presenta la vista de agenda con filtros por fecha, terapeuta y estado, así como el formulario de creación de citas.
+  \item \codeinline{GestorCitas}: controlador (control) que orquesta la validación, creación y consulta de citas.
+  \item \codeinline{ValidadorDisponibilidad}: controlador (control) que verifica que el horario solicitado esté dentro del horario del terapeuta y que no existan colisiones con citas ya agendadas.
+  \item \codeinline{Cita}: entidad persistente que representa una cita agendada con estado (SCHEDULED, COMPLETED, CANCELLED).
+  \item \codeinline{Recordatorio}: entidad persistente que representa la notificación programada para informar al paciente sobre su cita.
+\end{itemize}
+
+\subsection{Descripción del flujo}
+
+El flujo se divide en tres fases:
+
+\subsubsection{Fase 1: Consulta de agenda}
+
+\begin{enumerate}
+  \item El Administrador accede a la agenda del día.
+  \item El \codeinline{GestorCitas} recupera las citas filtradas por fecha, terapeuta y/o estado.
+  \item La \codeinline{UIAgenda} muestra la lista de citas con estadísticas del día (total, programadas, completadas, canceladas).
+\end{enumerate}
+
+\subsubsection{Fase 2: Creación de nueva cita}
+
+\begin{enumerate}
+  \item El Administrador completa el formulario de nueva cita (paciente, terapeuta, fecha/hora, motivo, modalidad).
+  \item El \codeinline{GestorCitas} valida los campos requeridos y delega en el \codeinline{ValidadorDisponibilidad}.
+  \item El \codeinline{ValidadorDisponibilidad} verifica dos condiciones:
+  \begin{itemize}
+    \item Que la fecha/hora esté dentro del horario registrado del terapeuta.
+    \item Que no existan colisiones con citas previamente agendadas en estado SCHEDULED.
+  \end{itemize}
+  \item Si la disponibilidad es válida:
+  \begin{itemize}
+    \item Se persiste la cita con estado SCHEDULED.
+    \item Se programa automáticamente un recordatorio (24~horas antes de la cita).
+    \item Se confirma al Administrador la creación exitosa.
+  \end{itemize}
+  \item Si la disponibilidad no es válida, se informa al Administrador el motivo (colisión o fuera de horario) para que seleccione otro horario.
+\end{enumerate}
+
+\subsubsection{Fase 3: Envío manual de recordatorio}
+
+\begin{enumerate}
+  \item El Administrador selecciona una cita en estado SCHEDULED y solicita enviar el recordatorio.
+  \item El \codeinline{GestorCitas} recupera los datos de la cita, paciente y terapeuta.
+  \item El \codeinline{Recordatorio} genera el contenido del mensaje y lo envía por correo electrónico.
+  \item Se actualiza el estado del recordatorio a ENVIADO con la fecha real de envío.
+  \item Se confirma al Administrador que el recordatorio fue enviado.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{FisioManager_Secuencia_GestionCitas.png}
+  \caption{Diagrama de Secuencia -- Flujo 3: Gestión de Citas por el Administrador.}
+  \label{fig:secuencia-citas}
+\end{figure}
+
+\subsection{Aspectos destacados}
+
+\begin{itemize}
+  \item \textbf{Rol de Admin simplificado:} el Administrador es el único responsable de la gestión de la agenda de toda la clínica, tal como se define en el modelo de actores (Capítulo~2). No se contemplan múltiples administradores.
+  \item \textbf{Validación de disponibilidad:} antes de crear cualquier cita, el \codeinline{ValidadorDisponibilidad} verifica tanto el horario del terapeuta como las colisiones con citas existentes, evitando sobreposiciones.
+  \item \textbf{Fragmento \codeinline{alt}:} modela la bifurcación entre el flujo exitoso (horario disponible) y el flujo alternativo (colisión o fuera de horario), garantizando que el Administrador reciba retroalimentación clara.
+  \item \textbf{Recordatorio automático y manual:} al crear la cita se programa un recordatorio automático (24~h antes); adicionalmente, el Administrador puede disparar el envío manual en cualquier momento.
+  \item \textbf{Trazabilidad con el diagrama de robustez:} los participantes corresponden directamente a las clases de software identificadas en el Flujo~1 del diagrama de robustez (Capítulo~\ref{ch:diagramarobustez}): \codeinline{UIAgenda}~(boundary), \codeinline{GestorCitas} y \codeinline{ValidadorDisponibilidad}~(control), \codeinline{Cita} y \codeinline{Recordatorio}~(entity).
+\end{itemize}
+
 \section{Código PlantUML de los diagramas}
 
-Los códigos fuente se entregan como \codeinline{10\_secuencia\_asignacion\_rutina.puml} y \codeinline{11\_secuencia\_registro\_feedback.puml} en el directorio \codeinline{puml/}. Se regeneran con:
+Los códigos fuente se entregan como \codeinline{10\_secuencia\_asignacion\_rutina.puml}, \codeinline{11\_secuencia\_registro\_feedback.puml} y \codeinline{13\_secuencia\_gestion\_citas.puml} en el directorio \codeinline{puml/}. Se regeneran con:
 
 \begin{lstlisting}[language=bash]
 plantuml -tpng 10_secuencia_asignacion_rutina.puml
 plantuml -tpng 11_secuencia_registro_feedback.puml
+plantuml -tpng 13_secuencia_gestion_citas.puml
 \end{lstlisting}
 
 El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.
