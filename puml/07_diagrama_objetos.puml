@@ -1,0 +1,217 @@
+@startuml FisioManager_DiagramaObjetos
+
+' FisioManager - Diagrama de Objetos
+' Instantanea del sistema: instancias concretas de las clases conceptuales
+' Escenario: paciente Ana en tratamiento de rodilla, con cita proxima,
+' (recordatorio enviado por push, coherente con los canales del sistema)
+' plan de tratamiento activo y una sesion con feedback ya analizado.
+
+skinparam backgroundColor #FAFAFA
+skinparam objectBackgroundColor #E8F4F8
+skinparam objectBorderColor #2E75B6
+skinparam objectArrowColor #2E75B6
+skinparam objectFontName Arial
+skinparam objectFontSize 11
+skinparam objectAttributeFontSize 10
+
+title <b>FisioManager - Diagrama de Objetos</b>\n<size:11>Instantanea: tratamiento de rodilla en curso (paciente Ana Lopez)</size>
+
+' ============================================================
+' Usuarios
+' ============================================================
+
+object "ana : Paciente" as ana {
+    nombre = "Ana"
+    apellidos = "Lopez Garcia"
+    email = "ana.lopez@correo.com"
+    telefono = "5512345678"
+    fechaNacimiento = "1992-04-18"
+    genero = FEMENINO
+    peso = 62.5
+    altura = 1.68
+    activo = true
+}
+
+object "drMartinez : Terapeuta" as ter {
+    nombre = "Carlos"
+    apellidos = "Martinez Ruiz"
+    email = "c.martinez@fisio.mx"
+    cedulaProfesional = "9876543"
+    especialidad = "Rehabilitacion ortopedica"
+}
+
+' ============================================================
+' Clinico
+' ============================================================
+
+object "hcAna : HistorialClinico" as hc {
+    fechaCreacion = "2026-02-10"
+    antecedentes = "Sin cirugias previas"
+    alergias = "Ninguna conocida"
+    medicamentos = "Ibuprofeno 400mg PRN"
+}
+
+object "diagRodilla : Diagnostico" as diag {
+    fecha = "2026-02-10"
+    descripcion = "Esguince ligamento colateral medial"
+    codigoCIE10 = "S83.4"
+    severidad = MODERADA
+}
+
+object "nota01 : NotaClinica" as nota1 {
+    fecha = "2026-04-22"
+    contenido = "Paciente reporta dolor 6/10 al subir escaleras"
+    tipo = EVOLUCION
+    visibleParaPaciente = false
+}
+
+object "planRodilla : PlanTratamiento" as plan {
+    nombre = "Recuperacion LCM rodilla derecha"
+    objetivoClinico = "Restaurar ROM 0-130 grados y fuerza 80%"
+    fechaInicio = "2026-02-15"
+    fechaFinEstimada = "2026-06-15"
+    estado = ACTIVO
+    observaciones = "Progresion gradual de carga"
+}
+
+object "fase02 : FaseTratamiento" as fase {
+    nombre = "Fase 2: Fortalecimiento"
+    orden = 2
+    duracionSemanas = 6
+    objetivos = "Recuperar fuerza cuadriceps e isquiotibiales"
+}
+
+' ============================================================
+' Agenda
+' ============================================================
+
+object "cita15Mayo : Cita" as cita {
+    fechaHoraInicio = "2026-05-20 10:00"
+    fechaHoraFin = "2026-05-20 10:45"
+    motivo = "Revaloracion fase 2"
+    modalidad = PRESENCIAL
+    estado = CONFIRMADA
+}
+
+object "sala03 : Sala" as sala {
+    nombre = "Consultorio 3"
+    ubicacion = "Planta baja, ala norte"
+    capacidad = 2
+    equipamiento = "Camilla, dinamometro, espejo postural"
+}
+
+object "horarioMartes : HorarioDisponible" as horario {
+    diaSemana = MARTES
+    horaInicio = "09:00"
+    horaFin = "14:00"
+    vigenteDesde = "2026-01-01"
+    vigenteHasta = "2026-12-31"
+}
+
+object "recPush : Recordatorio" as rec {
+    canal = PUSH
+    fechaEnvioProgramada = "2026-05-19 10:00"
+    fechaEnvioReal = "2026-05-19 10:00"
+    mensaje = "Recuerde su cita manana a las 10:00"
+    estado = ENVIADO
+}
+
+' ============================================================
+' Rutinas
+' ============================================================
+
+object "rutFortRodilla : Rutina" as rut {
+    nombre = "Fortalecimiento rodilla nivel 2"
+    descripcion = "Trabajo de cuadriceps con banda elastica"
+    duracionEstimada = 25
+    nivel = INTERMEDIO
+    fechaCreacion = "2026-03-01"
+}
+
+object "ejSentadilla : Ejercicio" as ej {
+    nombre = "Sentadilla asistida con banda"
+    zonaCorporal = RODILLA
+    tipo = FUERZA
+    videoUrl = "vid/sentadilla_banda.mp4"
+}
+
+object "paramSentadilla : ParametrosEjercicio" as param {
+    repeticiones = 12
+    series = 3
+    descansoSegundos = 45
+    orden = 1
+    notasTerapeuta = "Banda verde, mantener tronco erguido"
+}
+
+object "asigRut : AsignacionRutina" as asig {
+    fechaAsignacion = "2026-04-15"
+    fechaInicio = "2026-04-15"
+    fechaFin = "2026-05-30"
+    frecuenciaSemanal = 3
+    estado = ACTIVA
+}
+
+' ============================================================
+' Seguimiento
+' ============================================================
+
+object "sesion22Abr : SesionEjecucion" as ses {
+    fechaInicio = "2026-04-22 18:30"
+    fechaFin = "2026-04-22 18:58"
+    completada = true
+    porcentajeCumplimiento = 95.0
+}
+
+object "fb22Abr : Feedback" as fb {
+    fechaRegistro = "2026-04-22 19:00"
+    nivelDolor = 4
+    estadoEmocional = BIEN
+    duracionAudioSegundos = 38
+    transcripcion = "Senti el ejercicio mas comodo que la semana pasada"
+}
+
+object "ia22Abr : AnalisisIA" as ia {
+    sentimientoDetectado = "Positivo"
+    palabrasClave = ["comodo", "mejor", "semana pasada"]
+    alertas = []
+    confianza = 0.91
+    fechaProcesamiento = "2026-04-22 19:01"
+}
+
+' ============================================================
+' Enlaces (links de instancias)
+' ============================================================
+
+ana --> ter : atendida por
+ana --> hc : posee
+hc --> diag
+hc --> nota1
+diag --> ter
+nota1 --> ter
+
+ana --> plan : tiene
+plan --> ter : elaborado por
+plan --> fase : contiene
+plan --> nota1 : documentado por
+plan --> asig : prescribe
+
+cita --> ana
+cita --> ter
+cita --> sala
+cita --> rec
+cita --> plan
+ter --> horario
+sala --> horario
+
+ter --> rut : crea
+rut *-- param
+param --> ej
+
+asig --> rut
+asig --> ana
+asig --> ter
+asig --> ses
+ses --> fb
+fb --> ia
+
+@enduml

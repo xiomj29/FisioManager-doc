@@ -1,0 +1,38 @@
+@startuml CRC_Feedback
+
+' FisioManager - CRC Card: Feedback
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Feedback</b>
+
+class "Responsabilidades" as Resp {
+    + Almacenar el audio grabado por el paciente
+    + Registrar nivel de dolor en escala de 0-10
+    + Registrar estado emocional
+    + Solicitar la transcripcion del audio
+    + Solicitar el analisis con IA
+    + Mantener fecha y duracion del registro
+}
+
+class "Colaboradores" as Col {
+    SesionEjecucion (contexto)
+    Paciente (autor)
+    AnalisisIA (resultado)
+    AudioStorageService
+}
+
+Resp -[hidden]right- Col
+
+@enduml

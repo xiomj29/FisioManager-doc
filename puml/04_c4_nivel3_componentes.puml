@@ -1,0 +1,87 @@
+@startuml FisioManager_C4_Componentes
+
+' FisioManager - C4 Nivel 3: Componentes del Servicio de Feedback
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+
+skinparam rectangle {
+    BackgroundColor<<componente>> #85BBF0
+    BorderColor<<componente>> #5D82A8
+    FontColor<<componente>> #000000
+    BackgroundColor<<container>> #438DD5
+    BorderColor<<container>> #2E6295
+    FontColor<<container>> white
+    FontStyle bold
+}
+
+skinparam database {
+    BackgroundColor #438DD5
+    BorderColor #2E6295
+    FontColor white
+}
+
+skinparam queue {
+    BackgroundColor #438DD5
+    BorderColor #2E6295
+    FontColor white
+}
+
+title <b>FisioManager - C4 Nivel 3: Componentes del Servicio de Feedback</b>
+
+rectangle "SPA Web\n<size:9>[React + TS]</size>" as spa <<container>>
+database "PostgreSQL\n<size:9>BD Relacional</size>" as bd
+rectangle "MinIO\n<size:9>Object Storage</size>" as minio <<container>>
+queue "RabbitMQ\n<size:9>Eventos</size>" as cola
+rectangle "Servicio de IA\n<size:9>[Python FastAPI]</size>" as svcIA <<container>>
+
+rectangle "**Servicio de Feedback**" as boundary {
+
+    rectangle "FeedbackController\n<size:9>[ASP.NET Controller]</size>\n<size:9>POST /feedback</size>\n<size:9>GET /feedback/{id}</size>" as ctrlFb <<componente>>
+
+    rectangle "SesionController\n<size:9>[ASP.NET Controller]</size>\n<size:9>Inicio/fin sesiones</size>" as ctrlSes <<componente>>
+
+    rectangle "FeedbackApplicationService\n<size:9>[Servicio de aplicacion]</size>\n<size:9>Orquesta caso de uso</size>\n<size:9>de registro de feedback</size>" as appFb <<componente>>
+
+    rectangle "SesionApplicationService\n<size:9>[Servicio de aplicacion]</size>\n<size:9>Ciclo de vida de sesion</size>" as appSes <<componente>>
+
+    rectangle "AudioStorageService\n<size:9>[Infraestructura]</size>\n<size:9>Sube/descarga audios</size>" as audioSvc <<componente>>
+
+    rectangle "AnalisisIAClient\n<size:9>[HTTP Client]</size>\n<size:9>Cliente con reintentos</size>\n<size:9>y circuit breaker</size>" as iaClient <<componente>>
+
+    rectangle "EventPublisher\n<size:9>[Publisher]</size>\n<size:9>Publica eventos\nde dominio</size>" as pub <<componente>>
+
+    rectangle "FeedbackRepository\n<size:9>[EF Core]</size>" as repoFb <<componente>>
+
+    rectangle "SesionRepository\n<size:9>[EF Core]</size>" as repoSes <<componente>>
+
+    rectangle "FeedbackValidator\n<size:9>[FluentValidation]</size>" as validator <<componente>>
+
+    rectangle "FeedbackMapper\n<size:9>[AutoMapper]</size>" as mapper <<componente>>
+}
+
+spa --> ctrlFb : POST audio +\ndatos\n<size:9>[multipart]</size>
+spa --> ctrlSes : Sesion\n<size:9>[HTTPS]</size>
+
+ctrlFb --> validator
+ctrlFb --> mapper
+ctrlFb --> appFb
+ctrlSes --> appSes
+
+appFb --> audioSvc : Almacena audio
+appFb --> repoFb : Persiste
+appFb --> iaClient : Solicita analisis
+appFb --> pub : Publica evento
+
+appSes --> repoSes
+
+audioSvc --> minio : <size:9>[S3 API]</size>
+iaClient --> svcIA : <size:9>[HTTPS]</size>
+pub --> cola : <size:9>[AMQP]</size>
+repoFb --> bd : <size:9>[Npgsql]</size>
+repoSes --> bd
+
+@enduml

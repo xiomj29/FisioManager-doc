@@ -1,0 +1,36 @@
+@startuml CRC_SesionEjecucion
+
+' FisioManager - CRC Card: SesionEjecucion
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: SesionEjecucion</b>
+
+class "Responsabilidades" as Resp {
+    + Registrar inicio y fin de la ejecucion
+    + Marcar ejercicios completados/omitidos
+    + Calcular porcentaje de cumplimiento
+    + Vincular con el feedback registrado
+    + Conocer si fue completada satisfactoriamente
+}
+
+class "Colaboradores" as Col {
+    AsignacionRutina (origen)
+    Paciente (ejecutor)
+    Feedback (resultado opcional)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

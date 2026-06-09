@@ -1,0 +1,279 @@
+@startuml FisioManager_CRC_Cards
+
+' FisioManager - CRC Cards (Class - Responsibilities - Collaborators)
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>FisioManager - CRC Cards</b>\n<size:11>Class - Responsibilities - Collaborators</size>
+
+class "Paciente" as Paciente {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Ejecutar rutinas asignadas
+    + Registrar feedback por voz
+    + Registrar nivel de dolor
+    + Registrar estado emocional
+    + Consultar su progreso
+    + Acceder a modulos de bienestar
+    .. <b>COLABORADORES</b> ..
+    Rutina
+    AsignacionRutina
+    Feedback
+    SesionEjecucion
+    HistorialClinico
+}
+
+class "Terapeuta" as Terapeuta {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Gestionar pacientes
+    + Registrar diagnosticos
+    + Crear rutinas personalizadas
+    + Asignar rutinas a pacientes
+    + Analizar feedback recibido
+    + Generar reportes clinicos
+    .. <b>COLABORADORES</b> ..
+    Paciente
+    HistorialClinico
+    Diagnostico
+    Rutina
+    AsignacionRutina
+    AnalisisIA
+}
+
+class "Rutina" as Rutina {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Conocer su estructura de
+      ejercicios y orden
+    + Calcular duracion total
+    + Permitir clonado
+    + Validar coherencia
+    .. <b>COLABORADORES</b> ..
+    Ejercicio
+    ParametrosEjercicio
+    Terapeuta (creador)
+    AsignacionRutina
+}
+
+class "Ejercicio" as Ejercicio {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Describir tecnica
+    + Proveer recursos
+      multimedia
+    + Identificar zona corporal
+    + Identificar tipo
+    .. <b>COLABORADORES</b> ..
+    ParametrosEjercicio
+}
+
+class "AsignacionRutina" as AsignacionRutina {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Vincular rutina con
+      paciente y terapeuta
+    + Controlar estado y
+      vigencia
+    + Programar sesiones
+    + Iniciar sesiones de
+      ejecucion
+    .. <b>COLABORADORES</b> ..
+    Rutina
+    Paciente
+    Terapeuta
+    SesionEjecucion
+}
+
+class "SesionEjecucion" as SesionEjecucion {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Registrar inicio/fin
+      de sesion
+    + Marcar ejercicios
+      completados
+    + Calcular cumplimiento
+    + Asociar feedback
+    .. <b>COLABORADORES</b> ..
+    AsignacionRutina
+    Paciente
+    Feedback
+}
+
+class "Feedback" as Feedback {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Almacenar audio del
+      paciente
+    + Almacenar nivel de dolor
+    + Almacenar estado emocional
+    + Solicitar analisis con IA
+    .. <b>COLABORADORES</b> ..
+    SesionEjecucion
+    Paciente
+    AnalisisIA
+    AudioStorageService
+}
+
+class "AnalisisIA" as AnalisisIA {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Procesar transcripcion
+    + Detectar sentimiento
+    + Extraer palabras clave
+    + Generar alertas clinicas
+    + Resumir hallazgos
+    .. <b>COLABORADORES</b> ..
+    Feedback
+    ServicioIA (externo)
+    Terapeuta (consumidor)
+}
+
+class "HistorialClinico" as HistorialClinico {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Centralizar antecedentes
+    + Listar diagnosticos
+    + Mantener cronologia
+      clinica
+    .. <b>COLABORADORES</b> ..
+    Paciente
+    Diagnostico
+    Terapeuta
+}
+
+class "ReporteProgreso" as ReporteProgreso {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Calcular adherencia
+    + Generar tendencia de
+      dolor
+    + Producir graficas
+    + Exportar a PDF
+    .. <b>COLABORADORES</b> ..
+    Paciente
+    SesionEjecucion
+    Feedback
+    Terapeuta
+}
+
+class "PlanTratamiento" as PlanTratamiento {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Expresar objetivo clinico
+    + Conocer fechas y estado
+    + Agrupar fases secuenciales
+    + Prescribir asignaciones
+      de rutina
+    .. <b>COLABORADORES</b> ..
+    Paciente
+    Terapeuta
+    FaseTratamiento
+    AsignacionRutina
+    NotaClinica
+}
+
+class "FaseTratamiento" as FaseTratamiento {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Representar una etapa
+      del plan
+    + Conocer su orden
+    + Indicar duracion en
+      semanas
+    + Definir objetivos
+    .. <b>COLABORADORES</b> ..
+    PlanTratamiento
+    AsignacionRutina
+}
+
+class "NotaClinica" as NotaClinica {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Registrar observacion
+      con identidad propia
+    + Conocer fecha, tipo y
+      autor
+    + Indicar visibilidad al
+      paciente
+    .. <b>COLABORADORES</b> ..
+    HistorialClinico
+    PlanTratamiento
+    Terapeuta
+}
+
+class "Cita" as Cita {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Representar encuentro
+      paciente-terapeuta
+    + Conocer fecha y estado
+    + Ocupar una sala
+    + Disparar recordatorios
+    .. <b>COLABORADORES</b> ..
+    Paciente
+    Terapeuta
+    Sala
+    Recordatorio
+    PlanTratamiento
+}
+
+class "Sala" as Sala {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Describir consultorio
+    + Conocer ubicacion,
+      capacidad, equipamiento
+    + Exponer disponibilidad
+    .. <b>COLABORADORES</b> ..
+    Cita
+    HorarioDisponible
+}
+
+class "HorarioDisponible" as HorarioDisponible {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Expresar oferta semanal
+      de terapeuta o sala
+    + Conocer dia y horas
+    + Delimitar vigencia
+    + Validar nuevas citas
+    .. <b>COLABORADORES</b> ..
+    Terapeuta
+    Sala
+    Cita
+}
+
+class "Recordatorio" as Recordatorio {
+    .. <b>RESPONSABILIDADES</b> ..
+    + Programar aviso de cita
+    + Conocer canal
+      (push, email)
+    + Mantener fechas y estado
+    .. <b>COLABORADORES</b> ..
+    Cita
+    ServicioNotificaciones
+}
+
+' Disposicion en grid
+Paciente -[hidden]right- Terapeuta
+Terapeuta -[hidden]right- HistorialClinico
+
+Rutina -[hidden]right- Ejercicio
+Ejercicio -[hidden]right- AsignacionRutina
+
+SesionEjecucion -[hidden]right- Feedback
+Feedback -[hidden]right- AnalisisIA
+
+ReporteProgreso -[hidden]right- AnalisisIA
+
+Paciente -[hidden]down- Rutina
+Rutina -[hidden]down- SesionEjecucion
+SesionEjecucion -[hidden]down- ReporteProgreso
+
+PlanTratamiento -[hidden]right- FaseTratamiento
+FaseTratamiento -[hidden]right- NotaClinica
+
+Cita -[hidden]right- Sala
+Sala -[hidden]right- HorarioDisponible
+HorarioDisponible -[hidden]right- Recordatorio
+
+ReporteProgreso -[hidden]down- PlanTratamiento
+PlanTratamiento -[hidden]down- Cita
+
+@enduml

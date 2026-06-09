@@ -1,0 +1,83 @@
+@startuml FisioManager_DiagramaEstados
+
+skinparam backgroundColor #FEFEFE
+skinparam state {
+  BackgroundColor #E8F0FE
+  BorderColor #2E75B6
+  FontColor #1F4E79
+  ArrowColor #2E75B6
+  StartColor #5B9D3E
+  EndColor #C0392B
+}
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+title Diagrama de Estados - FisioManager\nCiclo de Vida de una Rutina Asignada
+
+state "Rutina en Biblioteca" as Biblioteca #D6EAF8
+state "Rutina Asignada" as Asignada #AED6F1
+state "Rutina Pendiente" as Pendiente #F9E79F
+state "Rutina en Ejecucion" as Ejecucion #FAD7A0 {
+    state "Ejercicio Activo" as EjActivo
+    state "Descanso" as Descanso
+    state "Siguiente Actividad" as SigActividad
+
+    [*] --> EjActivo
+    EjActivo --> Descanso : Tiempo de ejercicio\ncumplido
+    Descanso --> SigActividad : Tiempo de descanso\ncumplido
+    SigActividad --> EjActivo : Quedan actividades
+    SigActividad --> [*] : Ultima actividad\ncompletada
+}
+state "Rutina Completada" as Completada #ABEBC6
+state "Feedback Pendiente" as FeedbackPend #F5CBA7
+state "Registrando Feedback" as RegFeedback #F0B27A {
+    state "Seleccion Estado Emocional" as SelEmocion
+    state "Registro Nivel Dolor" as RegDolor
+    state "Grabacion Audio (Opcional)" as GrabAudio
+    state "Envio Feedback" as EnvioFB
+
+    [*] --> SelEmocion
+    SelEmocion --> RegDolor
+    RegDolor --> GrabAudio
+    GrabAudio --> EnvioFB
+    RegDolor --> EnvioFB : Sin audio
+    EnvioFB --> [*]
+}
+state "Feedback Registrado" as FBRegistrado #82E0AA
+state "Analisis IA Procesando" as IAProc #D7BDE2
+state "Analisis IA Completado" as IAComp #C39BD3
+
+[*] --> Biblioteca : Terapeuta crea\nrutina template
+
+Biblioteca --> Asignada : Terapeuta asigna\na paciente(s)
+Asignada --> Pendiente : Paciente recibe\nnotificacion
+Pendiente --> Ejecucion : Paciente inicia\nrutina
+Ejecucion --> Completada : Todas las actividades\nfinalizadas
+Completada --> FeedbackPend : Sistema solicita\nfeedback
+FeedbackPend --> RegFeedback : Paciente inicia\nregistro de feedback
+RegFeedback --> FBRegistrado : Feedback enviado\nexitosamente
+FBRegistrado --> IAProc : Audio enviado a\nservicio de IA
+IAProc --> IAComp : Analisis completado
+IAComp --> [*]
+
+FBRegistrado --> [*] : Sin audio\n(sin analisis IA)
+
+note right of Biblioteca
+  El terapeuta construye la rutina
+  en el RoutineBuilder seleccionando
+  ejercicios de la biblioteca
+end note
+
+note right of Ejecucion
+  El RoutinePlayer gestiona
+  temporizadores para cada
+  ejercicio y descanso
+end note
+
+note left of IAProc
+  Procesamiento asincrono
+  del audio del paciente
+  mediante servicio de IA
+end note
+
+@enduml

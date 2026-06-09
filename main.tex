@@ -1,0 +1,296 @@
+% FisioManager
+% Compilar con: pdflatex main.tex
+% Recomendado: latexmk -pdf main.tex
+
+\documentclass[11pt,letterpaper,oneside]{report}
+
+% --- Codificacion e idioma ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{microtype}
+
+% --- Geometria de pagina ---
+\usepackage[
+  letterpaper,
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2.5cm,
+  right=2.5cm,
+  headheight=14pt
+]{geometry}
+
+% --- Colores institucionales (paleta FisioManager) ---
+\usepackage{xcolor}
+\definecolor{fmPrimary}{HTML}{2E75B6}
+\definecolor{fmAccent}{HTML}{1F4E79}
+\definecolor{fmSecondary}{HTML}{5B9D3E}
+\definecolor{fmGrayLight}{HTML}{F2F2F2}
+\definecolor{fmTableHeader}{HTML}{D5E8F0}
+\definecolor{fmTableAltRow}{HTML}{F7FBFD}
+\definecolor{fmCRCYellow}{HTML}{FFF8DC}
+\definecolor{fmCRCHeader}{HTML}{FFD700}
+\definecolor{fmCodeBg}{HTML}{F5F5F5}
+\definecolor{fmTextDark}{HTML}{071E27}
+
+% --- Tipografia ---
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% --- Hyperref para enlaces y TOC navegable ---
+\usepackage[
+  pdftex,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black,
+  pdftitle={FisioManager - Documentacion Tecnica},
+  pdfauthor={Equipo FisioManager},
+  pdfsubject={Documentacion Tecnica del Sistema FisioManager},
+  pdfkeywords={CRC Cards, C4 Model, UML, Requerimientos, Arquitectura}
+]{hyperref}
+
+% --- Tablas profesionales ---
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{makecell}
+
+% Renglones zebra para tablas
+\renewcommand{\arraystretch}{1.25}
+
+% Definicion de columnas custom
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% --- Graficos e imagenes ---
+\usepackage{graphicx}
+\graphicspath{{figuras/}}
+\usepackage{float}
+\usepackage{rotating}
+
+% --- Figura de maqueta robusta ---
+% Si la imagen existe en figuras/, se inserta como figura con su pie y
+% etiqueta. Si la imagen NO existe, no se dibuja nada (ni recuadro ni
+% figura vacia); el documento sigue compilando sin errores y el texto
+% descriptivo de la pantalla permanece intacto.
+% Uso: \maquetafigura{opciones-includegraphics}{archivo}{caption}{label}
+\newcommand{\maquetafigura}[4]{%
+  \IfFileExists{figuras/#2}{%
+    \begin{figure}[H]
+      \centering
+      \includegraphics[#1]{#2}%
+      \caption{#3}\label{#4}%
+    \end{figure}%
+  }{}%
+}
+
+% --- Cabeceras y pies ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyfoot[C]{\color{fmGrayLight!50!black}\small Pagina \thepage{} de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\usepackage{lastpage}
+
+% Estilo para la primera pagina de cada capitulo
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\color{fmGrayLight!50!black}\small Pagina \thepage{} de \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% --- Personalizacion de titulos de capitulo y seccion ---
+\usepackage{titlesec}
+
+\titleformat{\chapter}[hang]
+  {\normalfont\Huge\bfseries\color{black}}
+  {\thechapter.}{1em}{}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+\titleformat{\section}
+  {\normalfont\LARGE\bfseries\color{black}}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries\color{black}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\large\bfseries\color{fmTextDark}}
+  {\thesubsubsection}{1em}{}
+
+% --- Listings para codigo (PlantUML, bash) ---
+\usepackage{listings}
+\lstdefinelanguage{plantuml}{
+  morekeywords={
+    @startuml, @enduml, class, abstract, interface, enum, package,
+    actor, usecase, component, database, queue, node, cloud, frame,
+    skinparam, title, hide, show, footer, header, legend, note,
+    Person, System, System_Boundary, Container, ContainerDb, ContainerQueue,
+    Component, Rel, Rel_D, Rel_R, Rel_L, Rel_U, Boundary,
+    LAYOUT_WITH_LEGEND, LAYOUT_LEFT_RIGHT, !define, !include,
+    extends, implements, as
+  },
+  morecomment=[l]{'},
+  morecomment=[s]{/'}{'/},
+  morestring=[b]",
+  sensitive=true
+}
+\lstset{
+  basicstyle=\ttfamily\footnotesize\color{fmTextDark},
+  backgroundcolor=\color{fmCodeBg},
+  keywordstyle=\color{fmAccent}\bfseries,
+  commentstyle=\color{fmSecondary}\itshape,
+  stringstyle=\color{fmPrimary},
+  breaklines=true,
+  breakatwhitespace=false,                 % <-- CAMBIO: permite cortar sin espacio
+  breakindent=0pt,                          % <-- nueva: sin sangria al continuar
+  postbreak=\mbox{\textcolor{fmAccent}{$\hookrightarrow$}\space}, % <-- senial visual
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{black!20},
+  framesep=4pt,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  numberstyle=\tiny\color{black!40},
+  numbers=left,
+  numbersep=8pt,
+  captionpos=b,
+  columns=flexible,                         % <-- evita kerning rigido en monospace
+  keepspaces=true
+}
+
+
+% --- Cuadros de informacion (tcolorbox para CRC y notas) ---
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins}
+
+% Estilo de caja CRC Card
+\newtcolorbox{crccard}[1]{
+  enhanced, breakable,
+  colback=white,
+  colframe=fmCRCHeader!80!black,
+  fonttitle=\bfseries\large,
+  coltitle=fmAccent,
+  colbacktitle=fmCRCHeader,
+  attach boxed title to top center={yshift=-2.5mm},
+  boxed title style={
+    colback=fmCRCHeader,
+    colframe=fmCRCHeader!80!black,
+    sharp corners,
+    rounded corners=northwest
+  },
+  title=#1,
+  arc=2mm,
+  boxrule=0.6pt,
+  before skip=12pt, after skip=12pt
+}
+
+% Caja informativa
+\newtcolorbox{infobox}[1][]{
+  enhanced, breakable,
+  colback=fmTableAltRow,
+  colframe=fmPrimary,
+  fonttitle=\bfseries,
+  arc=2mm,
+  boxrule=0.5pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  #1
+}
+
+% Caja de maqueta
+\newtcolorbox{mockupbox}[1][]{
+  enhanced, breakable,
+  colback=white,
+  colframe=fmAccent,
+  arc=3mm,
+  boxrule=0.8pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  drop fuzzy shadow=fmGrayLight!50!black,
+  #1
+}
+
+% --- Captions personalizados ---
+\usepackage[font=small,labelfont={bf,color=black},textfont=it]{caption}
+
+% --- Comandos personalizados ---
+\newcommand{\reqid}[1]{{\bfseries\color{black}#1}}
+\newcommand{\actor}[1]{{\bfseries\color{black}#1}}
+\newcommand{\codeinline}[1]{%
+  \begingroup
+    \setlength{\fboxsep}{2pt}%
+    \colorbox{fmCodeBg}{\small\ttfamily\hyphenchar\font=`\-\relax #1}%
+  \endgroup
+}
+
+% Para el formato de prioridad
+\newcommand{\prAlta}{{\color{red!70!black}\bfseries Alta}}
+\newcommand{\prMedia}{{\color{orange!70!black}\bfseries Media}}
+\newcommand{\prBaja}{{\color{fmSecondary}\bfseries Baja}}
+
+% Configuracion del TOC
+\usepackage{tocloft}
+\renewcommand{\cftchapfont}{\bfseries\color{black}}
+\renewcommand{\cftchappagefont}{\bfseries\color{black}}
+\renewcommand{\cftsecfont}{\color{black}}
+\renewcommand{\cftsubsecfont}{\color{black}}
+
+% Sin sangria en parrafos, separacion vertical
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 1pt minus 1pt}
+\tolerance=2000
+\emergencystretch=3em
+\hyphenpenalty=1000
+\hbadness=10000
+
+% --- Metadatos del documento ---
+\title{\bfseries\color{black} FisioManager}
+\author{Equipo FisioManager}
+\date{Abril 2026}
+
+% =============================================================
+% INICIO DEL DOCUMENTO
+% =============================================================
+\begin{document}
+
+% --- PORTADA ---
+\input{capitulos/00_portada}
+
+% --- TABLA DE CONTENIDO ---
+\pagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% --- CAPITULOS ---
+\input{capitulos/01_introduccion}
+\input{capitulos/02_actores}
+\input{capitulos/03_requerimientos}
+\input{capitulos/04_crc_cards}
+\input{capitulos/05_modelo_c4}
+\input{capitulos/06_crr}
+\input{capitulos/07_diagrama_clases}
+\input{capitulos/08_diagrama_objetos}
+\input{capitulos/09_diagrama_robustez}
+\input{capitulos/10_casos_uso}
+\input{capitulos/11_ui_maquetas}
+\input{capitulos/12_diagrama_estados}
+\input{capitulos/13_diagramas_secuencia}
+\input{capitulos/14_modelo_erd}
+
+% --- ANEXOS ---
+\appendix
+\input{capitulos/A_anexos_puml}
+
+\end{document}

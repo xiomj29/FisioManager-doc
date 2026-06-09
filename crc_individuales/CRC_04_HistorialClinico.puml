@@ -1,0 +1,37 @@
+@startuml CRC_HistorialClinico
+
+' FisioManager - CRC Card: HistorialClinico
+
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: HistorialClinico</b>
+
+class "Responsabilidades" as Resp {
+    + Centralizar la informacion clinica del paciente
+    + Almacenar antecedentes medicos relevantes
+    + Registrar alergias y medicamentos en uso
+    + Mantener cronologia de diagnosticos
+    + Proveer vista consolidada para el terapeuta
+}
+
+class "Colaboradores" as Col {
+    Paciente (propietario)
+    Diagnostico (componente)
+    Terapeuta (consumidor)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

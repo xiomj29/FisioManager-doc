@@ -1,0 +1,130 @@
+% CAPITULO 13 - DIAGRAMAS DE SECUENCIA
+
+\chapter{Diagramas de Secuencia}\label{ch:diagramassecuencia}
+
+Los diagramas de secuencia modelan la interacción entre objetos a lo largo del tiempo para un flujo específico del sistema. A diferencia del diagrama de robustez (Capítulo~\ref{ch:diagramarobustez}), que identifica las clases de software participantes, los diagramas de secuencia detallan el \emph{orden exacto} de los mensajes, las respuestas y los fragmentos combinados (loops, alternativas, opciones) que ocurren durante la ejecución de un caso de uso.
+
+Se presentan dos flujos críticos de FisioManager: el registro de feedback post-rutina y la asignación de rutinas a pacientes.
+
+% ---------------------------------------------------------------
+\section{Flujo 1: Registro de Feedback}\label{sec:sec-feedback}
+
+Este diagrama modela la secuencia completa desde que el paciente accede al formulario de feedback tras completar una rutina, hasta que el servicio de inteligencia artificial procesa el audio de forma asíncrona.
+
+\subsection{Participantes}
+
+\begin{itemize}
+  \item \actor{Paciente}: actor que completa la rutina e inicia el registro de feedback.
+  \item \codeinline{UIRegistroFeedback}: interfaz de usuario (boundary) que presenta el formulario de captura con selector de estado emocional, slider de dolor y grabador de audio.
+  \item \codeinline{GestorFeedback}: controlador (control) que orquesta la validación de datos y la persistencia del feedback.
+  \item \codeinline{AudioStorageService}: servicio encargado de almacenar el archivo de audio en el servidor (\codeinline{/uploads/}).
+  \item \codeinline{AnalisisIAClient}: cliente que prepara y envía la solicitud al servicio externo de IA.
+  \item \codeinline{AnalisisIA}: servicio externo de inteligencia artificial que realiza transcripción de audio, análisis de sentimiento y generación de resumen clínico.
+\end{itemize}
+
+\subsection{Descripción del flujo}
+
+\begin{enumerate}
+  \item El paciente accede al formulario de feedback tras completar una rutina.
+  \item Selecciona su estado emocional entre cinco opciones (EXCELENTE, BIEN, REGULAR, MAL, TERRIBLE).
+  \item Ajusta el nivel de dolor mediante un slider interactivo (escala 1--10).
+  \item Opcionalmente graba una nota de audio describiendo su experiencia.
+  \item Confirma y envía el feedback.
+  \item El \codeinline{GestorFeedback} valida los datos (nivel de dolor en rango, estado emocional válido).
+  \item Si hay audio, el \codeinline{AudioStorageService} almacena el archivo y retorna la URL.
+  \item Se persiste el feedback en la base de datos.
+  \item Se confirma al paciente que el feedback fue registrado exitosamente.
+  \item \textbf{De forma asíncrona}: si hay audio disponible, el \codeinline{AnalisisIAClient} envía la solicitud al servicio de IA.
+  \item El servicio de IA transcribe el audio, analiza el sentimiento y genera un resumen con recomendaciones.
+  \item El resumen se almacena en el campo \codeinline{aiSummary} del feedback.
+  \item Si se detectan alertas críticas (dolor alto combinado con estado emocional negativo), se registra una alerta para el terapeuta.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{FisioManager_Secuencia_RegistroFeedback.png}
+  \caption{Diagrama de Secuencia -- Flujo 1: Registro de Feedback con análisis asíncrono de IA.}
+  \label{fig:secuencia-feedback}
+\end{figure}
+
+\subsection{Aspectos destacados}
+
+\begin{itemize}
+  \item \textbf{Respuesta asíncrona de IA:} el paciente no queda bloqueado esperando el procesamiento de IA. La confirmación de feedback se entrega inmediatamente; el análisis se incorpora al registro de forma diferida.
+  \item \textbf{Fragmento \codeinline{opt} para audio:} la grabación de audio es opcional, por lo que el flujo de almacenamiento y análisis de IA solo se ejecuta cuando el paciente decide grabar.
+  \item \textbf{Fragmento \codeinline{alt} para análisis:} se modela la bifurcación entre el flujo con audio (que activa el pipeline de IA) y sin audio (que termina en el registro del feedback).
+  \item \textbf{Detección de alertas:} el \codeinline{AnalisisIAClient} evalúa si los resultados combinados (dolor, sentimiento, contenido del audio) ameritan una alerta clínica para el terapeuta.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Flujo 2: Asignación de Rutina}\label{sec:sec-asignacion}
+
+Este diagrama modela la secuencia completa desde que el terapeuta construye una rutina en el builder hasta que cada paciente seleccionado recibe la notificación de su rutina asignada.
+
+\subsection{Participantes}
+
+\begin{itemize}
+  \item \actor{Terapeuta}: actor que crea y asigna rutinas de ejercicio.
+  \item \codeinline{UIRutinaBuilder}: interfaz de usuario (boundary) que permite construir rutinas seleccionando ejercicios de la biblioteca, configurando parámetros y asignando a pacientes.
+  \item \codeinline{GestorPlanTratamiento}: controlador (control) que orquesta la creación de rutinas y delega la asignación.
+  \item \codeinline{AsignacionRutina}: servicio que ejecuta la clonación de la rutina template para cada paciente seleccionado.
+  \item \codeinline{Notificación al Paciente}: servicio encargado de generar y enviar las notificaciones a los pacientes.
+\end{itemize}
+
+\subsection{Descripción del flujo}
+
+El flujo se divide en dos fases claramente diferenciadas:
+
+\subsubsection{Fase 1: Construcción de la rutina}
+
+\begin{enumerate}
+  \item El terapeuta accede al constructor de rutinas.
+  \item El sistema carga las plantillas de ejercicio disponibles desde la biblioteca.
+  \item El terapeuta selecciona ejercicios aplicando filtros por parte del cuerpo (rodilla, espalda, hombro, cuello, brazo, cadera, tobillo) y por tipo (Físico, Respiración).
+  \item Configura los parámetros de cada actividad: duración en minutos, número de repeticiones y tiempo de descanso en segundos.
+  \item Confirma la creación de la rutina.
+  \item El \codeinline{GestorPlanTratamiento} valida los datos y persiste la rutina como template (\codeinline{patientId = null}) con todas sus actividades.
+\end{enumerate}
+
+\subsubsection{Fase 2: Asignación a pacientes}
+
+\begin{enumerate}
+  \item El terapeuta selecciona la rutina desde la biblioteca y elige la opción ``Asignar a Pacientes''.
+  \item Selecciona uno o más pacientes de su lista.
+  \item El \codeinline{GestorPlanTratamiento} delega en \codeinline{AsignacionRutina}.
+  \item Para cada paciente seleccionado, \codeinline{AsignacionRutina}:
+  \begin{itemize}
+    \item Obtiene la rutina template con todas sus actividades.
+    \item Clona la rutina asignando el \codeinline{patientId} correspondiente.
+    \item Copia todas las actividades con sus parámetros configurados.
+    \item Envía una notificación al paciente a través del servicio de notificaciones.
+  \end{itemize}
+  \item Se confirma al terapeuta que la rutina fue asignada a $N$ pacientes.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{FisioManager_Secuencia_AsignacionRutina.png}
+  \caption{Diagrama de Secuencia -- Flujo 2: Asignación de Rutina a pacientes.}
+  \label{fig:secuencia-asignacion}
+\end{figure}
+
+\subsection{Aspectos destacados}
+
+\begin{itemize}
+  \item \textbf{Patrón Template--Clone:} la rutina se almacena primero como plantilla reutilizable y luego se clona por cada paciente. Esto permite asignar la misma rutina a múltiples pacientes sin duplicar la configuración manual.
+  \item \textbf{Fragmento \codeinline{loop}:} la clonación y notificación se ejecutan dentro de un bucle que itera por cada paciente seleccionado, reflejando la operación por lotes (\textit{batch}).
+  \item \textbf{Separación de fases:} el diagrama distingue claramente la fase de construcción (creativa) de la fase de asignación (operativa), lo que facilita la trazabilidad y la posibilidad de reutilizar templates existentes sin reconstruirlos.
+  \item \textbf{Notificación integrada:} cada asignación dispara automáticamente una notificación al paciente, garantizando que esté informado de su nueva rutina.
+\end{itemize}
+
+\section{Código PlantUML de los diagramas}
+
+Los códigos fuente se entregan como \codeinline{10\_secuencia\_asignacion\_rutina.puml} y \codeinline{11\_secuencia\_registro\_feedback.puml} en el directorio \codeinline{puml/}. Se regeneran con:
+
+\begin{lstlisting}[language=bash]
+plantuml -tpng 10_secuencia_asignacion_rutina.puml
+plantuml -tpng 11_secuencia_registro_feedback.puml
+\end{lstlisting}
+
+El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.

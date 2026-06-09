@@ -1,0 +1,39 @@
+@startuml CRC_Rutina
+
+' FisioManager - CRC Card: Rutina
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Rutina</b>
+
+class "Responsabilidades" as Resp {
+    + Conocer su nombre, descripcion y nivel
+    + Mantener su composicion ordenada de ejercicios
+    + Conocer al terapeuta que la creo
+    + Calcular su duracion total estimada
+    + Permitir clonado para reutilizacion
+    + Validar coherencia interna
+      (no duplicados, orden valido)
+}
+
+class "Colaboradores" as Col {
+    Ejercicio (referenciado)
+    ParametrosEjercicio (componente)
+    Terapeuta (creador)
+    AsignacionRutina (consumidor)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

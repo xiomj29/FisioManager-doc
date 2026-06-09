@@ -1,0 +1,89 @@
+% CAPITULO 2 - ACTORES Y STAKEHOLDERS
+
+\chapter{Actores y Stakeholders}
+
+\section{Actores del sistema}
+
+Los actores son las entidades (humanas o sistemas) que interactuan directamente con el sistema FisioManager. El sistema da servicio a \textbf{una única clínica} y considera \textbf{un único actor Administrador}, que concentra tanto la administración operativa de la clínica como la administración técnica de la plataforma; no se contemplan múltiples clínicas ni múltiples administradores.
+
+\begin{longtable}{L{2.8cm} L{1.6cm} L{4cm} L{6.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}Actor} &
+  \textbf{\color{fmAccent}Tipo} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Funciones principales} \\
+  \midrule
+  \endhead
+
+  \actor{Paciente} & Humano &
+  Usuario que realiza su proceso de rehabilitación. &
+  Visualizar rutinas asignadas, ejecutar ejercicios, registrar feedback (audio, dolor, emociones), consultar progreso, acceder a módulos de bienestar. \\
+
+  \rowcolor{fmTableAltRow}
+  \actor{Fisioterapeuta} & Humano &
+  Profesional encargado del tratamiento del paciente. &
+  Gestionar pacientes, registrar diagnóstico e historial, crear y personalizar rutinas, asignarlas, analizar feedback y progreso. \\
+
+  \actor{Administrador} & Humano &
+  Único responsable de la clínica y de la plataforma; reúne las funciones operativas y técnicas. &
+  Gestionar usuarios y accesos, supervisar el uso del sistema, evaluar el desempeño de los terapeutas, consultar métricas agregadas, monitorear el funcionamiento y mantener la integridad de los datos. \\
+
+  \rowcolor{fmTableAltRow}
+  \actor{Servicio de IA} & Sistema &
+  Componente externo que procesa audio y texto. &
+  Transcribir audio a texto (STT), analizar sentimientos y palabras clave, generar resúmenes asistidos. \\
+
+  \bottomrule
+\end{longtable}
+
+\section{Stakeholders}
+
+Los stakeholders son todas las partes interesadas en el éxito del sistema, incluyendo aquellas que no interactúan directamente con la aplicación.
+
+\begin{longtable}{L{2.6cm} L{1.7cm} L{3.1cm} L{3.4cm} L{3.4cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}Stakeholder} &
+  \textbf{\color{fmAccent}Tipo} &
+  \textbf{\color{fmAccent}Interes} &
+  \textbf{\color{fmAccent}Rol} &
+  \textbf{\color{fmAccent}Necesidades} \\
+  \midrule
+  \endhead
+
+  \actor{Pacientes} & Primario &
+  Recuperarse de manera eficiente y cómoda. &
+  Ejecutar rutinas, registrar feedback, consultar progreso. &
+  Interfaz simple, accesibilidad móvil, motivación. \\
+
+  \rowcolor{fmTableAltRow}
+  \actor{Fisioterapeutas} & Primario &
+  Control total del tratamiento y seguimiento. &
+  Gestionar pacientes, crear rutinas, analizar feedback. &
+  Herramientas eficientes, visualización clara, personalización. \\
+
+  \actor{Clínica de fisioterapia} & Primario &
+  Optimizar la operación y calidad del servicio. &
+  Centralizar información, evaluar desempeño. &
+  Eficiencia operativa, control de información. \\
+
+  \rowcolor{fmTableAltRow}
+  \actor{Desarrolladores} & Secundario &
+  Construcción y evolución del sistema. &
+  Diseñar, desarrollar, mantener y mejorar. &
+  Código limpio, arquitectura escalable, mantenibilidad. \\
+
+  \actor{Administrador} & Secundario &
+  Control y supervisión del sistema. &
+  Gestionar usuarios, accesos y monitoreo. &
+  Seguridad, control de acceso, monitoreo. \\
+
+  \rowcolor{fmTableAltRow}
+  \actor{Entidades regulatorias} & Secundario &
+  Garantizar cumplimiento legal. &
+  Establecer normas y supervisar la privacidad de datos. &
+  Seguridad, cumplimiento normativo, privacidad. \\
+
+  \bottomrule
+\end{longtable}

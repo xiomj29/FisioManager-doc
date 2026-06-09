@@ -1,0 +1,39 @@
+@startuml CRC_AnalisisIA
+
+' FisioManager - CRC Card: AnalisisIA
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: AnalisisIA</b>
+
+class "Responsabilidades" as Resp {
+    + Almacenar la transcripcion del audio
+    + Detectar y clasificar el sentimiento
+    + Extraer palabras clave clinicamente
+      relevantes
+    + Generar alertas automaticas
+      (dolor sostenido, palabras de alerta)
+    + Resumir hallazgos para el terapeuta
+    + Indicar el nivel de confianza del analisis
+}
+
+class "Colaboradores" as Col {
+    Feedback (origen)
+    ServicioIA (productor)
+    Terapeuta (consumidor)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

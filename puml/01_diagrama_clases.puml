@@ -1,0 +1,254 @@
+@startuml FisioManager_DiagramaClases
+
+' FisioManager - Diagrama de Clases Conceptuales
+' Modelo de dominio: solo conceptos, atributos y asociaciones.
+' No se incluyen tipos de datos, metodos ni servicios de software.
+
+skinparam backgroundColor #FAFAFA
+skinparam classBackgroundColor #E8F4F8
+skinparam classBorderColor #2E75B6
+skinparam classArrowColor #2E75B6
+skinparam classFontName Arial
+skinparam classFontSize 12
+skinparam packageBackgroundColor #F0F8E8
+skinparam packageBorderColor #5B9D3E
+skinparam classAttributeIconSize 0
+
+hide methods
+hide circle
+
+title <b>FisioManager - Diagrama de Clases Conceptuales</b>\n<size:11>Modelo de dominio: conceptos, atributos y asociaciones</size>
+
+package "Usuarios" {
+
+    abstract class Usuario {
+        nombre
+        apellidos
+        email
+        telefono
+        fechaRegistro
+        activo
+    }
+
+    class Paciente {
+        fechaNacimiento
+        genero
+        peso
+        altura
+    }
+
+    class Terapeuta {
+        cedulaProfesional
+        especialidad
+    }
+
+    class Administrador {
+        nivelAcceso
+    }
+}
+
+package "Clinico" {
+
+    class HistorialClinico {
+        fechaCreacion
+        antecedentes
+        alergias
+        medicamentos
+    }
+
+    class Diagnostico {
+        fecha
+        descripcion
+        codigoCIE10
+        severidad
+    }
+
+    class NotaClinica {
+        fecha
+        contenido
+        tipo
+        visibleParaPaciente
+    }
+
+    class PlanTratamiento {
+        nombre
+        objetivoClinico
+        fechaInicio
+        fechaFinEstimada
+        estado
+        observaciones
+    }
+
+    class FaseTratamiento {
+        nombre
+        orden
+        duracionSemanas
+        objetivos
+    }
+}
+
+package "Agenda" {
+
+    class Cita {
+        fechaHoraInicio
+        fechaHoraFin
+        motivo
+        modalidad
+        estado
+    }
+
+    class Sala {
+        nombre
+        ubicacion
+        capacidad
+        equipamiento
+    }
+
+    class HorarioDisponible {
+        diaSemana
+        horaInicio
+        horaFin
+        vigenteDesde
+        vigenteHasta
+    }
+
+    class Recordatorio {
+        canal
+        fechaEnvioProgramada
+        fechaEnvioReal
+        mensaje
+        estado
+    }
+}
+
+package "Rutinas" {
+
+    class Rutina {
+        nombre
+        descripcion
+        duracionEstimada
+        nivel
+        fechaCreacion
+    }
+
+    class Ejercicio {
+        nombre
+        descripcion
+        videoUrl
+        imagenUrl
+        zonaCorporal
+        tipo
+    }
+
+    class ParametrosEjercicio {
+        repeticiones
+        series
+        duracionSegundos
+        descansoSegundos
+        orden
+        notasTerapeuta
+    }
+
+    class AsignacionRutina {
+        fechaAsignacion
+        fechaInicio
+        fechaFin
+        frecuenciaSemanal
+        estado
+    }
+}
+
+package "Seguimiento" {
+
+    class SesionEjecucion {
+        fechaInicio
+        fechaFin
+        completada
+        porcentajeCumplimiento
+    }
+
+    class Feedback {
+        fechaRegistro
+        nivelDolor
+        estadoEmocional
+        audioUrl
+        duracionAudioSegundos
+        transcripcion
+    }
+
+    class AnalisisIA {
+        sentimientoDetectado
+        palabrasClave
+        alertas
+        resumenSugerido
+        confianza
+        fechaProcesamiento
+    }
+
+    class ReporteProgreso {
+        rangoFechas
+        sesionesCompletadas
+        sesionesProgramadas
+        adherenciaPorcentaje
+        evolucionDolor
+    }
+}
+
+package "Bienestar" {
+
+    class ModuloBienestar {
+        titulo
+        tipo
+        contenidoUrl
+        duracionMinutos
+    }
+}
+
+' ============================================================
+' Relaciones (asociaciones conceptuales)
+' ============================================================
+
+Usuario <|-- Paciente
+Usuario <|-- Terapeuta
+Usuario <|-- Administrador
+
+Paciente "*" -- "1" Terapeuta : atendido por
+Paciente "1" -- "1" HistorialClinico : posee
+HistorialClinico "1" -- "*" Diagnostico : contiene
+HistorialClinico "1" -- "*" NotaClinica : registra
+Diagnostico "*" -- "1" Terapeuta : registrado por
+NotaClinica "*" -- "1" Terapeuta : redactada por
+
+Paciente "1" -- "*" PlanTratamiento : tiene
+PlanTratamiento "*" -- "1" Terapeuta : elaborado por
+PlanTratamiento "1" -- "*" FaseTratamiento : compuesto por
+PlanTratamiento "1" -- "*" NotaClinica : documentado por
+PlanTratamiento "1" -- "*" AsignacionRutina : prescribe
+
+Terapeuta "1" -- "*" Rutina : crea
+Rutina "1" *-- "*" ParametrosEjercicio : compone
+ParametrosEjercicio "*" -- "1" Ejercicio : referencia
+
+AsignacionRutina "*" -- "1" Rutina : asigna
+AsignacionRutina "*" -- "1" Paciente : a paciente
+AsignacionRutina "*" -- "1" Terapeuta : asignada por
+
+AsignacionRutina "1" -- "*" SesionEjecucion : genera
+SesionEjecucion "1" -- "0..1" Feedback : produce
+Feedback "1" -- "0..1" AnalisisIA : analizada por
+
+Paciente "1" -- "*" SesionEjecucion : ejecuta
+Paciente "*" -- "*" ModuloBienestar : accede
+
+' Agenda
+Cita "*" -- "1" Paciente : agendada para
+Cita "*" -- "1" Terapeuta : atendida por
+Cita "*" -- "0..1" Sala : ocupa
+Cita "1" -- "*" Recordatorio : notificada por
+Cita "*" -- "0..1" PlanTratamiento : asociada a
+Terapeuta "1" -- "*" HorarioDisponible : ofrece
+Sala "1" -- "*" HorarioDisponible : disponible en
+
+Paciente "1" -- "*" ReporteProgreso : descrito por
+
+@enduml

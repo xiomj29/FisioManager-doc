@@ -1,0 +1,46 @@
+@startuml CRC_Paciente
+
+' FisioManager - CRC Card: Paciente
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Paciente</b>
+
+class "Responsabilidades" as Resp {
+    + Identificarse y autenticarse en el sistema
+    + Conocer sus datos personales y demograficos
+    + Visualizar las rutinas que tiene asignadas
+    + Iniciar y ejecutar sesiones de rutina
+    + Registrar feedback al finalizar la sesion
+      (audio, dolor, emocion)
+    + Consultar su progreso a lo largo del tiempo
+    + Acceder a contenido de los modulos de bienestar
+    + Conocer al terapeuta que lo atiende
+}
+
+class "Colaboradores" as Col {
+    Usuario (clase base)
+    Terapeuta (asignado)
+    Rutina (visualizacion)
+    AsignacionRutina
+    SesionEjecucion
+    Feedback
+    HistorialClinico
+    ModuloBienestar
+    ReporteProgreso
+}
+
+Resp -[hidden]right- Col
+
+@enduml

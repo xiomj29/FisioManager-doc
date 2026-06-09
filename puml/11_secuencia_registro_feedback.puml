@@ -1,0 +1,142 @@
+@startuml FisioManager_Secuencia_RegistroFeedback
+
+skinparam backgroundColor #FEFEFE
+skinparam sequence {
+  ArrowColor #2E75B6
+  ActorBorderColor #1F4E79
+  LifeLineBorderColor #2E75B6
+  ParticipantBorderColor #2E75B6
+  ParticipantBackgroundColor #D6EAF8
+  ParticipantFontColor #1F4E79
+  ActorBackgroundColor #AED6F1
+}
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+title Diagrama de Secuencia - Flujo 1: Registro de Feedback
+
+actor "Paciente" as Paciente #AED6F1
+participant "UIRegistroFeedback" as UI #D6EAF8
+participant "GestorFeedback" as Gestor #D6EAF8
+participant "AudioStorageService" as Audio #D6EAF8
+participant "AnalisisIAClient" as IAClient #D6EAF8
+participant "AnalisisIA" as IA #E8DAEF
+database "Base de Datos" as DB #E8DAEF
+
+== Inicio del Registro de Feedback ==
+
+Paciente -> UI : Accede al formulario\nde feedback tras\ncompletar rutina
+activate UI
+
+UI -> UI : Cargar formulario\n(estado emocional,\nnivel de dolor, audio)
+UI --> Paciente : Mostrar interfaz\nde registro de feedback
+
+== Captura de Datos ==
+
+Paciente -> UI : Seleccionar estado\nemocional (GREAT/GOOD/\nOK/BAD/TERRIBLE)
+
+Paciente -> UI : Ajustar nivel de dolor\n(slider 1-10)
+
+opt Grabacion de Audio (Opcional)
+    Paciente -> UI : Iniciar grabacion\nde audio
+    UI -> UI : Capturar audio\ndel microfono
+    Paciente -> UI : Detener grabacion
+    UI --> Paciente : Preview del audio\ngrabado
+end
+
+== Envio del Feedback ==
+
+Paciente -> UI : Confirmar y enviar\nfeedback
+
+UI -> Gestor : registrarFeedback(\nroutineId, patientId,\npainLevel, emotionalState,\naudioBlob?)
+activate Gestor
+
+Gestor -> Gestor : Validar datos:\npainLevel in [1..10],\nemotionalState valido
+
+alt Audio incluido
+    Gestor -> Audio : almacenarAudio(\naudioBlob, pacienteId,\nfeedbackId)
+    activate Audio
+
+    Audio -> Audio : Generar nombre unico\ny ruta de almacenamiento
+
+    Audio -> Audio : Guardar archivo de\naudio en servidor\n(/uploads/)
+
+    Audio --> Gestor : audioRecordUrl
+    deactivate Audio
+else Sin audio
+    Gestor -> Gestor : audioRecordUrl = null
+end
+
+Gestor -> DB : INSERT Feedback\n(routineId, patientId,\npainLevel, emotionalState,\naudioRecordUrl, date)
+activate DB
+DB --> Gestor : Feedback creado\n(feedbackId)
+deactivate DB
+
+Gestor --> UI : Feedback registrado\nexitosamente
+UI --> Paciente : Confirmacion:\n"Feedback enviado\ncorrectamente"
+deactivate UI
+
+== Analisis Asincrono de IA ==
+
+alt Audio disponible para analisis
+    Gestor ->> IAClient : solicitarAnalisis(\nfeedbackId, audioUrl,\npainLevel, emotionalState)
+    activate IAClient
+    note right of Gestor
+      Llamada asincrona:
+      el paciente no espera
+      la respuesta de la IA
+    end note
+    deactivate Gestor
+
+    IAClient -> IAClient : Preparar payload\n(audio + metadatos\ndel feedback)
+
+    IAClient -> IA : POST /analyze\n(audioFile, contexto\nclinico)
+    activate IA
+
+    IA -> IA : Transcripcion de audio\n(Speech-to-Text)
+    IA -> IA : Analisis de sentimiento\ny contenido clinico
+    IA -> IA : Generar resumen\ny recomendaciones
+
+    IA --> IAClient : AnalisisResultado\n(transcripcion, resumen,\nalertas, recomendaciones)
+    deactivate IA
+
+    IAClient -> DB : UPDATE Feedback\nSET aiSummary = resumen\nWHERE id = feedbackId
+    activate DB
+    DB --> IAClient : Feedback actualizado
+    deactivate DB
+
+    IAClient -> IAClient : Verificar alertas\ncriticas (dolor alto,\nestado emocional negativo)
+
+    opt Alerta critica detectada
+        IAClient -> DB : Registrar alerta\npara el terapeuta
+        activate DB
+        DB --> IAClient : Alerta creada
+        deactivate DB
+    end
+
+    deactivate IAClient
+else Sin audio
+    deactivate Gestor
+    note over IAClient, IA
+      Sin audio no se invoca
+      el servicio de IA.
+      El feedback queda registrado
+      solo con datos numericos.
+    end note
+end
+
+note over Paciente, UI
+  El formulario muestra 5 opciones
+  de estado emocional con iconos
+  y un slider interactivo para
+  el nivel de dolor (1-10)
+end note
+
+note over Gestor, DB
+  El feedback queda disponible
+  inmediatamente para el terapeuta
+  en la vista de detalle del paciente
+  con graficas de tendencia
+end note
+
+@enduml

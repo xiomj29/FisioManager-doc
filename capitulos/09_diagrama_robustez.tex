@@ -1,0 +1,53 @@
+% CAPITULO 9 - DIAGRAMA DE ROBUSTEZ
+
+\chapter{Diagrama de Robustez}\label{ch:diagramarobustez}
+
+El diagrama de robustez es un artefacto del método ICONIX que sirve de puente entre el análisis (casos de uso, modelo conceptual) y el diseño detallado. A diferencia del diagrama de clases conceptuales del Capítulo~\ref{ch:diagramaclases} (que solo muestra conceptos del problema), aquí ya se modelan \textbf{clases de software}, clasificadas en tres categorías:
+
+\begin{itemize}
+  \item \textbf{Boundary (frontera):} interfaces de usuario y puntos de integración con sistemas externos. En FisioManager: pantallas (\codeinline{UIAgendaPaciente}, \codeinline{UIRegistroFeedback}, \ldots), el servicio de notificaciones y los servicios de IA externos.
+  \item \textbf{Control:} lógica de aplicación que orquesta el flujo entre fronteras y entidades. En FisioManager: \codeinline{GestorCitas}, \codeinline{GestorFeedback}, \codeinline{AnalizadorIA}, \codeinline{GestorPlanTratamiento}, \codeinline{GestorNotasClinicas}, etc.
+  \item \textbf{Entity (entidad):} entidades persistentes del dominio, generalmente derivadas del diagrama de clases conceptuales.
+\end{itemize}
+
+\section{Flujos consolidados}
+
+Para mantener una visión integrada del sistema se presenta un único diagrama de robustez consolidado que muestra cinco flujos representativos:
+
+\begin{enumerate}
+  \item \textbf{Agendar cita (Paciente):} el paciente solicita una cita, el \codeinline{GestorCitas} delega en \codeinline{ValidadorDisponibilidad} para verificar horarios, salas y colisiones, crea la \codeinline{Cita}, programa un \codeinline{Recordatorio} y dispara una notificación.
+  \item \textbf{Registrar feedback de sesión (Paciente):} el paciente envía audio, nivel de dolor y estado emocional; el \codeinline{GestorFeedback} crea la entidad \codeinline{Feedback} y delega en \codeinline{AnalizadorIA}, que invoca el servicio de IA externo y persiste \codeinline{AnalisisIA}.
+  \item \textbf{Elaborar plan de tratamiento (Terapeuta):} el terapeuta crea o edita un \codeinline{PlanTratamiento} con sus \codeinline{FaseTratamiento} y prescribe \codeinline{AsignacionRutina}, vinculando todo al \codeinline{HistorialClinico} del paciente.
+  \item \textbf{Registrar nota clínica durante consulta (Terapeuta):} desde el expediente del paciente, el terapeuta agrega una \codeinline{NotaClinica} que el \codeinline{GestorNotasClinicas} adjunta al historial y, cuando aplica, al plan de tratamiento activo.
+  \item \textbf{Consulta de agenda (Terapeuta):} el terapeuta consulta su agenda del día; el \codeinline{GestorCitas} devuelve las citas programadas.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{FisioManager_DiagramaRobustez.png}
+  \caption{Diagrama de Robustez consolidado: clases de software (Boundary, Control, Entity) que participan en los flujos principales de FisioManager.}
+  \label{fig:diagrama-robustez}
+\end{figure}
+
+\section{Reglas de robustez aplicadas}
+
+Se respetan las reglas clásicas de ICONIX:
+
+\begin{itemize}
+  \item Los actores solo interactúan con clases \textbf{boundary}.
+  \item Las clases \textbf{boundary} no se comunican entre sí directamente: siempre pasan por una clase \textbf{control}.
+  \item Las clases \textbf{entity} no se comunican entre sí ni con \textbf{boundary} directamente: la coordinación entre entidades es responsabilidad de las clases \textbf{control}.
+  \item Las clases \textbf{control} pueden hablar con cualquier otro tipo de clase.
+\end{itemize}
+
+Este diagrama es la base para identificar los \textit{servicios de aplicación} y \textit{repositorios} que aparecerán en el diseño detallado, y para construir más adelante los diagramas de secuencia por caso de uso.
+
+\section{Código PlantUML del diagrama}
+
+El código fuente se entrega como \codeinline{08\_diagrama\_robustez.puml} en el directorio \codeinline{puml/}. Se regenera con:
+
+\begin{lstlisting}[language=bash]
+plantuml -tpng 08_diagrama_robustez.puml
+\end{lstlisting}
+
+El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.

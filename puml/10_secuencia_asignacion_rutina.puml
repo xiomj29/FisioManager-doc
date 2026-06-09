@@ -1,0 +1,119 @@
+@startuml FisioManager_Secuencia_AsignacionRutina
+
+skinparam backgroundColor #FEFEFE
+skinparam sequence {
+  ArrowColor #2E75B6
+  ActorBorderColor #1F4E79
+  LifeLineBorderColor #2E75B6
+  ParticipantBorderColor #2E75B6
+  ParticipantBackgroundColor #D6EAF8
+  ParticipantFontColor #1F4E79
+  ActorBackgroundColor #AED6F1
+}
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+title Diagrama de Secuencia - Flujo 2: Asignacion de Rutina
+
+actor "Terapeuta" as Terapeuta #AED6F1
+participant "UIRutinaBuilder" as UI #D6EAF8
+participant "GestorPlanTratamiento" as Gestor #D6EAF8
+participant "AsignacionRutina" as Asignacion #D6EAF8
+participant "Notificacion\nal Paciente" as Notif #D6EAF8
+database "Base de Datos" as DB #E8DAEF
+
+== Construccion de la Rutina ==
+
+Terapeuta -> UI : Accede al constructor\nde rutinas
+activate UI
+
+UI -> UI : Cargar plantillas de\nejercicio disponibles
+UI --> Terapeuta : Mostrar biblioteca de\nejercicio con filtros\n(parte del cuerpo, tipo)
+
+Terapeuta -> UI : Seleccionar ejercicios\ny configurar parametros\n(duracion, repeticiones, descanso)
+UI -> UI : Validar configuracion\nde actividades
+
+Terapeuta -> UI : Confirmar creacion\nde rutina
+
+UI -> Gestor : crearRutina(titulo, tipo,\nactividades[])
+activate Gestor
+
+Gestor -> Gestor : Validar datos de rutina\n(campos requeridos,\ntipos validos)
+
+Gestor -> DB : INSERT Routine\n(patientId=null, titulo,\ntipo, actividades)
+activate DB
+DB --> Gestor : Rutina template creada\n(routineId)
+deactivate DB
+
+Gestor --> UI : Rutina guardada\nen biblioteca
+deactivate Gestor
+
+UI --> Terapeuta : Confirmacion:\n"Rutina creada exitosamente"
+
+== Asignacion a Pacientes ==
+
+Terapeuta -> UI : Seleccionar rutina\ndesde biblioteca
+UI --> Terapeuta : Mostrar detalle de rutina\ncon opcion "Asignar a Pacientes"
+
+Terapeuta -> UI : Click "Asignar a Pacientes"\ny seleccionar paciente(s)
+
+UI -> Gestor : asignarRutina(routineId,\npatientIds[])
+activate Gestor
+
+Gestor -> Asignacion : procesarAsignacion(\nroutineTemplate, pacientIds[])
+activate Asignacion
+
+loop Para cada paciente seleccionado
+    Asignacion -> DB : Obtener rutina template\ncon actividades
+    activate DB
+    DB --> Asignacion : Datos de rutina\ny actividades
+    deactivate DB
+
+    Asignacion -> DB : INSERT Routine clonada\n(patientId=pacienteId,\nactividades copiadas)
+    activate DB
+    DB --> Asignacion : Rutina asignada creada
+    deactivate DB
+
+    Asignacion -> Notif : enviarNotificacion(\npacienteId, rutina)
+    activate Notif
+
+    Notif -> Notif : Preparar mensaje\nde notificacion
+    Notif -> DB : Registrar notificacion\npendiente
+    activate DB
+    DB --> Notif : OK
+    deactivate DB
+
+    Notif --> Asignacion : Notificacion enviada
+    deactivate Notif
+end
+
+Asignacion --> Gestor : Asignacion completada\n(N rutinas creadas)
+deactivate Asignacion
+
+Gestor --> UI : Resultado de asignacion
+deactivate Gestor
+
+UI --> Terapeuta : Confirmacion:\n"Rutina asignada a N pacientes"
+deactivate UI
+
+note over Terapeuta, UI
+  El terapeuta puede filtrar ejercicios
+  por parte del cuerpo (rodilla, espalda,
+  hombro, cuello, brazo, cadera, tobillo)
+  y por tipo (Fisico, Respiracion)
+end note
+
+note over Asignacion, DB
+  La rutina se clona por cada paciente
+  preservando todas las actividades
+  y sus parametros configurados
+end note
+
+note over Notif
+  El paciente recibe
+  la notificacion y puede
+  ver la rutina asignada
+  en su dashboard
+end note
+
+@enduml

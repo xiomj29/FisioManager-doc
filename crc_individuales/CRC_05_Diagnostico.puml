@@ -1,0 +1,36 @@
+@startuml CRC_Diagnostico
+
+' FisioManager - CRC Card: Diagnostico
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Diagnostico</b>
+
+class "Responsabilidades" as Resp {
+    + Almacenar el diagnostico clinico de un paciente
+    + Asociar codigo CIE-10 cuando aplique
+    + Indicar nivel de severidad
+    + Mantener registro del terapeuta que lo emite
+    + Mantener fecha de emision
+    + Permitir actualizacion con trazabilidad
+}
+
+class "Colaboradores" as Col {
+    HistorialClinico (contenedor)
+    Terapeuta (autor)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

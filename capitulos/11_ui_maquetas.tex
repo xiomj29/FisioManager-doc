@@ -1,0 +1,444 @@
+% CAPITULO 9 - MAQUETAS DE INTERFAZ (UI/UX)
+
+\chapter{Maquetas de Interfaz (UI/UX)}\label{ch:maquetas}
+
+Este capítulo documenta las maquetas de alta fidelidad del producto diseñadas en \textit{Google Stitch}. Las pantallas reflejan la filosofía de diseño \textbf{The Empathetic Curator}: una estética editorial premium, con asimetría intencional, tipografía sofisticada (Manrope + Plus Jakarta Sans) y profundidad lograda mediante capas tonales en lugar de bordes sólidos.
+
+La paleta combina azul profundo (\codeinline{\#00478D}) para transmitir confianza clínica con verde orgánico (\codeinline{\#5B9D3E}) para representar vitalidad y progreso. La superficie base \codeinline{\#F3FAFF} se eleva mediante variaciones tonales en lugar de sombras tradicionales, creando una sensación de \textit{papel fino apilado}.
+
+\begin{infobox}[title={Nota sobre el idioma de las maquetas}]
+  Los textos visibles en estas maquetas de alta fidelidad están en inglés porque corresponden al prototipo generado en \textit{Google Stitch}, cuyo contenido placeholder se produjo en ese idioma. El producto final adopta el \textbf{español como idioma primario}, conforme al requerimiento \textbf{RNF-051}, con arquitectura preparada para internacionalización; las maquetas ilustran la \emph{estructura, jerarquía y comportamiento} de cada pantalla, no su copia definitiva.
+\end{infobox}
+
+\section{Sistema de Diseño}
+
+\subsection{Filosofía visual}
+
+\begin{infobox}[title={The Empathetic Curator}]
+  En el contexto de alto riesgo de la fisioterapia y la gestión de salud, FisioManager se aleja del aspecto clínico y \textit{template-heavy} del software médico tradicional para adoptar una estética editorial de alta gama. La interfaz se siente curada, intencional y serena.
+
+  Se rompe la rigidez del grid tradicional mediante \textbf{asimetría intencional} y \textbf{profundidad tonal}. Generosos márgenes en blanco y superficies superpuestas tipo \textit{layered} crean una interfaz que respira. Los datos no se presentan como una hoja de cálculo, sino como una serie de hitos significativos en el viaje del paciente.
+\end{infobox}
+
+\subsection{Reglas explícitas del sistema}
+
+\begin{itemize}
+  \item \textbf{Regla \textit{No-Line}}: prohibido el uso de bordes sólidos de 1px para seccionar contenido. Las fronteras se definen por \textit{shifts} de fondo (\codeinline{surface} a \codeinline{surface-container-low}) y transiciones tonales sutiles.
+  \item \textbf{Jerarquía de superficies}: tratamiento del UI como una pila física de papel fino o vidrio esmerilado. Niveles: \codeinline{surface} (base), \codeinline{surface-container-low} (secciones), \codeinline{surface-container-lowest} (tarjetas interactivas, blanco puro), \codeinline{surface-container-highest} (overlays, sidebars).
+  \item \textbf{Glass \& Gradient}: uso de \textit{glassmorphism} para barras de acción flotantes (semi-transparente con \codeinline{24px backdrop-blur}). Gradientes lineales \codeinline{primary} a \codeinline{primary-container} en los CTA principales para crear un \textit{soft glow} táctil y premium.
+  \item \textbf{Elevación sin sombras}: la sensación de profundidad se logra apilando \codeinline{surface-container-lowest} sobre \codeinline{surface-container}, no con \textit{drop shadows} tradicionales.
+  \item \textbf{Radios de esquina}: tarjetas \codeinline{md} (1.5rem) para sensación amigable; botones \codeinline{full} (9999px) para contraste arquitectónico; heroes \codeinline{xl} (3rem) para estética orgánica tipo guijarro.
+  \item \textbf{Sin negro puro}: el texto utiliza \codeinline{on-surface} (\#071E27) en lugar de \codeinline{\#000000} para mantener un acabado suave.
+\end{itemize}
+
+\subsection{Tipografía}
+
+\begin{itemize}
+  \item \textbf{Manrope} (La Autoridad): para \textit{display} y headlines (nombre del paciente, estadísticas de recuperación). Geométrica pero cálida; \textit{letter-spacing} ajustado a -2\% en displays grandes para sensación editorial bespoke.
+  \item \textbf{Plus Jakarta Sans} (El Compañero): para body y labels. Alta x-height y excelente legibilidad. \codeinline{body-lg} (1rem) en notas clínicas para garantizar accesibilidad.
+\end{itemize}
+
+\section{Mapa de pantallas}
+
+El producto se compone de \textbf{16 pantallas principales} organizadas en dos portales diferenciados. El portal del paciente (móvil) cubre el día a día de la rehabilitación, mientras que el portal del terapeuta (web) abarca tanto la gestión clínica diaria como la vista estratégica de administración de la clínica.
+
+\begin{longtable}{L{1cm} L{4.5cm} L{2.8cm} L{6.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}\#} &
+  \textbf{\color{fmAccent}Pantalla} &
+  \textbf{\color{fmAccent}Portal} &
+  \textbf{\color{fmAccent}Propósito principal} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  M-01 & Home del Paciente & Móvil --- Paciente & Punto de entrada diario, rutinas del día y CTA principal. \\
+  M-02 & Detalle de Ejercicio & Móvil --- Paciente & Ejecución guiada con video, instrucciones y contadores. \\
+  \rowcolor{fmTableAltRow}
+  M-03 & Rutina activa (Lower Back) & Móvil --- Paciente & Visualización del plan en curso y daily activities. \\
+  M-04 & Progreso y dashboard personal & Móvil --- Paciente & Streak, weekly goal, tendencias y smart insights. \\
+  \rowcolor{fmTableAltRow}
+  M-05 & Registro de Feedback & Móvil --- Paciente & Captura de dolor, emoción y voice feedback (RF-033/035). \\
+  M-06 & Wellness Hub & Móvil --- Paciente & Módulos de bienestar: respiración, relajación (RF-060/061). \\
+  \rowcolor{fmTableAltRow}
+  M-07 & Ejercicio guiado (Morning Serenity) & Móvil --- Paciente & Sesión en vivo de respiración guiada con biometría. \\
+  M-08 & Wellness Check-in y journaling & Móvil --- Paciente & Estado emocional diario, reflexiones y soporte. \\
+  \rowcolor{fmTableAltRow}
+  W-01 & Patient Directory & Web --- Terapeuta & Listado de pacientes con estado de recuperación. \\
+  W-02 & Patient Detail (Alex Rivera) & Web --- Terapeuta & Vista 360 del paciente con AI Clinical Insight. \\
+  \rowcolor{fmTableAltRow}
+  W-03 & Routine Builder & Web --- Terapeuta & Constructor drag-and-drop de rutinas (RF-021). \\
+  W-04 & Routine Builder (drag activo) & Web --- Terapeuta & Estado interactivo del builder con drop zone. \\
+  \rowcolor{fmTableAltRow}
+  W-05 & Routine Library & Web --- Terapeuta & Biblioteca curada con AI suggestions (RF-027). \\
+  W-06 & Clinical Analytics & Web --- Terapeuta / Admin & Dashboard agregado con AI Insights Engine (RF-051/054). \\
+  \rowcolor{fmTableAltRow}
+  W-07 & Sesión Clínica Activa & Web --- Terapeuta & Notas y prescripción de tratamiento durante consulta. \\
+  W-08 & Plan de Tratamiento & Web --- Terapeuta / Admin & Vista por fases, medicaciones y feedback con IA. \\
+  \bottomrule
+\end{longtable}
+
+\section{Portal del Paciente (Móvil)}
+
+\subsection{M-01 --- Home del Paciente}
+
+\textbf{Saludo personalizado y estado del día}. Encabezado \textit{Hello, Alex Rivera} en Manrope display con avatar circular. Línea secundaria \textit{Ready for your recovery session today?} establece tono empático.
+
+Tarjetas de \textit{summary metrics} en disposición asimétrica: \textbf{Weekly Goal 85\% Complete} con barra de progreso azul y \textbf{12 Day Streak} en chip verde fluo. La asimetría refuerza la jerarquía: la meta semanal es la métrica principal.
+
+Sección \textit{Today's routines} con dos cards: \textbf{Active Plan: Treatment Routine} (focus shoulder mobility, 4 of 6 exercises) con CTA primario azul gradient \textit{Start Now}. Debajo, \textbf{Evening: Relaxation Routine} con CTA secundario verde claro \textit{Start Session}.
+
+Footer fijo con \textit{bottom navigation} de 4 ítems: Home, Routine, Progress, Wellness. La píldora azul activa indica posición actual.
+
+\textit{Mapeo a requerimientos:} RF-025 (visualización de rutina asignada), RF-030 (inicio de sesión).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M01_home.jpg}{M-01 Home del Paciente.}{fig:maqueta-m01}
+
+\subsection{M-02 --- Detalle de Ejercicio}
+
+Pantalla de \textbf{ejecución guiada}. Hero superior: video instruccional de \textit{Quadriceps Stretch} con overlay \textit{INSTRUCTIONAL} y botón play centrado. El chip etiqueta superior \textit{LEG RECOVERY} contextualiza la zona corporal trabajada.
+
+Título display: \textbf{Quadriceps Stretch} en Manrope. Cuatro pasos numerados con círculos azules contienen las instrucciones: \textit{Stand tall on one leg... Bend your other knee... Grasp your ankle... Hold for 30 seconds}.
+
+Tarjetas de metadatos: \textbf{Focus Zone: Anterior Thigh} (fondo blanco, label azul) y \textbf{Intensity: Moderate} (chip verde fluo con barra de 3 segmentos). Esto refuerza la \textit{Bio-Metrics Chips} del sistema de diseño.
+
+\textbf{Progreso de ejecución}: anillo concéntrico \textit{Progress Orb} mostrando \textbf{8 / 12 reps} en el centro, con segmento verde indicando el avance. Debajo, control \textit{Set 2 of 3} con botones $-$/$+$. CTA primario gradient: \textbf{Complete Exercise} con icono check.
+
+\textit{Mapeo a requerimientos:} RF-020 (catálogo con video), RF-031 (marcado de ejercicio).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M02_ejercicio.jpg}{M-02 Detalle de Ejercicio --- Quadriceps Stretch.}{fig:maqueta-m02}
+
+\subsection{M-03 --- Rutina activa: Lower Back Recovery}
+
+Vista del \textbf{plan en curso}. Header: \textit{Current Plan} en label-sm seguido del título \textbf{Lower Back Recovery} en display, con indicador derecho \textbf{60\% Complete} en verde.
+
+Card hero \textit{Morning Session}: \textit{Focus on mobility and deep core activation to stabilize the lumbar spine}. Anillo de progreso a la izquierda, dos chips a la derecha (3 Exercises / 12 Mins Total).
+
+Lista de \textit{Daily Activities}: tres ítems con thumbnail cuadrado, título, tag de tipo (\textit{EXERCISE}, \textit{BREATHING}) y duración en minutos. CTA \textit{Start} en azul. El tercer ítem \textit{Pelvic Tilts} aparece bloqueado con icono de candado y badge \textit{NEXT STEP}, indicando progresión.
+
+Bloque \textbf{Therapist Notes} en card verde claro: nota del terapeuta titulada \textit{Consistency is Key}. Esto materializa la conexión paciente-terapeuta del modelo de dominio.
+
+Tarjetas inferiores tipo \textit{tip}: \textbf{Pain Guard} (fondo azul claro, icono advertencia) y \textbf{Stay Hydrated} (fondo verde menta).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M03_lowerback.jpg}{M-03 Rutina activa --- Lower Back Recovery.}{fig:maqueta-m03}
+
+\subsection{M-04 --- Progreso personal}
+
+Dashboard tipo \textit{wellness journal}. Hero card oscuro azul: \textbf{Steady Progress, Alex!} \textit{You're recovering faster than 80\% of patients in your phase}. Sub-card glassmorphism: \textbf{Current Streak: 5 Days Streak} con emoji llama.
+
+Card \textit{Weekly Goal}: \textbf{85\% MET} en anillo verde concéntrico. Texto inferior \textit{85\% of weekly goals met}.
+
+Card \textit{Pain Levels over time}: gráfica de línea suave (Plus Jakarta Sans para labels de días MON--SUN). Chip \textit{Decreasing Trend} en verde claro. Visualización limpia, sin grid pesado.
+
+Card \textit{Completion Rate / Daily routine adherence}: barras verticales por día (M, T, W, T, F, S, S). Verde sólido para completados, gris para perdidos. Una semana donde se ven 4 días completados y 3 perdidos.
+
+Card \textbf{Smart Insight} con icono de lámpara: texto narrativo personalizado generado por IA: \textit{Your pain levels correlate with morning mobility sessions. Consider adding a 5-minute stretch...}
+
+\textit{Mapeo a requerimientos:} RF-050 (consulta de progreso), RF-053 (gráficas de tendencia), RF-044 (resumen asistido por IA).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M04_progreso.jpg}{M-04 Progreso personal.}{fig:maqueta-m04}
+
+\subsection{M-05 --- Registro de Feedback}
+
+\textbf{Pantalla central del valor diferencial} de FisioManager. Título display: \textbf{How did you feel?} \textit{Your feedback helps us tailor your recovery journey}.
+
+Card \textbf{Pain Intensity}: slider horizontal con etiquetas 1, 5, 10. Tres iconos emoji indican el rango: verde (feliz, 1), amarillo (neutro, 5), rojo (dolor, 10). Chip \textit{Level 4} en verde claro a la derecha.
+
+Sección \textbf{Emotional Well-being}: tres botones cuadrados grandes con iconos emoji y label: \textit{Happy}, \textit{Neutral} (seleccionado, fondo azul gradient), \textit{Sad}.
+
+\textbf{Voice feedback}: gran círculo central con icono micrófono. Subtítulo \textit{Tap to record voice feedback / Tell us about any specific discomfort}. El tamaño del control comunica la centralidad del feedback por voz.
+
+CTA primario full-width: \textbf{Submit Feedback}.
+
+\textit{Mapeo a requerimientos:} RF-033 (feedback voz), RF-034 (dolor 0--10), RF-035 (estado emocional).
+
+\maquetafigura{width=0.45\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M05_feedback.jpg}{M-05 Registro de Feedback.}{fig:maqueta-m05}
+
+\subsection{M-06 --- Wellness Hub}
+
+Módulos de bienestar curados. Header: \textbf{Wellness Hub} en Manrope display. \textit{Nurture your mind and body during recovery with curated relaxation techniques}.
+
+Cards verticales con hero image de duración etiquetada (\textit{5 MIN}, \textit{12 MIN}). \textbf{Mindful Breathing} \textit{Deep diaphragmatic rhythm to center your focus}. \textbf{Progressive Relaxation} \textit{Guided tension-release cycles}. Cada card incluye CTA verde \textit{Start Practice} con icono play.
+
+Card \textit{Daily Wellness Goal}: anillo verde \textbf{75\% CALM} con texto \textbf{15/20 min}. Sub-tarjetas con biométricas: \textit{HR: 68 BPM} y \textit{Breath: 12/min}.
+
+CTA flotante azul gradient con efecto glow: \textbf{I need to relax} con icono flor de loto. La copy es deliberadamente humana y empática.
+
+\textit{Mapeo a requerimientos:} RF-060 (catálogo bienestar), RF-061 (acceso paciente).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M06_wellness.jpg}{M-06 Wellness Hub --- módulos curados de meditación y relajación.}{fig:maqueta-m06}
+
+\subsection{M-07 --- Ejercicio guiado: Morning Serenity}
+
+Pantalla de \textbf{sesión en vivo} para los módulos de bienestar. Es la profundización natural de M-06 cuando el paciente activa una práctica.
+
+Header: avatar y \textbf{FisioManager}, campana de notificaciones. Título display \textbf{Morning Serenity} en Manrope con subtítulo \textit{Guided Breathing Exercise}.
+
+\textbf{Centro de atención}: gran círculo concéntrico con orbe azul gradient en el medio. Etiqueta \textit{INHALE} y contador \textbf{04} (segundos restantes de la fase actual). El uso de un solo elemento dominante guía la atención del usuario hacia la respiración sin distracciones.
+
+Card de \textbf{biométricas en tiempo real}: \textit{Time Remaining} \textbf{02:45} y \textit{Heart Rate} \textbf{72 bpm} con icono corazón en rojo claro. Esta materializa la integración con dispositivos de medición biométrica (wearables / sensor de frecuencia cardiaca).
+
+Card \textbf{Background Sounds}: chip verde activo \textit{Soft Rain}, chips secundarios \textit{Forest Ambient} y \textit{Ocean Breeze}. Personalización del soundscape sin salir de la sesión.
+
+Card \textbf{Intensity}: \textit{Adjust the duration of each breathing cycle}, control con $-$/$+$ y valor \textbf{08s}. Permite al paciente ajustar dificultad sin abandonar la práctica.
+
+Footer: CTA primario azul gradient \textbf{Pause Session} (icono pause) y botón circular destructivo en rojo claro (X) para terminar.
+
+\textit{Bottom navigation} se modifica respecto a M-01: aparece una tab adicional \textit{BREATHE} (activa) entre Home y Wellness, indicando que esta es una vista modal de inmersión. También se muestra una tab \textit{CLINIC} a la derecha, lo que sugiere que en este flujo el paciente puede contactar la clínica directamente.
+
+\textit{Mapeo a requerimientos:} RF-061 (acceso a módulos de bienestar), extensión natural para integración biométrica.
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M07_breathing.jpg}{M-07 Morning Serenity --- ejercicio de respiración guiada en vivo.}{fig:maqueta-m07}
+
+\subsection{M-08 --- Wellness Check-in y Journaling}
+
+Pantalla de \textbf{seguimiento emocional diario}. Complementa a M-05 (feedback post-sesión) ofreciendo un espacio de auto-reflexión no vinculado a una rutina específica.
+
+Header: título display \textbf{How are you feeling today?} con subtítulo \textit{Your emotional health is a vital part of your physical recovery journey}. La copy refuerza el principio holístico del producto: cuerpo y mente son inseparables en la recuperación.
+
+\textbf{Grid 2x2 de estados emocionales}: cada estado se representa con un icono ilustrativo en círculo de color suave y label: \textit{Calm} (figura de meditación azul), \textit{Energetic} (rayo verde), \textit{Tired} (luna azul claro), \textit{Frustrated} (cara triste rojo claro). El layout 2x2 facilita la selección rápida con el pulgar.
+
+Card \textbf{Daily Reflections}: header con label-sm \textit{Daily Reflections} y \textit{OCT 24} en chip azul. Textarea grande con placeholder \textit{Write down your thoughts or note any progress...}. Botones inferiores: \textit{micrófono} (dictado por voz, RF-033 reutilizado), \textit{galería} (adjuntar foto/screenshot). CTA primario azul gradient \textit{Save Note}.
+
+Sección \textbf{Support Resources}: cards horizontales con cuatro elementos cada una:
+
+\textit{Talk to a Specialist}: foto de profesional de salud mental, copy \textit{Schedule a confidential 15-minute call with our mental wellness team}. CTA circular verde con flecha.
+
+\textit{Mental Wellness Tips}: icono de artículos, copy \textit{Curated articles on managing chronic pain through mindfulness}. CTA con icono libro abierto.
+
+\textit{Bottom navigation}: mismas 4 tabs (Home, Breathe, Wellness activa, Clinic).
+
+\textit{Mapeo a requerimientos:} RF-035 (estado emocional), RF-061 (acceso bienestar), RF-033 (registro por voz reutilizado para journaling).
+
+\maquetafigura{width=0.42\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_M08_wellness_checkin.jpg}{M-08 Wellness Check-in --- reflexión emocional diaria y soporte.}{fig:maqueta-m08}
+
+\section{Portal del Terapeuta (Web)}
+
+\subsection{W-01 --- Patient Directory}
+
+\textbf{Pantalla de inicio del terapeuta}. Sidebar izquierdo \codeinline{surface-container-highest} con logo \textbf{FisioManager Therapist Portal}, navegación: Home, Patient Directory (activo), Routine Library, Clinical Analytics, Settings. CTA fijo abajo: \textbf{+ Create Routine} en azul gradient.
+
+Topbar: search bar central, ítems de menú (Dashboard, Patients seleccionado, Routines, Analytics), iconos de notificaciones y settings, botón \textit{New Patient} y avatar.
+
+Hero: \textbf{Welcome back, Dr. Aris}, \textit{You have 12 appointments scheduled for today}. Métricas: \textbf{84\% Avg. Recovery} y \textbf{24 Active Patients}. Cards laterales: \textit{Next Session: Elena Rodriguez In 15 Minutes} y \textit{Tasks: 4 Pending Reviews}.
+
+Grid de pacientes (3 columnas) con cards: avatar, nombre, condición (\textit{ACL Recovery Phase 2}, \textit{Lower Back Pain Chronic}, etc.), estado (\textit{ON TRACK} en verde, \textit{DELAYED} en amarillo, \textit{ATTENTION} en rojo), barra de progreso con porcentaje y CTA \textit{View Details}.
+
+Slot vacío con icono persona+: \textbf{Register Patient} \textit{Start a new recovery journey today}.
+
+\textit{Mapeo a requerimientos:} RF-051 (dashboard de terapeuta), RF-010 (asignación paciente-terapeuta).
+
+\maquetafigura{width=\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_W01_directory.jpg}{W-01 Patient Directory --- vista de inicio del terapeuta.}{fig:maqueta-w01}
+
+\subsection{W-02 --- Patient Detail}
+
+Vista 360 grados de un paciente. Header con avatar grande, nombre \textbf{Alex Rivera / 32 Years}, badge \textit{Active Recovery}, diagnóstico \textit{Post-ACL Reconstruction}, chip \textit{Week 8 of 12}. CTAs: \textit{Schedule Visit} (secundario) y \textit{Start Assessment} (primario gradient).
+
+\textbf{Card AI Clinical Insight} (azul oscuro, hero principal): \textit{Alex is showing remarkable progress in knee flexion, reaching 115 degrees today. However, voice feedback indicates a slight increase in frustration levels regarding balance exercises. Consider adjusting proprioception intensity for the next cycle}. Sub-cards: \textit{Emotional Pulse: Determined}, \textit{Recent Feedback: Feeling stable today}.
+
+Esto materializa el flujo \textbf{Feedback} $\rightarrow$ \textbf{AnalisisIA} $\rightarrow$ \textbf{insight para el terapeuta} (RF-040 a RF-044).
+
+Card lateral \textit{Recovery Metrics}: \textbf{ROM Progress 85\%}, \textbf{Compliance 92\%}, \textbf{Pain Level (Avg) 2.4/10}.
+
+Tabs: Medical History (activo), Assigned Routines, Feedback History, Documents. \textbf{Journey Timeline} vertical con 3 eventos cronológicos: Post-Op Review \#4 (Oct 12, 2023), Initial Rehab Protocol (Sep 28), ACL Reconstruction Surgery (Sep 14). Etiquetas \textit{DR. SMITH ORTHO}.
+
+Cards laterales: \textbf{Active Routines} (Lower Limb Stability A, Aquatic Mobilization), \textbf{Pain Distribution} (mini barras por día de la semana, viernes con mayor altura).
+
+\textit{Mapeo a requerimientos:} RF-013 (consulta historial), RF-051 (dashboard), RF-044 (resumen asistido).
+
+\maquetafigura{width=\textwidth,height=0.85\textheight,keepaspectratio}{maqueta_W02_detail.jpg}{W-02 Patient Detail --- vista 360 de Alex Rivera.}{fig:maqueta-w02}
+
+\subsection{W-03 --- Routine Builder}
+
+\textbf{Constructor drag-and-drop} de rutinas. Layout de dos paneles:
+
+\textbf{Panel izquierdo: Exercise Catalog}. Search bar \textit{Search exercises (e.g. Lumbar, Shoulder)}. Chips de filtro: All Movements (activo), Strength, Flexibility, Balance. Cards de ejercicios con thumbnail real (Lumbar Extension Cobra, Isometric Core Plank, Scapular Retraction, Glute Bridge), título, focus zone y tag de tipo (STRETCH, STRENGTH, REHAB) con botón + para agregar.
+
+\textbf{Panel derecho: rutina en construcción}. Título editable \textbf{Untitled Routine} con icono lápiz. Fecha de creación. CTAs superiores: \textit{Save as Template} y \textit{Assign to Patient} (primario).
+
+Lista de ejercicios agregados, cada uno con: número ordinal en círculo azul, nombre, controles \textbf{SETS / REPS-SEC / REST} en chips editables azul claro, botón eliminar (icono basurero rojo). Drop zone con dashed border y \textit{+ Drag an exercise here or click to add manually}.
+
+Footer fijo: métricas \textbf{Total Duration: \textasciitilde 12 Minutes}, \textbf{Exercise Count: 2 Movements}, CTA negro \textit{Save Routine} y badge verde \textit{DRAFT STATUS / All changes saved locally}.
+
+\textit{Mapeo a requerimientos:} RF-021 (creación de rutinas), RF-022 (personalización), RF-024 (asignación).
+
+\maquetafigura{width=\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_W03_builder.jpg}{W-03 Routine Builder --- panel de catálogo y rutina en construcción.}{fig:maqueta-w03}
+
+\subsection{W-04 --- Routine Builder (estado drag activo)}
+
+Variante interactiva del builder en pleno arrastre. Esta vista documenta los \textbf{estados intermedios del componente DnD} y guía al equipo de desarrollo en la implementación.
+
+Diferencias respecto a W-03:
+
+\begin{itemize}
+  \item En el panel izquierdo, las cards de ejercicios pierden la información de focus (subtítulo \textit{Focus: Spinal mobility, Lower back} se reduce a \textit{Focus: Spinal mobility}). El propósito es \textbf{compactar el catálogo} mientras hay un drag activo, dando más espacio visual al panel destino.
+  \item Cada ítem de la lista de rutina aparece con un \textbf{drag handle} (icono de seis puntos en gris) a la izquierda del número ordinal, indicando que puede ser reordenado.
+  \item La \textbf{drop zone} cambia de aspecto: el fondo pasa a \codeinline{surface-container-low} con ligera tonalidad azul, el borde dashed se conserva, y el copy se simplifica de \textit{Drag an exercise here or click to add manually} a \textit{Drag from catalog or click to add}. La iluminación adicional es la señal visual de que ese es el target válido.
+  \item El ítem \textit{Glute Bridge} del catálogo desaparece (no está visible en el panel izquierdo), lo que sugiere que ese ítem es el que se está arrastrando.
+\end{itemize}
+
+Esta granularidad es importante para el equipo de frontend: documenta no solo los componentes en estado idle sino las transiciones de estado, que son el corazón de un Builder de calidad.
+
+\maquetafigura{width=\textwidth,height=0.78\textheight,keepaspectratio}{maqueta_W04_builder_drag.jpg}{W-04 Routine Builder --- estado de drag activo con drop zone iluminada.}{fig:maqueta-w04}
+
+\subsection{W-05 --- Routine Library}
+
+Biblioteca curada de rutinas. Header: \textit{Curated Collections} (label-sm) seguido del título \textbf{Clinical Routine Library}. \textit{Standardized rehabilitation protocols and wellness journeys for your patient clinical pathways}. Filtros derechos: \textbf{Filter} y \textbf{Latest}.
+
+Grid 4 columnas. Primera card \textit{Create New Routine} con icono + grande, copy editorial \textit{Design a custom sequence for specific recovery needs}. Cards subsiguientes con foto hero (anatomía, vista de yoga mat, atleta, gimnasio), badge de categoría (\textit{TREATMENT} verde, \textit{RELAXATION} azul claro), título (\textbf{Post-OP Shoulder}, \textbf{Lumbar Release}, \textbf{ACL Strength II}, \textbf{Cervical Stability}, \textbf{Ankle Mobility}, \textbf{Hip Dysplasia}), descripción breve.
+
+Cada card al pie: chips de duración (\textit{12E 15M}, \textit{8E 20M}, etc.) y acciones rápidas iconos: edit, asignar a paciente (icono persona+), clonar.
+
+\textbf{Banner inferior \textit{Smart Templates are here}}: copy \textit{Our AI engine suggests routine modifications based on real-time patient progress data and bio-metric feedback}. CTAs \textit{Enable Smart Insights} y \textit{Learn More}.
+
+Sub-card \textit{AI Suggestion: Lower Back Protocol}, con dos sugerencias: \textit{Suggestion: Increase rest interval to 45s for 3 patients showing high fatigue} y \textit{Insight: Patient John D. is ready for Stage 2 advancement}.
+
+\textit{Mapeo a requerimientos:} RF-021 (creación), RF-023 (clonado), RF-027 (generación asistida por IA).
+
+\maquetafigura{width=\textwidth,height=0.85\textheight,keepaspectratio}{maqueta_W05_library.jpg}{W-05 Routine Library --- biblioteca clínica curada con AI Suggestions.}{fig:maqueta-w05}
+
+\subsection{W-06 --- Clinical Analytics}
+
+Dashboard agregado. Título \textbf{Clinical Analytics}, \textit{Detailed overview of clinic-wide rehabilitation performance and patient outcome metrics}. Selector \textit{Last 30 Days} y CTA \textit{Export Report}.
+
+\textbf{Hero card AI Insights Engine} (azul oscuro, mismo tratamiento que en patient detail): \textbf{Lower Limb Adherence is up 14\% this month}. \textit{Clinical data indicates that patients using the Dynamic Knee Recovery protocol show a 22\% faster reduction in pain levels compared to baseline. Recommend prioritizing this routine for new ACL recovery cohorts}. Sub-cards: \textit{Critical Focus: Shoulder Mobility Stability}, \textit{Peak Engagement: Tuesday, 08:00 AM}.
+
+Card \textbf{Average Adherence}: anillo verde \textbf{82\% Compliance}. Detalle: \textit{Completed 82.4\%} / \textit{Skipped 17.6\%}.
+
+Card \textbf{Aggregate Patient Progress / Recovery trajectory across all active clinical cases}: barras verticales por semana (WK 1--7), comparación \textit{Target Line} (azul) vs \textit{Actual Progress} (verde).
+
+Card \textbf{Average Pain Reporting (VAS Scale)}: 5 barras tipo termómetro con valores 8.2 (rojo, mes 1), 6.5 (naranja), 4.1 (amarillo), 2.4 (verde claro), 1.2 (verde oscuro, mes 5). Visualiza la mejora a lo largo del tratamiento.
+
+Card \textbf{Top Performing Protocols}: lista con icono por protocolo, nombre, barra de progreso azul y delta porcentual: \textit{Post-Op ACL Recovery +12\%}, \textit{Rotator Cuff Strengthening +8\%}, \textit{Lumbar Stabilization -3\%}.
+
+Banner \textit{Resource Center / Update your clinical protocols to access new AI assessment tools} con CTA \textit{Create Routine}.
+
+\textit{Mapeo a requerimientos:} RF-054 (indicadores de clínica), RF-053 (gráficas de tendencia), RF-044 (resumen asistido).
+
+\maquetafigura{width=\textwidth,height=0.85\textheight,keepaspectratio}{maqueta_W06_analytics.jpg}{W-06 Clinical Analytics --- dashboard agregado con AI Insights Engine.}{fig:maqueta-w06}
+
+\subsection{W-07 --- Sesión Clínica Activa}
+
+Pantalla operativa de la \textbf{consulta presencial}. Es la herramienta del terapeuta durante la sesión clínica con el paciente.
+
+Header con \textit{breadcrumb}: \textit{PATIENTS} $>$ \textit{CLINICAL RECORD} $>$ \textit{CURRENT SESSION}. Identidad del paciente: nombre \textbf{Elena Rodriguez}, ID \textbf{FM-9928}, chip diagnóstico \textit{Diagnosis: Rotator Cuff Tendinopathy}. CTAs: \textit{Print/Export PDF} y \textbf{Add to Treatment Plan} (primario azul gradient).
+
+\textbf{Panel izquierdo --- Clinical Findings}: card grande con header \textit{Clinical Findings}, \textit{Session Date: Oct 24, 2023}. Toolbar de editor de texto enriquecido: bold (B), italic (I), lista, link. Textarea con placeholder \textit{Start typing your examination notes here...}. Esta es la captura en vivo de las observaciones clínicas del terapeuta.
+
+\textbf{Panel derecho --- Treatment Prescription}: header con icono médico y CTA \textit{Load Template} (carga rutinas predefinidas).
+
+Lista de ejercicios prescritos con detalle granular:
+
+\begin{itemize}
+  \item \textbf{Wall External Rotation} con sub-label \textit{Theraband (Green)}, equipo necesario. Chips: \textit{FREQUENCY 3x Daily}, \textit{SETS/REPS 2 Sets of 15}. Nota informativa con icono \textit{i}: \textit{Maintain elbow at 90 degrees; avoid overextension}. Botón X para remover.
+
+  \item \textbf{Doorway Pectoral Stretch} con sub-label \textit{Bodyweight}. Chips: \textit{FREQUENCY 2x Daily}, \textit{DURATION 30s Hold}.
+
+  \item Botón dashed \textit{+ Add Specific Exercise}.
+\end{itemize}
+
+Card \textbf{Global Instructions} con icono histórico (reloj con flecha): textarea \textit{Additional notes for the patient...} y CTA circular verde con icono compartir, indicando que las instrucciones se transmiten al paciente al cerrar la sesión.
+
+Card inferior \textbf{Patient Recovery Progress}: anillo verde con \textbf{75\%} y label \textbf{Target Strength Reached}, \textit{4 weeks into 6-week plan}.
+
+Esta pantalla es donde se materializa la \textbf{prescripción clínica detallada} (más granular que una rutina genérica), incluyendo equipo, frecuencia, duración y notas técnicas por ejercicio.
+
+\textit{Mapeo a requerimientos:} RF-011 (registro de historial clínico), RF-012 (registro de diagnóstico), RF-024 (asignación de rutina), RF-022 (personalización).
+
+\maquetafigura{width=\textwidth,height=0.85\textheight,keepaspectratio}{maqueta_W07_session.jpg}{W-07 Sesión Clínica Activa --- captura de hallazgos y prescripción en vivo.}{fig:maqueta-w07}
+
+\subsection{W-08 --- Plan de Tratamiento}
+
+Vista del \textbf{Administrador} (rol senior de la clínica) sobre el plan de tratamiento estructurado de un paciente. El sidebar muestra el branding \textbf{FisioManager --- Administración Clínica} con navegación ampliada: Dashboard, Patients, Agenda, Treatment Plans (activo), Routines, Progress, Messages. CTA inferior \textbf{+ New Treatment Plan}.
+
+Header del paciente: avatar con indicador de presencia verde, nombre \textbf{Patient: Alex Rivera}, chip \textit{32 Years}, chip diagnóstico \textit{Post-ACL Reconstruction}, fecha \textit{Start: Sep 14, 2023}. Iconos: historial, notificaciones (con punto rojo de pendiente), menú kebab. CTA primario \textbf{Edit Plan}.
+
+\textbf{Card Clinical Summary} (panel principal):
+
+\begin{itemize}
+  \item Label \textit{PRIMARY GOAL}: \textbf{Restore full ROM and functional stability}.
+  \item Label \textit{ESTIMATED DURATION}: \textbf{12 Weeks} \textit{(Week 4 in progress)}.
+  \item Sub-card destacada \textit{THERAPIST NOTES} con borde lateral azul: \textit{Alex is highly motivated. Focus on quadriceps reactivation and terminal knee extension. Patient reported mild discomfort after long standing periods, but flexion is progressing ahead of schedule}.
+\end{itemize}
+
+\textbf{Card Compliance}: título en verde con valor \textbf{85\%}. Anillo concéntrico verde con icono rayo en el centro. Sub-cards: \textit{AVG PAIN 2.4/10} y \textit{MOOD Determined}.
+
+\textbf{Card Treatment Phases} (timeline vertical):
+
+\begin{itemize}
+  \item \textbf{Phase 1: Initial Mobility} con check verde sólido y badge \textit{COMPLETED}. \textit{Week 1--2 - Recovering inflammation \& baseline ROM}. Sub-ítem con icono mancuerna: \textit{ACL Range of Motion --- Treatment - 2x Daily - 15m} con check verde a la derecha.
+
+  \item \textbf{Phase 2: Strengthening} con icono ciclo (rotación) y badge \textit{IN PROGRESS}. \textit{Week 3--6 - Focus on weight bearing \& proprioception}. Sub-ítem con icono ejercicio: \textit{Lower Limb Stability --- Treatment - 1x Daily - 25m}, indicador inline \textbf{60\% Done} con barra horizontal.
+\end{itemize}
+
+\textbf{Card Medications}: título con icono píldora roja. Item \textbf{Ibuprofen 400mg}: \textit{1 pill - Every 8h - 5 days}. Sub-label \textit{Target: Inflammation Management}. CTAs \textit{View Details} y \textbf{Buy Online} (verde). Disclaimer al pie en gris pequeño: \textit{System does not sell medications; only provides external clinical links for information}. Diseñado para cumplimiento normativo y trazabilidad médica.
+
+\textbf{Card Patient Feedback} (con borde superior verde de notificación, badge \textit{2 da[ys]} indicando frescura):
+
+\begin{itemize}
+  \item Reproductor de audio inline con botón play azul y waveform.
+  \item Sub-card \textit{AI TRANSCRIPT} con icono rayo y texto en itálica: \textit{``Feeling better, pain is decreasing in the morning, but stiffness persists...''}.
+  \item Sub-card \textit{AI SUMMARY}: \textit{Positive trajectory, slight morning stiffness noted. Recommend extension hold increase}.
+\end{itemize}
+
+CTA flotante azul circular con + para agregar nueva entrada de feedback.
+
+\textbf{Card Clinical History} (timeline horizontal con tres hitos):
+
+\begin{itemize}
+  \item Punto azul --- \textit{SEP 14, 2023}: \textbf{Plan Created}. \textit{Initial assessment completed. Post-ACL protocol initiated}.
+  \item Punto verde --- \textit{SEP 28, 2023}: \textbf{Phase 1 Completed}. \textit{Pain levels dropped below 4/10. Ready for light weight-bearing}.
+  \item Punto azul claro --- \textit{OCT 05, 2023}: \textbf{Adjustment Made}. \textit{Increased reps for flexion exercises to push 110 degrees ROM}.
+\end{itemize}
+
+Esta vista consolida en una sola pantalla \textbf{toda la información estratégica} de un caso: meta primaria, fases del plan, medicación, evidencia auditiva del paciente con análisis IA, e historia clínica de decisiones. Es la pantalla de toma de decisiones del Administrador de la clínica.
+
+\textit{Mapeo a requerimientos:} RF-012 (diagnóstico con CIE-10), RF-024 (asignación con frecuencia), RF-040--044 (transcripción, análisis IA, resumen), RF-052 (reporte exportable), RF-013 (consulta de historial).
+
+\maquetafigura{width=\textwidth,height=0.85\textheight,keepaspectratio}{maqueta_W08_treatment.jpg}{W-08 Plan de Tratamiento --- vista del Administrador con fases, medicaciones y feedback con IA.}{fig:maqueta-w08}
+
+\section{Trazabilidad pantallas vs requerimientos funcionales}
+
+\begin{longtable}{L{1.6cm} L{5cm} L{7.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}Pantalla} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}RF cubiertos} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  M-01 & Home Paciente & RF-025, RF-030, RF-070 \\
+  M-02 & Detalle Ejercicio & RF-020, RF-031 \\
+  \rowcolor{fmTableAltRow}
+  M-03 & Rutina activa & RF-025, RF-022 \\
+  M-04 & Progreso personal & RF-050, RF-053, RF-044 \\
+  \rowcolor{fmTableAltRow}
+  M-05 & Feedback & RF-033, RF-034, RF-035, RF-036 \\
+  M-06 & Wellness Hub & RF-060, RF-061 \\
+  \rowcolor{fmTableAltRow}
+  M-07 & Morning Serenity (respiración) & RF-061 \\
+  M-08 & Wellness Check-in & RF-035, RF-061, RF-033 \\
+  \rowcolor{fmTableAltRow}
+  W-01 & Patient Directory & RF-051, RF-010 \\
+  W-02 & Patient Detail & RF-013, RF-051, RF-041, RF-044 \\
+  \rowcolor{fmTableAltRow}
+  W-03 / W-04 & Routine Builder (idle / drag) & RF-021, RF-022, RF-024 \\
+  W-05 & Routine Library & RF-021, RF-023, RF-027 \\
+  \rowcolor{fmTableAltRow}
+  W-06 & Clinical Analytics & RF-054, RF-053, RF-044 \\
+  W-07 & Sesión Clínica Activa & RF-011, RF-012, RF-022, RF-024 \\
+  \rowcolor{fmTableAltRow}
+  W-08 & Plan de Tratamiento & RF-012, RF-024, RF-040, RF-041, RF-042, RF-043, RF-044, RF-052, RF-013 \\
+  \bottomrule
+\end{longtable}
+
+\section{Acceso al prototipo}
+
+Las maquetas están disponibles como prototipo navegable en Google Stitch:
+
+\begin{center}
+  \url{https://stitch.withgoogle.com/projects/2273687490294202803}
+\end{center}

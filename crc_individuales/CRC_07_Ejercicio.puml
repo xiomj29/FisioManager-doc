@@ -1,0 +1,37 @@
+@startuml CRC_Ejercicio
+
+' FisioManager - CRC Card: Ejercicio
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Ejercicio</b>
+
+class "Responsabilidades" as Resp {
+    + Describir un ejercicio del catalogo
+    + Proveer recursos multimedia (video, imagen)
+    + Identificar la zona corporal trabajada
+    + Identificar el tipo
+      (fuerza, flexibilidad, equilibrio,
+       relajacion, cardio)
+    + Proveer instrucciones de ejecucion
+}
+
+class "Colaboradores" as Col {
+    ParametrosEjercicio
+    (referenciado en rutinas)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

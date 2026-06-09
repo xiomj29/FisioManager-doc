@@ -1,0 +1,60 @@
+@startuml FisioManager_C4_Contexto
+
+' FisioManager - C4 Nivel 1: Diagrama de Contexto del Sistema
+
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam roundCorner 10
+
+skinparam actor {
+    BackgroundColor #08427B
+    BorderColor #073B6F
+}
+skinparam ActorFontColor #08427B
+skinparam ActorFontStyle bold
+
+skinparam rectangle {
+    BackgroundColor<<sistema>> #1168BD
+    BorderColor<<sistema>> #0B4884
+    FontColor<<sistema>> white
+    BackgroundColor<<externo>> #999999
+    BorderColor<<externo>> #6B6B6B
+    FontColor<<externo>> white
+    FontStyle bold
+}
+
+title <b>FisioManager - C4 Nivel 1: Contexto del Sistema</b>
+
+actor "Paciente\n<size:10>[Persona]</size>" as paciente
+actor "Fisioterapeuta\n<size:10>[Persona]</size>" as terapeuta
+actor "Administrador\n<size:10>[Persona]</size>" as admin
+
+rectangle "**FisioManager**\n<size:10>[Sistema]</size>\n<size:10>Plataforma de rehabilitacion</size>\n<size:10>con feedback por voz e IA</size>" as fisio <<sistema>>
+
+rectangle "Servicio de IA\n(STT + LLM)\n<size:10>[Sistema externo]</size>" as ia <<externo>>
+rectangle "ElevenLabs TTS\n<size:10>[Sistema externo]</size>" as tts <<externo>>
+rectangle "Almacenamiento\nde Objetos\n<size:10>[MinIO / S3]</size>" as storage <<externo>>
+rectangle "Proveedor SMTP\n<size:10>[Sistema externo]</size>" as email <<externo>>
+rectangle "Notificaciones\nPush (FCM)\n<size:10>[Sistema externo]</size>" as push <<externo>>
+
+paciente --> fisio : Rutinas, feedback,\nprogreso\n<size:9>[HTTPS]</size>
+terapeuta --> fisio : Gestion clinica,\nanalisis\n<size:9>[HTTPS]</size>
+admin --> fisio : Supervision\ny operacion\n<size:9>[HTTPS]</size>
+
+fisio --> ia : Transcribe y\nanaliza audio
+fisio --> tts : Genera audio
+fisio --> storage : Audios/videos
+fisio --> email : Notifica
+fisio --> push : Recordatorios
+
+legend right
+    | Color | Tipo |
+    |<#1168BD>| Sistema FisioManager |
+    |<#999999>| Sistema externo |
+    |<#08427B>| Persona |
+endlegend
+
+@enduml

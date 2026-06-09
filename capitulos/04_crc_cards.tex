@@ -1,0 +1,418 @@
+% CAPITULO 4 - CRC CARDS
+
+\chapter{CRC Cards}
+
+Las tarjetas CRC (Class--Responsibilities--Collaborators) son una herramienta de diseño orientado a objetos creada por Kent Beck y Ward Cunningham. Cada tarjeta describe una clase del sistema en términos de su nombre, sus responsabilidades (qué sabe y qué hace) y sus colaboradores (otras clases con las que coopera para cumplir esas responsabilidades).
+
+A continuación se presentan las tarjetas CRC del modelo de dominio de FisioManager. Estas tarjetas son la base sobre la que se construye el diagrama de clases (Capítulo~\ref{ch:diagramaclases}) y guian la asignación de responsabilidades durante la implementación.
+
+\section{Tarjetas CRC del dominio}
+
+% Comando local: \CRC{Nombre}{Lista de responsabilidades}{Lista de colaboradores}
+\newcommand{\CRC}[3]{%
+  \begin{crccard}{#1}
+    \begin{minipage}[t]{0.48\textwidth}
+      \centering\textbf{\color{fmAccent}\small RESPONSABILIDADES}\\[4pt]
+      \raggedright\small
+      #2
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+      \centering\textbf{\color{fmAccent}\small COLABORADORES}\\[4pt]
+      \raggedright\small
+      #3
+    \end{minipage}
+  \end{crccard}
+}
+
+\subsection{Paciente}
+\CRC{Paciente}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Identificarse y autenticarse en el sistema
+  \item Conocer sus datos personales y demográficos
+  \item Visualizar las rutinas que tiene asignadas
+  \item Iniciar y ejecutar sesiones de rutina
+  \item Registrar feedback al finalizar la sesión (audio, dolor, emoción)
+  \item Consultar su progreso a lo largo del tiempo
+  \item Acceder a contenido de los módulos de bienestar
+  \item Conocer al terapeuta que lo atiende
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Usuario (clase base)
+  \item Terapeuta (asignado)
+  \item Rutina (visualizacion)
+  \item AsignacionRutina
+  \item SesionEjecucion
+  \item Feedback
+  \item HistorialClinico
+  \item ModuloBienestar
+  \item ReporteProgreso
+\end{itemize}
+}
+
+\subsection{Terapeuta}
+\CRC{Terapeuta}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Identificarse y autenticarse
+  \item Conocer su cédula profesional y especialidad
+  \item Gestionar su lista de pacientes asignados
+  \item Crear y mantener historial clínico
+  \item Registrar diagnósticos con códigos CIE-10
+  \item Crear y personalizar rutinas
+  \item Asignar rutinas a pacientes con frecuencia y duración
+  \item Pausar, reanudar o cancelar asignaciones
+  \item Analizar feedback con apoyo de IA
+  \item Generar reportes de progreso para sus pacientes
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Usuario (clase base)
+  \item Paciente
+  \item HistorialClinico
+  \item Diagnostico
+  \item Rutina
+  \item AsignacionRutina
+  \item Feedback
+  \item AnalisisIA
+  \item ReporteProgreso
+  \item ServicioIA
+\end{itemize}
+}
+
+\subsection{Administrador}
+\CRC{Administrador}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Identificarse con privilegios elevados
+  \item Crear, editar y desactivar cuentas de usuario
+  \item Asignar y modificar roles de usuario
+  \item Supervisar el uso del sistema y el desempeño de los terapeutas
+  \item Consultar las métricas agregadas de la clínica
+  \item Monitorear el funcionamiento del sistema
+  \item Auditar accesos a datos clínicos sensibles
+  \item Configurar parámetros globales del sistema
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Usuario (clase base)
+  \item Paciente
+  \item Terapeuta
+  \item LogAcceso
+  \item MetricasSistema
+\end{itemize}
+}
+
+\subsection{HistorialClinico}
+\CRC{HistorialClinico}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Centralizar la información clínica del paciente
+  \item Almacenar antecedentes médicos relevantes
+  \item Registrar alergias y medicamentos en uso
+  \item Mantener cronología de diagnósticos
+  \item Proveer vista consolidada para el terapeuta
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (propietario)
+  \item Diagnostico (componente)
+  \item Terapeuta (consumidor)
+\end{itemize}
+}
+
+\subsection{Diagnostico}
+\CRC{Diagnostico}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Almacenar el diagnóstico clínico de un paciente
+  \item Asociar código CIE-10 cuando aplique
+  \item Indicar nivel de severidad
+  \item Mantener registro del terapeuta que lo emite
+  \item Mantener fecha de emisión
+  \item Permitir actualización con trazabilidad
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item HistorialClinico (contenedor)
+  \item Terapeuta (autor)
+\end{itemize}
+}
+
+\subsection{PlanTratamiento}
+\CRC{PlanTratamiento}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Expresar el objetivo clínico del tratamiento
+  \item Conocer sus fechas de inicio y fin estimadas
+  \item Mantener su estado (activo, completado, suspendido)
+  \item Agrupar fases secuenciales de tratamiento
+  \item Prescribir las asignaciones de rutina del paciente
+  \item Documentarse mediante notas clínicas
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (sujeto)
+  \item Terapeuta (autor)
+  \item FaseTratamiento (componente)
+  \item AsignacionRutina (prescripción)
+  \item NotaClinica (documentación)
+\end{itemize}
+}
+
+\subsection{FaseTratamiento}
+\CRC{FaseTratamiento}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Representar una etapa del plan de tratamiento
+  \item Conocer su orden dentro del plan
+  \item Indicar su duración estimada en semanas
+  \item Definir los objetivos clínicos de la fase
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item PlanTratamiento (contenedor)
+  \item AsignacionRutina (prescrita en la fase)
+\end{itemize}
+}
+
+\subsection{NotaClinica}
+\CRC{NotaClinica}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Registrar una observación clínica con identidad propia
+  \item Conocer su fecha, tipo y autor
+  \item Indicar si es visible para el paciente
+  \item Vincularse al historial y, opcionalmente, al plan activo
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item HistorialClinico (contenedor)
+  \item PlanTratamiento (contexto opcional)
+  \item Terapeuta (autor)
+\end{itemize}
+}
+
+\subsection{Rutina}
+\CRC{Rutina}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Conocer su nombre, descripción y nivel
+  \item Mantener su composición ordenada de ejercicios
+  \item Conocer al terapeuta que la creó
+  \item Calcular su duración total estimada
+  \item Permitir clonado para reutilización
+  \item Validar coherencia interna (no duplicados, orden válido)
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Ejercicio (referenciado)
+  \item ParametrosEjercicio (componente)
+  \item Terapeuta (creador)
+  \item AsignacionRutina (consumidor)
+\end{itemize}
+}
+
+\subsection{Ejercicio}
+\CRC{Ejercicio}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Describir un ejercicio del catálogo
+  \item Proveer recursos multimedia (video, imagen)
+  \item Identificar la zona corporal trabajada
+  \item Identificar el tipo (fuerza, flexibilidad, equilibrio, relajación, cardio)
+  \item Proveer instrucciones de ejecución
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item ParametrosEjercicio (referenciado en rutinas)
+\end{itemize}
+}
+
+\subsection{ParametrosEjercicio}
+\CRC{ParametrosEjercicio}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Especificar series, repeticiones, duración y descanso
+  \item Determinar el orden del ejercicio en una rutina
+  \item Almacenar notas específicas del terapeuta
+  \item Vincular un ejercicio del catálogo a una rutina
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Rutina (contenedor)
+  \item Ejercicio (referenciado)
+\end{itemize}
+}
+
+\subsection{AsignacionRutina}
+\CRC{AsignacionRutina}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Vincular una rutina con un paciente y un terapeuta
+  \item Controlar fechas de inicio y fin
+  \item Definir frecuencia semanal de ejecución
+  \item Mantener su estado (activa, pausada, completada, cancelada)
+  \item Iniciar nuevas sesiones de ejecución
+  \item Marcar como completada cuando corresponda
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Rutina
+  \item Paciente
+  \item Terapeuta
+  \item SesionEjecucion (genera)
+\end{itemize}
+}
+
+\subsection{SesionEjecucion}
+\CRC{SesionEjecucion}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Registrar inicio y fin de la ejecución
+  \item Marcar ejercicios completados/omitidos
+  \item Calcular porcentaje de cumplimiento
+  \item Vincular con el feedback registrado
+  \item Conocer si fue completada satisfactoriamente
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item AsignacionRutina (origen)
+  \item Paciente (ejecutor)
+  \item Feedback (resultado opcional)
+\end{itemize}
+}
+
+\subsection{Feedback}
+\CRC{Feedback}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Almacenar el audio grabado por el paciente
+  \item Registrar nivel de dolor en escala de 0--10
+  \item Registrar estado emocional
+  \item Solicitar la transcripción del audio
+  \item Solicitar el análisis con IA
+  \item Mantener fecha y duración del registro
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item SesionEjecucion (contexto)
+  \item Paciente (autor)
+  \item AnalisisIA (resultado)
+  \item AudioStorageService
+\end{itemize}
+}
+
+\subsection{AnalisisIA}
+\CRC{AnalisisIA}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Almacenar la transcripción del audio
+  \item Detectar y clasificar el sentimiento
+  \item Extraer palabras clave clínicamente relevantes
+  \item Generar alertas automáticas (dolor sostenido, palabras de alerta)
+  \item Resumir hallazgos para el terapeuta
+  \item Indicar el nivel de confianza del análisis
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Feedback (origen)
+  \item ServicioIA (productor)
+  \item Terapeuta (consumidor)
+\end{itemize}
+}
+
+\subsection{ReporteProgreso}
+\CRC{ReporteProgreso}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Calcular adherencia al tratamiento
+  \item Generar tendencia de evolución del dolor
+  \item Producir gráficas de estado emocional
+  \item Generar resumen ejecutivo
+  \item Exportar a PDF
+  \item Definir el rango de fechas a reportar
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (sujeto)
+  \item SesionEjecucion (datos)
+  \item Feedback (datos)
+  \item Terapeuta (consumidor)
+\end{itemize}
+}
+
+\subsection{Cita}
+\CRC{Cita}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Representar un encuentro entre paciente y terapeuta
+  \item Conocer su fecha, hora, motivo y modalidad
+  \item Mantener su estado (confirmada, reprogramada, cancelada)
+  \item Ocupar opcionalmente una sala
+  \item Disparar uno o más recordatorios
+  \item Ligarse opcionalmente a un plan de tratamiento
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente
+  \item Terapeuta
+  \item Sala (opcional)
+  \item Recordatorio (genera)
+  \item PlanTratamiento (contexto opcional)
+\end{itemize}
+}
+
+\subsection{Sala}
+\CRC{Sala}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Describir un consultorio o espacio de la clínica
+  \item Conocer su ubicación, capacidad y equipamiento
+  \item Exponer su disponibilidad horaria
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Cita (la ocupa)
+  \item HorarioDisponible (su disponibilidad)
+\end{itemize}
+}
+
+\subsection{HorarioDisponible}
+\CRC{HorarioDisponible}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Expresar la oferta semanal de un terapeuta o sala
+  \item Conocer día, hora de inicio y fin
+  \item Delimitar su rango de vigencia
+  \item Servir de base para validar nuevas citas
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Terapeuta (propietario)
+  \item Sala (propietario)
+  \item Cita (validación)
+\end{itemize}
+}
+
+\subsection{Recordatorio}
+\CRC{Recordatorio}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Programar el aviso de una cita
+  \item Conocer su canal (push, email)
+  \item Mantener fechas de envío programada y real
+  \item Mantener su estado (programado, enviado, fallido)
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Cita (origen)
+  \item ServicioNotificaciones
+\end{itemize}
+}
+
+\subsection{ModuloBienestar}
+\CRC{ModuloBienestar}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Almacenar contenido de bienestar
+  \item Identificar el tipo (meditación, respiración, educacional, motivacional)
+  \item Proveer la URL del contenido
+  \item Indicar duración estimada
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (consumidor)
+\end{itemize}
+}
+
+\section{Diagrama visual de CRC Cards}
+
+La siguiente figura presenta una vista panorámica de las tarjetas CRC del sistema, generada con PlantUML y disponible como artefacto compilable en el repositorio del proyecto:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth,height=0.85\textheight,keepaspectratio]{FisioManager_CRC_Cards.png}
+  \caption{Vista global de las CRC Cards del dominio FisioManager.}
+  \label{fig:crc-cards}
+\end{figure}

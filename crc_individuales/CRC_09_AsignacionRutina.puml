@@ -1,0 +1,40 @@
+@startuml CRC_AsignacionRutina
+
+' FisioManager - CRC Card: AsignacionRutina
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: AsignacionRutina</b>
+
+class "Responsabilidades" as Resp {
+    + Vincular una rutina con un paciente
+      y un terapeuta
+    + Controlar fechas de inicio y fin
+    + Definir frecuencia semanal de ejecucion
+    + Mantener su estado
+      (activa, pausada, completada, cancelada)
+    + Iniciar nuevas sesiones de ejecucion
+    + Marcar como completada cuando corresponda
+}
+
+class "Colaboradores" as Col {
+    Rutina
+    Paciente
+    Terapeuta
+    SesionEjecucion (genera)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

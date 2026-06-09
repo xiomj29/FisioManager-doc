@@ -1,0 +1,69 @@
+% CAPITULO 12 - DIAGRAMA DE ESTADOS
+
+\chapter{Diagrama de Estados}\label{ch:diagramaestados}
+
+El diagrama de estados modela el \emph{ciclo de vida} de una rutina dentro de FisioManager, desde su creación como plantilla en la biblioteca del terapeuta hasta la finalización del análisis de inteligencia artificial sobre el feedback del paciente. Este tipo de diagrama UML permite visualizar las transiciones entre estados, los eventos que las disparan y los subestados que componen las fases más complejas del flujo.
+
+\section{Estados principales}
+
+El ciclo de vida de una rutina atraviesa los siguientes estados:
+
+\begin{enumerate}
+  \item \textbf{Rutina en Biblioteca:} el terapeuta construye la rutina en el \codeinline{RoutineBuilder}, seleccionando ejercicios de la biblioteca de actividades y configurando parámetros (duración, repeticiones, descanso). La rutina se almacena con \codeinline{patientId = null}, indicando que es una plantilla reutilizable.
+
+  \item \textbf{Rutina Asignada:} el terapeuta selecciona la plantilla y la asigna a uno o más pacientes. El sistema clona la rutina por cada paciente, preservando todas las actividades y sus parámetros.
+
+  \item \textbf{Rutina Pendiente:} el paciente recibe la notificación de la nueva rutina asignada y puede visualizarla en su dashboard.
+
+  \item \textbf{Rutina en Ejecución:} el paciente inicia la rutina a través del \codeinline{RoutinePlayer}. Este es un \emph{estado compuesto} con tres subestados:
+  \begin{itemize}
+    \item \textbf{Ejercicio Activo:} el temporizador controla la duración del ejercicio actual.
+    \item \textbf{Descanso:} período de reposo entre ejercicios.
+    \item \textbf{Siguiente Actividad:} transición al próximo ejercicio o finalización si era el último.
+  \end{itemize}
+
+  \item \textbf{Rutina Completada:} todas las actividades han sido finalizadas. El sistema marca la rutina como \codeinline{completed = true}.
+
+  \item \textbf{Feedback Pendiente:} el sistema solicita al paciente que registre su feedback post-rutina.
+
+  \item \textbf{Registrando Feedback:} estado compuesto donde el paciente:
+  \begin{itemize}
+    \item Selecciona su estado emocional (EXCELENTE, BIEN, REGULAR, MAL, TERRIBLE).
+    \item Registra su nivel de dolor mediante un slider (escala 1--10).
+    \item Opcionalmente graba una nota de audio.
+    \item Envía el feedback al sistema.
+  \end{itemize}
+
+  \item \textbf{Feedback Registrado:} el feedback queda persistido y disponible para el terapeuta.
+
+  \item \textbf{Análisis IA Procesando:} si el feedback incluye audio, se envía de forma asíncrona al servicio de inteligencia artificial para transcripción y análisis de sentimiento.
+
+  \item \textbf{Análisis IA Completado:} el resumen generado por la IA se almacena en el campo \codeinline{aiSummary} del feedback. Si se detectan alertas críticas (dolor alto, estado emocional negativo), se notifica al terapeuta.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{FisioManager_DiagramaEstados.png}
+  \caption{Diagrama de Estados: ciclo de vida completo de una rutina en FisioManager.}
+  \label{fig:diagrama-estados}
+\end{figure}
+
+\section{Decisiones de modelado}
+
+\begin{itemize}
+  \item \textbf{Estados compuestos para Ejecución y Feedback:} se modelan como subestados porque representan flujos internos con su propia lógica de transición (temporizadores, navegación entre actividades, captura secuencial de datos).
+
+  \item \textbf{Bifurcación en el análisis de IA:} el flujo se bifurca dependiendo de si el paciente grabó audio. Sin audio, el ciclo termina en \textit{Feedback Registrado}; con audio, continúa hacia el procesamiento asíncrono de IA.
+
+  \item \textbf{Asincronía del servicio de IA:} el paciente no espera la respuesta del servicio de IA. El feedback queda disponible inmediatamente para el terapeuta con los datos numéricos, y el resumen de IA se incorpora posteriormente.
+\end{itemize}
+
+\section{Código PlantUML del diagrama}
+
+El código fuente se entrega como \codeinline{09\_diagrama\_estados.puml} en el directorio \codeinline{puml/}. Se regenera con:
+
+\begin{lstlisting}[language=bash]
+plantuml -tpng 09_diagrama_estados.puml
+\end{lstlisting}
+
+El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.

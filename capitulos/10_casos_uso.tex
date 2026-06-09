@@ -1,0 +1,69 @@
+% CAPITULO 8 - DIAGRAMA DE CASOS DE USO
+
+\chapter{Diagrama de Casos de Uso}
+
+Aunque no fue solicitado explícitamente, se incluye el diagrama de casos de uso por su valor para conectar los actores con los requerimientos funcionales y dar contexto a las CRC Cards.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[
+    width=\textwidth,
+    height=0.80\textheight,
+    keepaspectratio
+  ]{FisioManager_CasosDeUso.png}
+  \caption{Diagrama de Casos de Uso UML.}
+  \label{fig:casos-uso}
+\end{figure}
+
+\section{Trazabilidad casos de uso vs requerimientos funcionales}
+
+La siguiente tabla establece la trazabilidad entre los casos de uso identificados y los requerimientos funcionales que cubren. Esta matriz permite verificar la cobertura de los requerimientos a nivel de implementación.
+
+\begin{longtable}{L{1.6cm} L{5cm} L{3.5cm} L{4cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Caso de Uso} &
+  \textbf{\color{fmAccent}Actor} &
+  \textbf{\color{fmAccent}RF asociados} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-01} & Iniciar sesión & Todos & RF-002 \\
+  \reqid{UC-10} & Visualizar rutina asignada & Paciente & RF-025 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-11} & Ejecutar ejercicio & Paciente & RF-030, RF-031, RF-032 \\
+  \reqid{UC-12} & Registrar feedback por voz & Paciente & RF-033, RF-036, RF-040 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-13} & Registrar nivel de dolor & Paciente & RF-034 \\
+  \reqid{UC-14} & Registrar estado emocional & Paciente & RF-035 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-15} & Consultar progreso personal & Paciente & RF-050, RF-053 \\
+  \reqid{UC-16} & Acceder a módulo de bienestar & Paciente & RF-060, RF-061 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-20} & Gestionar paciente & Terapeuta & RF-010 \\
+  \reqid{UC-21} & Registrar diagnóstico & Terapeuta & RF-012, RF-014 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-22} & Consultar historial clínico & Terapeuta & RF-013 \\
+  \reqid{UC-23} & Crear rutina personalizada & Terapeuta & RF-021, RF-022, RF-023, RF-027 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-24} & Asignar rutina a paciente & Terapeuta & RF-024, RF-026 \\
+  \reqid{UC-25} & Analizar feedback del paciente & Terapeuta & RF-041, RF-042, RF-043, RF-044 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-26} & Visualizar dashboard de pacientes & Terapeuta & RF-051 \\
+  \reqid{UC-27} & Generar reporte de progreso & Terapeuta / Administrador & RF-052, RF-054 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-28} & Elaborar plan de tratamiento & Terapeuta & RF-015, RF-016, RF-017 \\
+  \reqid{UC-29} & Registrar nota clínica & Terapeuta & RF-018, RF-019 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-60} & Definir disponibilidad y salas & Terapeuta / Administrador & RF-080, RF-081 \\
+  \reqid{UC-61} & Agendar cita & Paciente / Terapeuta & RF-082, RF-083, RF-084, RF-085, RF-087 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-62} & Consultar agenda & Terapeuta & RF-086 \\
+  \reqid{UC-40} & Gestionar usuarios & Administrador & RF-001, RF-008 \\
+  \reqid{UC-50} & Transcribir audio & Servicio IA & RF-040 \\
+  \rowcolor{fmTableAltRow}
+  \reqid{UC-51} & Analizar sentimiento & Servicio IA & RF-041 \\
+  \bottomrule
+\end{longtable}

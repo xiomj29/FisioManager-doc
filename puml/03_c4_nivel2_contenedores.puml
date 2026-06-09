@@ -1,0 +1,109 @@
+@startuml FisioManager_C4_Contenedores
+
+' FisioManager - C4 Nivel 2: Diagrama de Contenedores
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam linetype ortho
+
+skinparam actor {
+    BackgroundColor #08427B
+    BorderColor #073B6F
+}
+skinparam ActorFontColor #08427B
+skinparam ActorFontStyle bold
+
+skinparam rectangle {
+    BackgroundColor<<container>> #438DD5
+    BorderColor<<container>> #2E6295
+    FontColor<<container>> white
+    BackgroundColor<<db>> #438DD5
+    BorderColor<<db>> #2E6295
+    FontColor<<db>> white
+    BackgroundColor<<externo>> #999999
+    BorderColor<<externo>> #6B6B6B
+    FontColor<<externo>> white
+    FontStyle bold
+}
+
+skinparam database {
+    BackgroundColor #438DD5
+    BorderColor #2E6295
+    FontColor white
+}
+
+skinparam queue {
+    BackgroundColor #438DD5
+    BorderColor #2E6295
+    FontColor white
+}
+
+title <b>FisioManager - C4 Nivel 2: Contenedores</b>
+
+actor "Paciente" as paciente
+actor "Terapeuta" as terapeuta
+actor "Admin" as admin
+
+rectangle "**FisioManager**" as boundary {
+
+    rectangle "Aplicacion Web SPA\n<size:9>[React + TypeScript]</size>\n<size:9>Interfaz responsiva.</size>\n<size:9>Captura de audio en navegador.</size>" as spa <<container>>
+
+    rectangle "API Gateway / BFF\n<size:9>[ASP.NET Core 8]</size>\n<size:9>Auth JWT, autorizacion,</size>\n<size:9>rate limit, validacion</size>" as gateway <<container>>
+
+    rectangle "Servicio de\nPacientes\n<size:9>[ASP.NET Core]</size>\n<size:9>Pacientes, historial,</size>\n<size:9>diagnosticos</size>" as svcPacientes <<container>>
+
+    rectangle "Servicio de\nRutinas\n<size:9>[ASP.NET Core]</size>\n<size:9>Ejercicios, rutinas,</size>\n<size:9>asignaciones, sesiones</size>" as svcRutinas <<container>>
+
+    rectangle "Servicio de\nFeedback\n<size:9>[ASP.NET Core]</size>\n<size:9>Recibe audio, coordina</size>\n<size:9>analisis con IA</size>" as svcFeedback <<container>>
+
+    rectangle "Servicio de IA\n/ Orquestador\n<size:9>[Python FastAPI]</size>\n<size:9>Whisper, analisis</size>\n<size:9>de sentimientos</size>" as svcIA <<container>>
+
+    rectangle "Servicio de\nReportes\n<size:9>[ASP.NET Core]</size>\n<size:9>Dashboards, PDF,</size>\n<size:9>metricas</size>" as svcReportes <<container>>
+
+    rectangle "Servicio de\nNotificaciones\n<size:9>[ASP.NET Core Worker]</size>\n<size:9>Cola de email/push</size>" as svcNotif <<container>>
+
+    database "Base de Datos\nRelacional\n<size:9>[PostgreSQL 16]</size>" as bd
+    database "Cache\nDistribuido\n<size:9>[Redis]</size>" as cache
+    queue "Cola de\nMensajes\n<size:9>[RabbitMQ]</size>" as cola
+}
+
+rectangle "Whisper / OpenAI\n<size:9>STT</size>" as whisper <<externo>>
+rectangle "LLM Externo\n<size:9>Sentimiento</size>" as llm <<externo>>
+rectangle "ElevenLabs\n<size:9>TTS</size>" as eleven <<externo>>
+rectangle "MinIO / S3\n<size:9>Object storage</size>" as minio <<externo>>
+rectangle "SMTP / SendGrid\n<size:9>Email</size>" as smtp <<externo>>
+rectangle "Firebase FCM\n<size:9>Push</size>" as fcm <<externo>>
+
+paciente --> spa : Usa\n<size:9>[HTTPS]</size>
+terapeuta --> spa
+admin --> spa
+
+spa --> gateway : <size:9>[HTTPS / JSON]</size>
+
+gateway --> svcPacientes
+gateway --> svcRutinas
+gateway --> svcFeedback
+gateway --> svcReportes
+gateway --> cache : Sesiones/tokens
+
+svcPacientes --> bd : <size:9>[EF Core]</size>
+svcRutinas --> bd
+svcFeedback --> bd
+svcReportes --> bd
+
+svcFeedback --> minio : Sube audio
+svcFeedback --> cola : Publica eventos
+svcFeedback --> svcIA : Solicita analisis
+
+svcIA --> whisper
+svcIA --> llm
+svcIA --> eleven
+
+svcNotif --> cola : Consume
+svcNotif --> smtp
+svcNotif --> fcm
+
+@enduml

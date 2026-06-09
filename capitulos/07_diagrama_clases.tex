@@ -1,0 +1,46 @@
+% CAPITULO 7 - DIAGRAMA DE CLASES CONCEPTUALES
+
+\chapter{Diagrama de Clases Conceptuales}\label{ch:diagramaclases}
+
+El diagrama de clases conceptuales representa la estructura estática del \emph{dominio del problema}. A diferencia de un diagrama de clases de software o de diseño, aquí no se incluyen tipos de datos, métodos, ni elementos de la capa de servicios, infraestructura o tecnología: solo conceptos del dominio, sus atributos esenciales y las asociaciones entre ellos. Estas clases conceptuales son las candidatas a convertirse, durante el diseño, en clases de software.
+
+Para FisioManager se modelan las clases conceptuales agrupadas en paquetes que reflejan los \textit{bounded contexts}: Usuarios, Clínico, Agenda, Rutinas, Seguimiento y Bienestar.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{FisioManager_DiagramaClases.png}
+  \caption{Diagrama de Clases Conceptuales del sistema FisioManager.}
+  \label{fig:diagrama-clases}
+\end{figure}
+
+\section{Decisiones de modelado}
+
+Las siguientes decisiones de modelado fueron tomadas durante el análisis orientado a objetos y se reflejan tanto en las CRC Cards como en el diagrama de clases conceptuales:
+
+\begin{itemize}
+  \item \textbf{Herencia en Usuario:} se modela una clase abstracta \codeinline{Usuario} de la cual heredan \codeinline{Paciente}, \codeinline{Terapeuta} y \codeinline{Administrador}. Esto centraliza los atributos comunes y evita duplicación a nivel conceptual.
+
+  \item \textbf{Separación Rutina vs AsignacionRutina:} una \codeinline{Rutina} es una plantilla reutilizable; \codeinline{AsignacionRutina} representa la instancia concreta para un paciente con fechas y estado. Esto permite asignar la misma \codeinline{Rutina} a múltiples pacientes sin duplicarla.
+
+  \item \textbf{Composición ParametrosEjercicio:} la relación entre \codeinline{Rutina} y \codeinline{Ejercicio} se modela mediante \codeinline{ParametrosEjercicio} (clase intermedia con datos propios), no como simple muchos-a-muchos. Permite especificar series, repeticiones y notas que dependen del contexto de la rutina.
+
+  \item \textbf{SesionEjecucion como agregado de seguimiento:} cada vez que el paciente realiza una rutina se crea una \codeinline{SesionEjecucion}. Esta es la entidad sobre la que pivotan el feedback y el cálculo de adherencia.
+
+  \item \textbf{Feedback con cardinalidad 0..1 hacia AnalisisIA:} el análisis es opcional porque el procesamiento es asíncrono y puede no haberse realizado aún, o haber fallado y estar pendiente de reintento.
+
+  \item \textbf{PlanTratamiento y FaseTratamiento:} el plan agrupa fases secuenciales y prescribe las rutinas que el paciente debe ejecutar. La separación entre \codeinline{PlanTratamiento} y \codeinline{AsignacionRutina} permite que el plan exprese intención clínica (objetivos, fases) mientras que la asignación expresa la prescripción operativa.
+
+  \item \textbf{NotaClinica como concepto propio:} las notas que el terapeuta registra durante consultas no se modelan como simples atributos de texto en \codeinline{HistorialClinico} o \codeinline{PlanTratamiento}, sino como un concepto independiente con identidad propia, fecha y autor. Esto permite trazabilidad de la evolución clínica y reutilizar la nota en distintos contextos.
+
+  \item \textbf{Paquete Agenda:} se introduce \codeinline{Cita} como concepto central de la planeación clínica. La cita ocurre entre un paciente y un terapeuta, opcionalmente ocupa una \codeinline{Sala} y dispara uno o más \codeinline{Recordatorio}. El \codeinline{HorarioDisponible} expresa la oferta semanal del terapeuta (y de la sala) y es la base contra la que se valida una nueva cita. La cita puede ligarse a un \codeinline{PlanTratamiento} para reflejar el contexto clínico de la consulta.
+\end{itemize}
+
+\section{Código PlantUML del diagrama}
+
+El diagrama es totalmente compilable. El código fuente se entrega como archivo \codeinline{.puml} en el repositorio y puede regenerarse con el comando:
+
+\begin{lstlisting}[language=bash]
+plantuml -tpng 01_diagrama_clases.puml
+\end{lstlisting}
+
+El código fuente completo del diagrama se incluye en el Anexo~\ref{ch:anexos} al final de este documento.

@@ -1,0 +1,70 @@
+
+% CAPITULO 1 - INTRODUCCION
+
+\chapter{Introducción}
+
+\section{Propósito del documento}
+
+El presente documento contiene la documentación técnica del sistema \textbf{FisioManager}, una plataforma digital orientada a la rehabilitación física que integra terapeutas y pacientes mediante rutinas personalizadas, seguimiento continuo y retroalimentación inteligente basada en voz y con integración de Inteligencia Artificial.
+
+El documento está dirigido a equipos de desarrollo, lideres técnicos y stakeholders del proyecto, y su objetivo es establecer un enfoque del diseño, las responsabilidades de los componentes y los requisitos del sistema.
+
+\section{Alcance del sistema}
+
+FisioManager es una aplicación web responsiva (con soporte móvil) desarrollada sobre tecnologías modernas. El sistema está concebido para operar en el contexto de \textbf{una única clínica de fisioterapia} (no es una plataforma multiclínica) y contempla \textbf{un único rol de Administrador} que concentra tanto la administración operativa de la clínica como la administración técnica de la plataforma. El sistema cubre los siguientes requisitos funcionales:
+
+\begin{itemize}
+  \item Gestión de usuarios (pacientes, terapeutas y el administrador único de la clínica).
+  \item Gestión del historial clínico y diagnósticos.
+  \item Planes de tratamiento por fases y notas clínicas de evolución.
+  \item Agenda de citas con gestión de salas, horarios y recordatorios.
+  \item Catálogo de ejercicios y creación de rutinas personalizadas.
+  \item Asignación de rutinas y seguimiento de sesiones de ejecución.
+  \item Captura de feedback del paciente mediante audio, escala de dolor y estado emocional.
+  \item Transcripción y análisis con IA del feedback recibido.
+  \item Generación de reportes de progreso y dashboards para terapeutas.
+  \item Módulos de bienestar (meditación, respiración, contenido motivacional).
+\end{itemize}
+
+\section{Visión del producto}
+
+FisioManager mejora el manejo y seguimiento del tratamiento, facilita la comunicación entre paciente y terapeuta, y optimiza la toma de decisiones clínicas mediante el aprovechamiento de inteligencia artificial sobre el feedback de voz del paciente. La plataforma funge como una herramienta intermedia entre las consultas presenciales, permitiendo continuidad y trazabilidad del tratamiento.
+
+\section{Definiciones, acrónimos y abreviaturas}
+
+\begin{longtable}{>{\bfseries\color{fmAccent}}L{2.5cm} L{12cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}Termino} & \textbf{\color{fmAccent}Definicion} \\
+  \midrule
+  \endhead
+
+  API & Application Programming Interface, interfaz de programación de aplicaciones. \\
+  \rowcolor{fmTableAltRow}
+  BFF & Backend For Frontend, capa intermedia que adapta APIs al consumidor frontend. \\
+  C4 Model & Modelo de documentación arquitectónica con cuatro niveles: Contexto, Contenedores, Componentes y Código. \\
+  \rowcolor{fmTableAltRow}
+  CIE-10 & Clasificación Internacional de Enfermedades, décima revisión. \\
+  CRC Card & Class--Responsibilities--Collaborators. Tarjeta para diseño orientado a objetos. \\
+  \rowcolor{fmTableAltRow}
+  EF Core & Entity Framework Core, ORM oficial de .NET. \\
+  FCM & Firebase Cloud Messaging, servicio de notificaciones push. \\
+  \rowcolor{fmTableAltRow}
+  IA & Inteligencia Artificial. \\
+  JWT & JSON Web Token, estándar de tokens firmados para autenticación. \\
+  \rowcolor{fmTableAltRow}
+  LLM & Large Language Model, modelo de lenguaje de gran escala. \\
+  PTT & Push To Talk, modalidad de comunicación por voz. \\
+  \rowcolor{fmTableAltRow}
+  RNF & Requerimiento No Funcional. \\
+  RF & Requerimiento Funcional. \\
+  \rowcolor{fmTableAltRow}
+  SPA & Single Page Application, aplicación web de página única. \\
+  STT & Speech-To-Text, transcripción de voz a texto. \\
+  \rowcolor{fmTableAltRow}
+  TTS & Text-To-Speech, síntesis de voz a partir de texto. \\
+  UML & Unified Modeling Language, lenguaje unificado de modelado. \\
+  \rowcolor{fmTableAltRow}
+  CRR & Component Responsibility Report, reporte de responsabilidades de componentes. \\
+  \bottomrule
+\end{longtable}

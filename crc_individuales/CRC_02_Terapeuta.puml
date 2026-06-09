@@ -1,0 +1,49 @@
+@startuml CRC_Terapeuta
+
+' FisioManager - CRC Card: Terapeuta
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: Terapeuta</b>
+
+class "Responsabilidades" as Resp {
+    + Identificarse y autenticarse
+    + Conocer su cedula profesional y especialidad
+    + Gestionar su lista de pacientes asignados
+    + Crear y mantener historial clinico
+    + Registrar diagnosticos con codigos CIE-10
+    + Crear y personalizar rutinas
+    + Asignar rutinas a pacientes con frecuencia
+      y duracion
+    + Pausar, reanudar o cancelar asignaciones
+    + Analizar feedback con apoyo de IA
+    + Generar reportes de progreso para sus pacientes
+}
+
+class "Colaboradores" as Col {
+    Usuario (clase base)
+    Paciente
+    HistorialClinico
+    Diagnostico
+    Rutina
+    AsignacionRutina
+    Feedback
+    AnalisisIA
+    ReporteProgreso
+    ServicioIA
+}
+
+Resp -[hidden]right- Col
+
+@enduml

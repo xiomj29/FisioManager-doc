@@ -1,0 +1,426 @@
+% CAPITULO 3 - REQUERIMIENTOS DEL SISTEMA
+
+\chapter{Requerimientos del Sistema}
+
+Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF) del sistema FisioManager. Cada requerimiento se identifica con un código único, una descripción clara y un nivel de prioridad: \prAlta\ (imprescindible para el MVP), \prMedia\ (importante para la primera versión) o \prBaja\ (deseable, planificado para versiones posteriores).
+
+% Uso: \rfrow{ID}{Nombre}{Descripcion}{Prioridad}
+\newcommand{\rfrow}[4]{%
+  \reqid{#1} & #2 & #3 & #4 \\
+}
+
+\section{Requerimientos Funcionales}
+
+\subsection{Módulo de Autenticación y Gestión de Usuarios}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-001}{Registro de usuarios}{El sistema debe permitir el registro de nuevos usuarios con rol Paciente, Terapeuta o Administrador, capturando datos personales básicos y credenciales seguras.}{\prAlta}
+  \rfrow{RF-002}{Inicio de sesión}{El sistema debe autenticar a los usuarios mediante correo electrónico y contraseña, emitiendo un token JWT con duración configurable.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-003}{Cierre de sesión}{El sistema debe permitir al usuario cerrar sesión invalidando su token activo.}{\prAlta}
+  \rfrow{RF-004}{Recuperación de contraseña}{El sistema debe permitir la recuperación de contraseña mediante un enlace de un solo uso enviado por correo electrónico.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-005}{Cambio de contraseña}{El usuario autenticado debe poder cambiar su contraseña actual por una nueva.}{\prMedia}
+  \rfrow{RF-006}{Gestión de perfil}{Cada usuario debe poder visualizar y actualizar sus datos de perfil (teléfono, foto, preferencias de notificación).}{\prMedia}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-007}{Control de acceso por rol}{El sistema debe restringir las funcionalidades disponibles según el rol del usuario autenticado (Paciente, Terapeuta o Administrador).}{\prAlta}
+  \rfrow{RF-008}{Gestión de usuarios (admin)}{El administrador debe poder crear, editar, desactivar y eliminar lógicamente cualquier cuenta de usuario.}{\prAlta}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Pacientes y Clínico}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-010}{Asignación paciente-terapeuta}{El sistema debe permitir asignar uno o más pacientes a un terapeuta. Un paciente puede tener un terapeuta principal asignado.}
+  {\prAlta}
+  \rfrow{RF-011}{Registro de historial clínico}{El terapeuta debe poder crear y mantener el historial clínico de cada paciente, incluyendo antecedentes, alergias y medicamentos.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-012}{Registro de diagnóstico}{El terapeuta debe poder registrar diagnósticos asociados al paciente, con descripción, fecha, código y nivel de gravedad.}{\prAlta}
+  \rfrow{RF-013}{Consulta de historial}{El terapeuta y el paciente (en modo lectura) deben poder consultar el historial clínico completo en orden cronológico.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-014}{Edición de diagnóstico}{El terapeuta debe poder editar los diagnósticos registrados por él mismo.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Plan de Tratamiento y Notas Clínicas}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-015}{Creación de plan de tratamiento}{El terapeuta debe poder crear un plan de tratamiento para un paciente, con nombre, objetivo clínico, fechas de inicio y fin estimadas, y estado (activo, completado, suspendido).}{\prAlta}
+  \rfrow{RF-016}{Definición de fases del plan}{El terapeuta debe poder estructurar el plan en fases secuenciales ordenadas, cada una con nombre, duración estimada en semanas y objetivos.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-017}{Prescripción de rutinas en el plan}{El plan de tratamiento debe poder prescribir una o más asignaciones de rutina vinculadas a sus fases, reflejando la intención clínica del tratamiento.}{\prMedia}
+  \rfrow{RF-018}{Registro de notas clínicas}{El terapeuta debe poder registrar notas clínicas con fecha, tipo (evolución, observación, indicación) y contenido, asociadas al historial clínico y, opcionalmente, al plan de tratamiento activo.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-019}{Visibilidad de la nota al paciente}{El terapeuta debe poder marcar cada nota clínica como visible o no visible para el paciente.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Rutinas y Ejercicios}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-020}{Catálogo de ejercicios}{El sistema debe ofrecer un catálogo de ejercicios con nombre, descripción, video, imagen, zona corporal y tipo (fuerza, flexibilidad, equilibrio, relajación, cardio).}{\prAlta}
+  \rfrow{RF-021}{Creación de rutinas}{El terapeuta debe poder crear rutinas componiendo ejercicios del catálogo, especificando series, repeticiones, duración y descanso por ejercicio.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-022}{Personalización de rutina}{El terapeuta debe poder agregar notas específicas para el paciente en cada ejercicio dentro de una rutina.}{\prAlta}
+  \rfrow{RF-023}{Clonado de rutina}{El terapeuta debe poder clonar una rutina existente como punto de partida para crear una nueva.}{\prMedia}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-024}{Asignación de rutina a paciente}{El terapeuta debe poder asignar una rutina a uno o varios pacientes, especificando fecha de inicio, fecha de fin y frecuencia semanal.}{\prAlta}
+  \rfrow{RF-025}{Visualización de rutina asignada}{El paciente debe poder visualizar las rutinas que tiene asignadas, con instrucciones, video e imágenes.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-026}{Pausa o cancelación de asignación}{El terapeuta debe poder pausar, reanudar o cancelar una asignación de rutina.}{\prMedia}
+  \rfrow{RF-027}{Generación asistida de rutinas}{El sistema debe ofrecer al terapeuta sugerencias de rutinas generadas por IA con base en el perfil clínico del paciente.}{\prBaja}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Sesiones y Feedback}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-030}{Inicio de sesión de ejecución}{El paciente debe poder iniciar una sesión de ejecución de rutina, registrándose el momento de inicio.}{\prAlta}
+  \rfrow{RF-031}{Marcado de ejercicio completado}{El paciente debe poder marcar cada ejercicio como completado, omitido o no completado durante la sesión.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-032}{Finalización de sesión}{El sistema debe registrar la finalización de la sesión calculando el porcentaje de cumplimiento.}{\prAlta}
+  \rfrow{RF-033}{Registro de feedback por voz}{El paciente debe poder grabar un mensaje de audio al finalizar la sesión expresando cómo se sintió.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-034}{Registro de nivel de dolor}{El paciente debe poder seleccionar un nivel de dolor en una escala de 0 a 10 al registrar feedback.}{\prAlta}
+  \rfrow{RF-035}{Registro de estado emocional}{El paciente debe poder registrar su estado emocional mediante una escala visual (muy bien, bien, neutro, mal, muy mal).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-036}{Almacenamiento seguro del audio}{El sistema debe almacenar el audio en un repositorio de objetos cifrado, asociado al feedback correspondiente.}{\prAlta}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de IA y Análisis}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-040}{Transcripción de audio}{El sistema debe transcribir automáticamente el audio del feedback a texto en español mediante un servicio de IA.}{\prAlta}
+  \rfrow{RF-041}{Análisis de sentimiento}{El sistema debe analizar el texto transcrito y clasificar el sentimiento general (positivo, neutro, negativo).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-042}{Extracción de palabras clave}{El sistema debe identificar palabras clave clínicamente relevantes (síntomas, partes del cuerpo, intensidad).}{\prMedia}
+  \rfrow{RF-043}{Generación de alertas clínicas}{El sistema debe generar alertas automáticas cuando el feedback indique problemas o síntomas de deterioro del paciente (dolor alto sostenido, palabras de alerta).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-044}{Resumen asistido para terapeuta}{El sistema debe generar un resumen breve del feedback procesado para facilitar su lectura por el terapeuta.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Seguimiento y Reportes}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-050}{Consulta de progreso (paciente)}{El paciente debe poder consultar su progreso personal: rutinas completadas, evolución del dolor, adherencia.}{\prAlta}
+  \rfrow{RF-051}{Dashboard de terapeuta}{El terapeuta debe contar con un dashboard que liste sus pacientes, alertas recientes y feedback pendiente de revisión.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-052}{Reporte de progreso (PDF)}{El sistema debe generar reportes de progreso exportables a PDF para un paciente y un rango de fechas dado.}{\prMedia}
+  \rfrow{RF-053}{Gráficas de tendencia}{El sistema debe mostrar gráficas de tendencia de dolor, estado emocional y adherencia.}{\prMedia}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-054}{Indicadores de clínica}{El administrador de la clínica debe poder consultar indicadores agregados (pacientes activos, sesiones completadas, adherencia promedio).}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Bienestar}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-060}{Catálogo de módulos de bienestar}{El sistema debe ofrecer un catálogo de recursos de bienestar (meditación, respiración, contenido educativo y motivacional).}{\prMedia}
+  \rfrow{RF-061}{Acceso del paciente}{El paciente debe poder acceder libremente a los módulos de bienestar y registrar su consumo.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Notificaciones}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-070}{Recordatorio de rutina}{El sistema debe enviar notificaciones push y/o email recordando al paciente la ejecución de su rutina según la frecuencia programada.}{\prAlta}
+  \rfrow{RF-071}{Notificación de feedback al terapeuta}{El sistema debe notificar al terapeuta cuando un paciente registre feedback con alerta clínica.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-072}{Preferencias de notificación}{El usuario debe poder configurar canales y horarios de notificación preferidos.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Agenda y Citas}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-080}{Definición de horarios disponibles}{El terapeuta debe poder definir su disponibilidad semanal (día, hora de inicio y fin) con un rango de vigencia; la disponibilidad de una sala se modela de la misma forma.}{\prAlta}
+  \rfrow{RF-081}{Gestión de salas}{El administrador debe poder registrar y mantener las salas o consultorios de la clínica con ubicación, capacidad y equipamiento.}{\prMedia}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-082}{Agendamiento de cita}{El sistema debe permitir agendar una cita entre un paciente y un terapeuta, validando la disponibilidad horaria y evitando colisiones con otras citas.}{\prAlta}
+  \rfrow{RF-083}{Asignación de sala a la cita}{Una cita debe poder ocupar opcionalmente una sala que esté disponible en el horario solicitado.}{\prMedia}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-084}{Gestión del estado de la cita}{El sistema debe permitir confirmar, reprogramar o cancelar una cita, manteniendo la trazabilidad de su estado.}{\prAlta}
+  \rfrow{RF-085}{Recordatorio de cita}{El sistema debe programar y enviar un recordatorio de la cita por los canales configurados (push y/o email) con anticipación.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-086}{Consulta de agenda}{El terapeuta debe poder consultar su agenda diaria y semanal con las citas programadas.}{\prAlta}
+  \rfrow{RF-087}{Vinculación de cita a plan de tratamiento}{Una cita debe poder asociarse a un plan de tratamiento para reflejar el contexto clínico de la consulta.}{\prBaja}
+  \bottomrule
+\end{longtable}
+
+\section{Requerimientos No Funcionales}
+
+Los requerimientos no funcionales describen las propiedades de calidad del sistema. Se agrupan según la categorización ISO/IEC 25010.
+
+\subsection{Rendimiento}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-001}{Tiempo de respuesta API}{El 95 por ciento de las peticiones a endpoints REST debe resolverse en menos de 500 ms bajo carga normal (hasta 200 usuarios concurrentes).}{\prAlta}
+  \rfrow{RNF-002}{Tiempo de carga inicial}{La aplicación web debe cargar su pantalla inicial en menos de 3 segundos sobre conexión 4G.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-003}{Procesamiento de IA}{La transcripción y análisis de un audio de hasta 60 segundos deben completarse en menos de 15 segundos.}{\prMedia}
+  \rfrow{RNF-004}{Subida de audio}{Una grabación de hasta 5 MB debe poder subirse en menos de 10 segundos sobre conexión 4G.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Escalabilidad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-010}{Escalabilidad horizontal}{El sistema debe soportar el escalado horizontal de servicios mediante manejo de contenedores (Docker/Podman).}{\prAlta}
+  \rfrow{RNF-011}{Capacidad inicial}{El sistema debe soportar al menos 5{,}000 usuarios registrados y 500 sesiones concurrentes en su versión inicial.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-012}{Crecimiento}{La arquitectura debe permitir crecer hasta 50{,}000 usuarios sin rediseño mayor.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Seguridad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-020}{Cifrado en tránsito}{Toda comunicación cliente-servidor y servicio-servicio debe usar TLS 1.2 o superior.}{\prAlta}
+  \rfrow{RNF-021}{Cifrado en reposo}{Los audios de feedback y los datos clínicos en base de datos deben almacenarse con cifrado en reposo (AES-256).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-022}{Hash de contraseñas}{Las contraseñas deben almacenarse con bcrypt con factor de costo moderado.}{\prAlta}
+  \rfrow{RNF-023}{Tokens JWT}{Los tokens JWT deben tener expiración máxima de 60 minutos, con refresh token de hasta 7 días.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-024}{Auditoría de accesos}{Todos los accesos a datos clínicos deben registrarse en una bitácora con identificación del usuario, marca de tiempo y operación.}{\prAlta}
+  \rfrow{RNF-025}{Protección contra ataques comunes}{El sistema debe protegerse contra OWASP Top 10 (inyección, XSS, CSRF, etc.).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-026}{Rate limiting}{El API gateway debe aplicar límites de tasa para prevenir abuso (por ejemplo, 100 peticiones por minuto por usuario).}{\prAlta}
+  \bottomrule
+\end{longtable}
+
+\subsection{Privacidad y cumplimiento normativo}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-030}{Cumplimiento de protección de datos}{El sistema debe cumplir con la legislación local de protección de datos personales (LFPDPPP en México, RGPD en Europa) y normativas de datos de salud aplicables.}{\prAlta}
+  \rfrow{RNF-031}{Consentimiento informado}{El sistema debe registrar el consentimiento explícito del paciente para almacenar audios y procesarlos con IA.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-032}{Derecho al olvido}{El sistema debe permitir la eliminación completa de los datos personales y clínicos de un usuario a petición, dentro del plazo legal.}{\prAlta}
+  \rfrow{RNF-033}{Anonimización para análisis agregado}{Las métricas agregadas y reportes de clínica no deben permitir identificar individualmente a los pacientes.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Disponibilidad y confiabilidad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-040}{Disponibilidad objetivo}{El sistema debe contar con un SLA de 99.5 por ciento de disponibilidad mensual.}{\prAlta}
+  \rfrow{RNF-041}{Respaldo automático}{Las bases de datos deben respaldarse automáticamente al menos cada 24 horas con retención mínima de 30 días.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-042}{Recuperación ante desastres}{El RTO objetivo debe ser menor a 4 horas y el RPO menor a 1 hora.}{\prMedia}
+  \rfrow{RNF-043}{Tolerancia a fallos de IA}{Si el servicio de IA externo no está disponible, el feedback debe poder almacenarse y procesarse posteriormente sin pérdida.}{\prAlta}
+  \bottomrule
+\end{longtable}
+
+\subsection{Usabilidad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-050}{Interfaz responsiva}{La interfaz debe adaptarse a resoluciones desde 360 px (móvil) hasta 1920 px (escritorio).}{\prAlta}
+  \rfrow{RNF-051}{Idioma}{La interfaz debe estar disponible en español como idioma primario, con arquitectura preparada para internacionalización.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-052}{Accesibilidad WCAG}{La interfaz debe cumplir con WCAG 2.1 nivel AA en flujos críticos (login, ejecución de rutina, registro de feedback).}{\prMedia}
+  \rfrow{RNF-053}{Curva de aprendizaje}{Un terapeuta debe poder crear y asignar su primera rutina en menos de 10 minutos sin entrenamiento previo.}{\prMedia}
+  \bottomrule
+\end{longtable}
+
+\subsection{Mantenibilidad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-060}{Cobertura de pruebas}{El código debe mantener al menos el 70 por ciento de cobertura de pruebas unitarias en la capa de dominio y aplicación.}{\prAlta}
+  \rfrow{RNF-061}{Documentación API}{Toda la API REST pública debe estar documentada con OpenAPI 3.0 (Swagger).}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-062}{CI/CD}{Cada commit debe disparar el pipeline automatizado de build, pruebas y análisis estático.}{\prAlta}
+  \rfrow{RNF-063}{Logging estructurado}{Todos los servicios deben emitir logs estructurados (JSON) con nivel, marca de tiempo, correlation ID y contexto.}{\prAlta}
+  \bottomrule
+\end{longtable}
+
+\subsection{Portabilidad e interoperabilidad}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-070}{Compatibilidad de navegadores}{La aplicación debe funcionar en las dos últimas versiones estables de Chrome, Firefox, Safari y Edge.}{\prAlta}
+  \rfrow{RNF-071}{Containerización}{Todos los servicios deben distribuirse como contenedores Docker-Podman.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RNF-072}{Independencia de proveedor de IA}{La capa de IA debe encapsular el proveedor concreto (Whisper, OpenAI, Ollama, Llama, etc.) tras una interfaz, permitiendo sustitución.}{\prMedia}
+  \rfrow{RNF-073}{Exportación de datos}{El sistema debe permitir la exportación de los datos del paciente en formato estándar (JSON / CSV / FHIR).}{\prBaja}
+  \bottomrule
+\end{longtable}

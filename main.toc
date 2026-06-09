@@ -1,0 +1,149 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{\numberline {1}Introducción}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Propósito del documento}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Alcance del sistema}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Visión del producto}{1}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Definiciones, acrónimos y abreviaturas}{2}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Actores y Stakeholders}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Actores del sistema}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Stakeholders}{3}{section.2.2}%
+\contentsline {chapter}{\numberline {3}Requerimientos del Sistema}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Requerimientos Funcionales}{5}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Módulo de Autenticación y Gestión de Usuarios}{5}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Módulo de Pacientes y Clínico}{5}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Módulo de Plan de Tratamiento y Notas Clínicas}{6}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Módulo de Rutinas y Ejercicios}{7}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.5}Módulo de Sesiones y Feedback}{7}{subsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.1.6}Módulo de IA y Análisis}{8}{subsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.1.7}Módulo de Seguimiento y Reportes}{8}{subsection.3.1.7}%
+\contentsline {subsection}{\numberline {3.1.8}Módulo de Bienestar}{9}{subsection.3.1.8}%
+\contentsline {subsection}{\numberline {3.1.9}Módulo de Notificaciones}{9}{subsection.3.1.9}%
+\contentsline {subsection}{\numberline {3.1.10}Módulo de Agenda y Citas}{10}{subsection.3.1.10}%
+\contentsline {section}{\numberline {3.2}Requerimientos No Funcionales}{10}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Rendimiento}{10}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Escalabilidad}{11}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Seguridad}{11}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Privacidad y cumplimiento normativo}{12}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Disponibilidad y confiabilidad}{12}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Usabilidad}{13}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Mantenibilidad}{13}{subsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.2.8}Portabilidad e interoperabilidad}{14}{subsection.3.2.8}%
+\contentsline {chapter}{\numberline {4}CRC Cards}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Tarjetas CRC del dominio}{15}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Paciente}{15}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Terapeuta}{15}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Administrador}{16}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}HistorialClinico}{16}{subsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.1.5}Diagnostico}{17}{subsection.4.1.5}%
+\contentsline {subsection}{\numberline {4.1.6}PlanTratamiento}{17}{subsection.4.1.6}%
+\contentsline {subsection}{\numberline {4.1.7}FaseTratamiento}{18}{subsection.4.1.7}%
+\contentsline {subsection}{\numberline {4.1.8}NotaClinica}{18}{subsection.4.1.8}%
+\contentsline {subsection}{\numberline {4.1.9}Rutina}{18}{subsection.4.1.9}%
+\contentsline {subsection}{\numberline {4.1.10}Ejercicio}{19}{subsection.4.1.10}%
+\contentsline {subsection}{\numberline {4.1.11}ParametrosEjercicio}{19}{subsection.4.1.11}%
+\contentsline {subsection}{\numberline {4.1.12}AsignacionRutina}{19}{subsection.4.1.12}%
+\contentsline {subsection}{\numberline {4.1.13}SesionEjecucion}{20}{subsection.4.1.13}%
+\contentsline {subsection}{\numberline {4.1.14}Feedback}{20}{subsection.4.1.14}%
+\contentsline {subsection}{\numberline {4.1.15}AnalisisIA}{20}{subsection.4.1.15}%
+\contentsline {subsection}{\numberline {4.1.16}ReporteProgreso}{21}{subsection.4.1.16}%
+\contentsline {subsection}{\numberline {4.1.17}Cita}{21}{subsection.4.1.17}%
+\contentsline {subsection}{\numberline {4.1.18}Sala}{21}{subsection.4.1.18}%
+\contentsline {subsection}{\numberline {4.1.19}HorarioDisponible}{22}{subsection.4.1.19}%
+\contentsline {subsection}{\numberline {4.1.20}Recordatorio}{22}{subsection.4.1.20}%
+\contentsline {subsection}{\numberline {4.1.21}ModuloBienestar}{22}{subsection.4.1.21}%
+\contentsline {section}{\numberline {4.2}Diagrama visual de CRC Cards}{22}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Modelo C4 de Arquitectura}{24}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Nivel 1: Diagrama de Contexto}{24}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Actores y sistemas externos}{24}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Nivel 2: Diagrama de Contenedores}{25}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Contenedores principales}{25}{subsection.5.2.1}%
+\contentsline {section}{\numberline {5.3}Nivel 3: Diagrama de Componentes}{26}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Componentes del Servicio de Feedback}{27}{subsection.5.3.1}%
+\contentsline {chapter}{\numberline {6}CRR --- Component Responsibility Report}{29}{chapter.6}%
+\contentsline {section}{\numberline {6.1}CRR --- Aplicación Web SPA}{29}{section.6.1}%
+\contentsline {section}{\numberline {6.2}CRR --- API Gateway / BFF}{30}{section.6.2}%
+\contentsline {section}{\numberline {6.3}CRR --- Servicio de Pacientes}{30}{section.6.3}%
+\contentsline {section}{\numberline {6.4}CRR --- Servicio de Rutinas}{31}{section.6.4}%
+\contentsline {section}{\numberline {6.5}CRR --- Servicio de Feedback}{31}{section.6.5}%
+\contentsline {section}{\numberline {6.6}CRR --- Servicio de IA / Orquestador}{32}{section.6.6}%
+\contentsline {section}{\numberline {6.7}CRR --- Servicio de Notificaciones}{32}{section.6.7}%
+\contentsline {chapter}{\numberline {7}Diagrama de Clases Conceptuales}{33}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Decisiones de modelado}{33}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Código PlantUML del diagrama}{34}{section.7.2}%
+\contentsline {chapter}{\numberline {8}Diagrama de Objetos}{35}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Escenario representado}{35}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Propósito del diagrama}{36}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Código PlantUML del diagrama}{37}{section.8.3}%
+\contentsline {chapter}{\numberline {9}Diagrama de Robustez}{38}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Flujos consolidados}{38}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Reglas de robustez aplicadas}{39}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Código PlantUML del diagrama}{39}{section.9.3}%
+\contentsline {chapter}{\numberline {10}Diagrama de Casos de Uso}{40}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Trazabilidad casos de uso vs requerimientos funcionales}{41}{section.10.1}%
+\contentsline {chapter}{\numberline {11}Maquetas de Interfaz (UI/UX)}{43}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Sistema de Diseño}{43}{section.11.1}%
+\contentsline {subsection}{\numberline {11.1.1}Filosofía visual}{43}{subsection.11.1.1}%
+\contentsline {subsection}{\numberline {11.1.2}Reglas explícitas del sistema}{43}{subsection.11.1.2}%
+\contentsline {subsection}{\numberline {11.1.3}Tipografía}{44}{subsection.11.1.3}%
+\contentsline {section}{\numberline {11.2}Mapa de pantallas}{44}{section.11.2}%
+\contentsline {section}{\numberline {11.3}Portal del Paciente (Móvil)}{45}{section.11.3}%
+\contentsline {subsection}{\numberline {11.3.1}M-01 --- Home del Paciente}{45}{subsection.11.3.1}%
+\contentsline {subsection}{\numberline {11.3.2}M-02 --- Detalle de Ejercicio}{46}{subsection.11.3.2}%
+\contentsline {subsection}{\numberline {11.3.3}M-03 --- Rutina activa: Lower Back Recovery}{48}{subsection.11.3.3}%
+\contentsline {subsection}{\numberline {11.3.4}M-04 --- Progreso personal}{50}{subsection.11.3.4}%
+\contentsline {subsection}{\numberline {11.3.5}M-05 --- Registro de Feedback}{51}{subsection.11.3.5}%
+\contentsline {subsection}{\numberline {11.3.6}M-06 --- Wellness Hub}{53}{subsection.11.3.6}%
+\contentsline {subsection}{\numberline {11.3.7}M-07 --- Ejercicio guiado: Morning Serenity}{54}{subsection.11.3.7}%
+\contentsline {subsection}{\numberline {11.3.8}M-08 --- Wellness Check-in y Journaling}{55}{subsection.11.3.8}%
+\contentsline {section}{\numberline {11.4}Portal del Terapeuta (Web)}{56}{section.11.4}%
+\contentsline {subsection}{\numberline {11.4.1}W-01 --- Patient Directory}{56}{subsection.11.4.1}%
+\contentsline {subsection}{\numberline {11.4.2}W-02 --- Patient Detail}{57}{subsection.11.4.2}%
+\contentsline {subsection}{\numberline {11.4.3}W-03 --- Routine Builder}{59}{subsection.11.4.3}%
+\contentsline {subsection}{\numberline {11.4.4}W-04 --- Routine Builder (estado drag activo)}{60}{subsection.11.4.4}%
+\contentsline {subsection}{\numberline {11.4.5}W-05 --- Routine Library}{61}{subsection.11.4.5}%
+\contentsline {subsection}{\numberline {11.4.6}W-06 --- Clinical Analytics}{64}{subsection.11.4.6}%
+\contentsline {subsection}{\numberline {11.4.7}W-07 --- Sesión Clínica Activa}{65}{subsection.11.4.7}%
+\contentsline {subsection}{\numberline {11.4.8}W-08 --- Plan de Tratamiento}{66}{subsection.11.4.8}%
+\contentsline {section}{\numberline {11.5}Trazabilidad pantallas vs requerimientos funcionales}{68}{section.11.5}%
+\contentsline {section}{\numberline {11.6}Acceso al prototipo}{68}{section.11.6}%
+\contentsline {chapter}{\numberline {12}Diagrama de Estados}{69}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Estados principales}{69}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Decisiones de modelado}{72}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Código PlantUML del diagrama}{72}{section.12.3}%
+\contentsline {chapter}{\numberline {13}Diagramas de Secuencia}{73}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Flujo 1: Registro de Feedback}{73}{section.13.1}%
+\contentsline {subsection}{\numberline {13.1.1}Participantes}{73}{subsection.13.1.1}%
+\contentsline {subsection}{\numberline {13.1.2}Descripción del flujo}{73}{subsection.13.1.2}%
+\contentsline {subsection}{\numberline {13.1.3}Aspectos destacados}{76}{subsection.13.1.3}%
+\contentsline {section}{\numberline {13.2}Flujo 2: Asignación de Rutina}{76}{section.13.2}%
+\contentsline {subsection}{\numberline {13.2.1}Participantes}{76}{subsection.13.2.1}%
+\contentsline {subsection}{\numberline {13.2.2}Descripción del flujo}{76}{subsection.13.2.2}%
+\contentsline {subsubsection}{Fase 1: Construcción de la rutina}{76}{subsection.13.2.2}%
+\contentsline {subsubsection}{Fase 2: Asignación a pacientes}{77}{Item.34}%
+\contentsline {subsection}{\numberline {13.2.3}Aspectos destacados}{79}{subsection.13.2.3}%
+\contentsline {section}{\numberline {13.3}Código PlantUML de los diagramas}{79}{section.13.3}%
+\contentsline {chapter}{\numberline {14}Modelo de Base de Datos (ERD)}{80}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Tablas del modelo}{80}{section.14.1}%
+\contentsline {subsection}{\numberline {14.1.1}Dominio de Usuarios}{80}{subsection.14.1.1}%
+\contentsline {subsection}{\numberline {14.1.2}Dominio Clínico}{80}{subsection.14.1.2}%
+\contentsline {subsection}{\numberline {14.1.3}Dominio de Rutinas y Ejercicios}{81}{subsection.14.1.3}%
+\contentsline {subsection}{\numberline {14.1.4}Dominio de Seguimiento}{81}{subsection.14.1.4}%
+\contentsline {subsection}{\numberline {14.1.5}Dominio de Agenda}{81}{subsection.14.1.5}%
+\contentsline {section}{\numberline {14.2}Diagrama ERD}{83}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Convenciones aplicadas}{83}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Código PlantUML del diagrama}{83}{section.14.4}%
+\contentsline {chapter}{\numberline {A}Codigo fuente de los diagramas UML}{84}{chapter.A}%
+\contentsline {section}{\numberline {A.1}Lista de archivos}{84}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Como compilar los diagramas}{84}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Diagrama de Clases Conceptuales}{85}{section.A.3}%
+\contentsline {section}{\numberline {A.4}C4 Nivel 1: Contexto}{89}{section.A.4}%
+\contentsline {section}{\numberline {A.5}C4 Nivel 2: Contenedores}{90}{section.A.5}%
+\contentsline {section}{\numberline {A.6}C4 Nivel 3: Componentes}{93}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Casos de Uso}{94}{section.A.7}%
+\contentsline {section}{\numberline {A.8}CRC Cards}{97}{section.A.8}%
+\contentsline {section}{\numberline {A.9}Diagrama de Objetos}{101}{section.A.9}%
+\contentsline {section}{\numberline {A.10}Diagrama de Robustez}{105}{section.A.10}%
+\contentsline {section}{\numberline {A.11}Diagrama de Estados}{108}{section.A.11}%
+\contentsline {section}{\numberline {A.12}Secuencia: Asignación de Rutina}{109}{section.A.12}%
+\contentsline {section}{\numberline {A.13}Secuencia: Registro de Feedback}{111}{section.A.13}%
+\contentsline {section}{\numberline {A.14}Modelo ERD}{114}{section.A.14}%

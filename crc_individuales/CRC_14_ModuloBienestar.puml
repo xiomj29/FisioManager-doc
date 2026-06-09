@@ -1,0 +1,35 @@
+@startuml CRC_ModuloBienestar
+
+' FisioManager - CRC Card: ModuloBienestar
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: ModuloBienestar</b>
+
+class "Responsabilidades" as Resp {
+    + Almacenar contenido de bienestar
+    + Identificar el tipo
+      (meditacion, respiracion,
+       educacional, motivacional)
+    + Proveer la URL del contenido
+    + Indicar duracion estimada
+}
+
+class "Colaboradores" as Col {
+    Paciente (consumidor)
+}
+
+Resp -[hidden]right- Col
+
+@enduml

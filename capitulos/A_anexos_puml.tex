@@ -1,0 +1,89 @@
+% =============================================================
+% ANEXO A - CODIGO FUENTE PLANTUML
+% =============================================================
+\chapter{Codigo fuente de los diagramas UML}\label{ch:anexos}
+
+Todos los diagramas se entregan como codigo PlantUML compilable. Los archivos \codeinline{.puml} estan disponibles en el directorio \codeinline{puml/} del repositorio y pueden regenerarse con:
+
+\begin{lstlisting}[language=bash]
+plantuml -tpng *.puml          # PNG
+plantuml -tsvg *.puml          # SVG (vectorial, mejor para impresion)
+\end{lstlisting}
+
+\section{Lista de archivos}
+
+\begin{itemize}
+  \item \codeinline{01\_diagrama\_clases.puml}: diagrama de clases conceptuales del modelo de dominio.
+  \item \codeinline{02\_c4\_nivel1\_contexto.puml}: C4 nivel 1 --- contexto del sistema.
+  \item \codeinline{03\_c4\_nivel2\_contenedores.puml}: C4 nivel 2 --- contenedores.
+  \item \codeinline{04\_c4\_nivel3\_componentes.puml}: C4 nivel 3 --- componentes del Servicio de Feedback.
+  \item \codeinline{05\_diagrama\_casos\_uso.puml}: diagrama de casos de uso UML.
+  \item \codeinline{06\_crc\_cards.puml}: CRC Cards renderizadas en formato visual.
+  \item \codeinline{07\_diagrama\_objetos.puml}: diagrama de objetos (instantánea del dominio).
+  \item \codeinline{08\_diagrama\_robustez.puml}: diagrama de robustez (clases de software Boundary / Control / Entity).
+  \item \codeinline{09\_diagrama\_estados.puml}: diagrama de estados (ciclo de vida de una rutina).
+  \item \codeinline{10\_secuencia\_asignacion\_rutina.puml}: diagrama de secuencia --- flujo de asignación de rutina.
+  \item \codeinline{11\_secuencia\_registro\_feedback.puml}: diagrama de secuencia --- flujo de registro de feedback.
+  \item \codeinline{12\_modelo\_erd.puml}: modelo de base de datos entidad-relación (ERD).
+\end{itemize}
+
+\section{Como compilar los diagramas}
+
+\textbf{Pre-requisitos:} Java 11 o superior, PlantUML (descargar \codeinline{plantuml.jar} de plantuml.com o instalar via package manager).
+
+\textbf{En Linux / WSL / macOS:}
+
+\begin{lstlisting}[language=bash]
+# Opcion 1: con apt (Debian/Ubuntu)
+sudo apt-get install plantuml
+
+# Opcion 2: con jar directamente
+java -jar plantuml.jar -tpng 01_diagrama_clases.puml
+
+# Opcion 3: generar todos los diagramas
+plantuml -tpng *.puml
+\end{lstlisting}
+
+\textbf{En Windows:}
+
+\begin{lstlisting}[language=bash]
+java -jar plantuml.jar -tpng *.puml
+\end{lstlisting}
+
+A continuacion se incluye el codigo fuente completo de cada archivo.
+
+\section{Diagrama de Clases Conceptuales}
+\lstinputlisting[language=plantuml,caption={\codeinline{01\_diagrama\_clases.puml}}]{puml/01_diagrama_clases.puml}
+
+\section{C4 Nivel 1: Contexto}
+\lstinputlisting[language=plantuml,caption={\codeinline{02\_c4\_nivel1\_contexto.puml}}]{puml/02_c4_nivel1_contexto.puml}
+
+\section{C4 Nivel 2: Contenedores}
+\lstinputlisting[language=plantuml,caption={\codeinline{03\_c4\_nivel2\_contenedores.puml}}]{puml/03_c4_nivel2_contenedores.puml}
+
+\section{C4 Nivel 3: Componentes}
+\lstinputlisting[language=plantuml,caption={\codeinline{04\_c4\_nivel3\_componentes.puml}}]{puml/04_c4_nivel3_componentes.puml}
+
+\section{Casos de Uso}
+\lstinputlisting[language=plantuml,caption={\codeinline{05\_diagrama\_casos\_uso.puml}}]{puml/05_diagrama_casos_uso.puml}
+
+\section{CRC Cards}
+\lstinputlisting[language=plantuml,caption={\codeinline{06\_crc\_cards.puml}}]{puml/06_crc_cards.puml}
+
+\section{Diagrama de Objetos}
+\lstinputlisting[language=plantuml,caption={\codeinline{07\_diagrama\_objetos.puml}}]{puml/07_diagrama_objetos.puml}
+
+\section{Diagrama de Robustez}
+\lstinputlisting[language=plantuml,caption={\codeinline{08\_diagrama\_robustez.puml}}]{puml/08_diagrama_robustez.puml}
+
+\section{Diagrama de Estados}
+\lstinputlisting[language=plantuml,caption={\codeinline{09\_diagrama\_estados.puml}}]{puml/09_diagrama_estados.puml}
+
+\section{Secuencia: Asignación de Rutina}
+\lstinputlisting[language=plantuml,caption={\codeinline{10\_secuencia\_asignacion\_rutina.puml}}]{puml/10_secuencia_asignacion_rutina.puml}
+
+\section{Secuencia: Registro de Feedback}
+\lstinputlisting[language=plantuml,caption={\codeinline{11\_secuencia\_registro\_feedback.puml}}]{puml/11_secuencia_registro_feedback.puml}
+
+\section{Modelo ERD}
+\lstinputlisting[language=plantuml,caption={\codeinline{12\_modelo\_erd.puml}}]{puml/12_modelo_erd.puml}

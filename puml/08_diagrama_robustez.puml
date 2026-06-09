@@ -1,0 +1,135 @@
+@startuml FisioManager_DiagramaRobustez
+
+' FisioManager - Diagrama de Robustez (clases de software)
+' Consolidado: agenda de cita, registro de feedback, prescripcion de plan
+' y elaboracion de nota clinica.
+'
+' Clases de software (ICONIX):
+'   <<actor>>     Actores externos al sistema
+'   <<boundary>>  Interfaces de usuario / sistemas externos
+'   <<control>>   Logica de aplicacion y orquestacion
+'   <<entity>>    Entidades persistentes del dominio
+
+skinparam backgroundColor #FAFAFA
+skinparam ArrowColor #2E75B6
+skinparam DefaultFontName Arial
+skinparam DefaultFontSize 11
+skinparam shadowing false
+
+skinparam class {
+    BackgroundColor<<actor>>     #EEEEEE
+    BorderColor<<actor>>         #555555
+    BackgroundColor<<boundary>>  #FFF3E6
+    BorderColor<<boundary>>      #E08E45
+    BackgroundColor<<control>>   #F0F8E8
+    BorderColor<<control>>       #5B9D3E
+    BackgroundColor<<entity>>    #E8F4F8
+    BorderColor<<entity>>        #2E75B6
+}
+
+title <b>FisioManager - Diagrama de Robustez</b>\n<size:11>Clases de software: Boundary / Control / Entity</size>
+
+' ============================================================
+' ACTORES
+' ============================================================
+class ActorPaciente <<actor>>
+class ActorTerapeuta <<actor>>
+
+' ============================================================
+' BOUNDARIES (interfaces)
+' ============================================================
+class UIAgendaPaciente <<boundary>>
+class UIAgendaTerapeuta <<boundary>>
+class UIRegistroFeedback <<boundary>>
+class UIConsultaPaciente <<boundary>>
+class UIPlanTratamiento <<boundary>>
+class ServicioNotificaciones <<boundary>>
+class ServicioIAExterno <<boundary>>
+
+' ============================================================
+' CONTROLS (logica de aplicacion)
+' ============================================================
+class GestorCitas <<control>>
+class GestorRecordatorios <<control>>
+class GestorFeedback <<control>>
+class AnalizadorIA <<control>>
+class GestorPlanTratamiento <<control>>
+class GestorNotasClinicas <<control>>
+class ValidadorDisponibilidad <<control>>
+
+' ============================================================
+' ENTITIES (dominio persistente)
+' ============================================================
+class Paciente <<entity>>
+class Terapeuta <<entity>>
+class Cita <<entity>>
+class Sala <<entity>>
+class HorarioDisponible <<entity>>
+class Recordatorio <<entity>>
+class SesionEjecucion <<entity>>
+class Feedback <<entity>>
+class AnalisisIA <<entity>>
+class PlanTratamiento <<entity>>
+class FaseTratamiento <<entity>>
+class NotaClinica <<entity>>
+class HistorialClinico <<entity>>
+class AsignacionRutina <<entity>>
+
+' ============================================================
+' FLUJO 1: Agendar cita (Paciente)
+' ============================================================
+ActorPaciente --> UIAgendaPaciente
+UIAgendaPaciente --> GestorCitas : solicitar cita
+GestorCitas --> ValidadorDisponibilidad : verificar disponibilidad
+ValidadorDisponibilidad --> HorarioDisponible : consulta horarios
+ValidadorDisponibilidad --> Sala : consulta salas
+ValidadorDisponibilidad --> Cita : consulta colisiones
+GestorCitas --> Cita : crea
+GestorCitas --> Paciente : asocia
+GestorCitas --> Terapeuta : asocia
+GestorCitas --> GestorRecordatorios : programar recordatorio
+GestorRecordatorios --> Recordatorio : crea
+GestorRecordatorios --> ServicioNotificaciones : enviar
+ServicioNotificaciones --> ActorPaciente : push / email
+
+' ============================================================
+' FLUJO 2: Registrar feedback de sesion (Paciente)
+' ============================================================
+ActorPaciente --> UIRegistroFeedback : graba audio + dolor + emocion
+UIRegistroFeedback --> GestorFeedback : enviar feedback
+GestorFeedback --> SesionEjecucion : consulta sesion
+GestorFeedback --> Feedback : crea
+GestorFeedback --> AnalizadorIA : solicitar analisis
+AnalizadorIA --> ServicioIAExterno : transcribir + sentimiento
+ServicioIAExterno --> AnalizadorIA : resultado
+AnalizadorIA --> AnalisisIA : crea
+AnalizadorIA --> Feedback : enlaza analisis
+
+' ============================================================
+' FLUJO 3: Elaborar plan de tratamiento (Terapeuta)
+' ============================================================
+ActorTerapeuta --> UIPlanTratamiento
+UIPlanTratamiento --> GestorPlanTratamiento : crear / editar plan
+GestorPlanTratamiento --> Paciente : selecciona paciente
+GestorPlanTratamiento --> PlanTratamiento : crea
+GestorPlanTratamiento --> FaseTratamiento : agrega fases
+GestorPlanTratamiento --> AsignacionRutina : prescribe rutinas
+GestorPlanTratamiento --> HistorialClinico : vincula historial
+
+' ============================================================
+' FLUJO 4: Registrar nota clinica durante consulta (Terapeuta)
+' ============================================================
+ActorTerapeuta --> UIConsultaPaciente : abre expediente paciente
+UIConsultaPaciente --> GestorNotasClinicas : agregar nota
+GestorNotasClinicas --> HistorialClinico : ubica historial
+GestorNotasClinicas --> NotaClinica : crea
+GestorNotasClinicas --> PlanTratamiento : adjunta al plan
+
+' ============================================================
+' FLUJO 5: Consulta de agenda (Terapeuta)
+' ============================================================
+ActorTerapeuta --> UIAgendaTerapeuta : revisa agenda del dia
+UIAgendaTerapeuta --> GestorCitas : listar citas
+GestorCitas --> Cita : consulta
+
+@enduml

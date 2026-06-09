@@ -1,0 +1,37 @@
+@startuml CRC_ParametrosEjercicio
+
+' FisioManager - CRC Card: ParametrosEjercicio
+
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam class {
+    BackgroundColor #FFF8DC
+    BorderColor #B8860B
+    HeaderBackgroundColor #FFD700
+    AttributeFontColor #000000
+}
+
+title <b>CRC Card: ParametrosEjercicio</b>
+
+class "Responsabilidades" as Resp {
+    + Especificar series, repeticiones,
+      duracion y descanso
+    + Determinar el orden del ejercicio
+      en una rutina
+    + Almacenar notas especificas del terapeuta
+    + Vincular un ejercicio del catalogo
+      a una rutina
+}
+
+class "Colaboradores" as Col {
+    Rutina (contenedor)
+    Ejercicio (referenciado)
+}
+
+Resp -[hidden]right- Col
+
+@enduml
