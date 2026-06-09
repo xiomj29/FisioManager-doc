@@ -72,3 +72,10 @@ pdflatex main.tex
 pdflatex main.tex  
 pdflatex main.tex   
 ```
+
+## Repositorio del Proyecto
+
+```bash
+git@github.com:AndreaHortaHernandez/FisioManager.git
+```
+
