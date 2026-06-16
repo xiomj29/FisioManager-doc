@@ -18,9 +18,18 @@ latex/
 │   ├── 05_modelo_c4.tex         
 │   ├── 06_crr.tex               
 │   ├── 07_diagrama_clases.tex
-│   ├── 08_casos_uso.tex
-│   ├── 09_ui_maquetas.tex      
-│   └── A_anexos_puml.tex        
+│   ├── 08_diagrama_objetos.tex
+│   ├── 09_diagrama_robustez.tex
+│   ├── 10_casos_uso.tex
+│   ├── 11_ui_maquetas.tex
+│   ├── 12_diagrama_estados.tex
+│   ├── 13_diagramas_secuencia.tex
+│   ├── 14_modelo_erd.tex
+│   └── A_anexos_puml.tex
+├── crc_individuales/
+│   ├── *.png
+│   ├── *.puml
+│   ├── ...                   
 ├── figuras/                     
 │   ├── FisioManager_C4_Contexto.png
 │   ├── FisioManager_C4_Contenedores.png
@@ -28,7 +37,8 @@ latex/
 │   ├── FisioManager_DiagramaClases.png
 │   ├── FisioManager_CasosDeUso.png
 │   ├── FisioManager_CRC_Cards.png
-│   └── maqueta_wellness.png     
+│   └── maqueta_wellness.png
+│   ├── ... 
 └── puml/                        
     ├── 01_diagrama_clases.puml
     ├── 02_c4_nivel1_contexto.puml
@@ -36,6 +46,7 @@ latex/
     ├── 04_c4_nivel3_componentes.puml
     ├── 05_diagrama_casos_uso.puml
     └── 06_crc_cards.puml
+    ├── ...
 ```
 
 ## Compilacion
@@ -61,3 +72,10 @@ pdflatex main.tex
 pdflatex main.tex  
 pdflatex main.tex   
 ```
+
+## Repositorio del Proyecto
+
+```bash
+git@github.com:AndreaHortaHernandez/FisioManager.git
+```
+
