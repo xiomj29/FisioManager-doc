@@ -53,5 +53,5 @@ Requiere `latexmk` (o `pdflatex`) y, para regenerar diagramas, `plantuml`.
 ## Repositorio del Proyecto
 
 ```bash
-git@github.com:AndreaHortaHernandez/FisioManager.git
+git@github.com:AndreaHortaHernandez/FisioManager-ADS.git
 ```
