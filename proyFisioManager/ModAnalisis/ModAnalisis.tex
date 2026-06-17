@@ -1,0 +1,40 @@
+\documentclass[11pt,letterpaper,oneside]{report}
+
+\input{../logos/preambulo}
+
+\graphicspath{{figuras/}{crc_individuales/}{../logos/}}
+
+\hypersetup{pdftitle={FisioManager - Modelo de Analisis}}
+
+\begin{document}
+
+\portadafm{Modelo de Análisis}
+
+\pagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\caratulacambios{
+  2026-04-22 & 0.1 & Modelo de contexto C4 y primeras CRC Cards. & Xiomara \\
+  \rowcolor{fmTableAltRow}
+  2026-05-20 & 0.6 & Casos de uso, modelo de dominio, diagrama de estados y maquetas de interfaz. & Xiomara, Andrea, Brenda \\
+  2026-06-16 & 1.0 & Versión final del Modelo de Análisis con ERD y anexo PlantUML. & Xiomara, Andrea, Brenda \\
+}
+
+\input{05_modelo_c4}
+\input{10_casos_uso}
+\input{04_crc_cards}
+\input{07_diagrama_clases}
+\input{12_diagrama_estados}
+\input{11_ui_maquetas}
+\input{14_modelo_erd}
+
+\appendix
+\input{A_anexos_puml}
+
+\end{document}

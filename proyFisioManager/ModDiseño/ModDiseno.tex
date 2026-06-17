@@ -1,0 +1,34 @@
+\documentclass[11pt,letterpaper,oneside]{report}
+
+\input{../logos/preambulo}
+
+\graphicspath{{../ModAnalisis/figuras/}{../logos/}}
+
+\hypersetup{pdftitle={FisioManager - Modelo de Diseno}}
+
+\begin{document}
+
+\portadafm{Modelo de Diseño}
+
+\pagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\caratulacambios{
+  2026-05-05 & 0.2 & Modelo de objetos y modelo de robustez iniciales. & Xiomara \\
+  \rowcolor{fmTableAltRow}
+  2026-05-28 & 0.7 & Diagramas de secuencia de los flujos principales. & Xiomara, Andrea \\
+  2026-06-16 & 1.0 & Versión final del Modelo de Diseño con el CRR de componentes. & Xiomara, Andrea \\
+}
+
+\input{08_diagrama_objetos}
+\input{09_diagrama_robustez}
+\input{13_diagramas_secuencia}
+\input{06_crr}
+
+\end{document}

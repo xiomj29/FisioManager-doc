@@ -1,0 +1,33 @@
+\documentclass[11pt,letterpaper,oneside]{report}
+
+\input{../logos/preambulo}
+
+\graphicspath{{../logos/}{../ModAnalisis/figuras/}}
+
+\hypersetup{pdftitle={FisioManager - Requerimientos}}
+
+\begin{document}
+
+\portadafm{Requerimientos}
+
+\pagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\caratulacambios{
+  2026-04-10 & 0.1 & Versión inicial: visión del producto y borrador de actores. & Andrea \\
+  \rowcolor{fmTableAltRow}
+  2026-05-15 & 0.5 & SRS con requerimientos funcionales y no funcionales; definición de actores y stakeholders. & Xiomara, Andrea, Brenda \\
+  2026-06-16 & 1.0 & Versión final del artefacto de Requerimientos para entrega. & Andrea, Xiomara, Brenda \\
+}
+
+\input{01_introduccion}
+\input{02_actores}
+\input{03_requerimientos}
+
+\end{document}

@@ -1,4 +1,3 @@
-% CAPITULO 13 - DIAGRAMAS DE SECUENCIA
 
 \chapter{Diagramas de Secuencia}\label{ch:diagramassecuencia}
 
@@ -6,7 +5,6 @@ Los diagramas de secuencia modelan la interacción entre objetos a lo largo del 
 
 Se presentan tres flujos críticos de FisioManager: el registro de feedback post-rutina, la asignación de rutinas a pacientes y la gestión de citas desde el rol de Administrador.
 
-% ---------------------------------------------------------------
 \section{Flujo 1: Registro de Feedback}\label{sec:sec-feedback}
 
 Este diagrama modela la secuencia completa desde que el paciente accede al formulario de feedback tras completar una rutina, hasta que el servicio de inteligencia artificial procesa el audio de forma asíncrona.
@@ -56,7 +54,6 @@ Este diagrama modela la secuencia completa desde que el paciente accede al formu
   \item \textbf{Detección de alertas:} el \codeinline{AnalisisIAClient} evalúa si los resultados combinados (dolor, sentimiento, contenido del audio) ameritan una alerta clínica para el terapeuta.
 \end{itemize}
 
-% ---------------------------------------------------------------
 \section{Flujo 2: Asignación de Rutina}\label{sec:sec-asignacion}
 
 Este diagrama modela la secuencia completa desde que el terapeuta construye una rutina en el builder hasta que cada paciente seleccionado recibe la notificación de su rutina asignada.
@@ -118,7 +115,6 @@ El flujo se divide en dos fases claramente diferenciadas:
   \item \textbf{Notificación integrada:} cada asignación dispara automáticamente una notificación al paciente, garantizando que esté informado de su nueva rutina.
 \end{itemize}
 
-% ---------------------------------------------------------------
 \section{Flujo 3: Gestión de Citas (Administrador)}\label{sec:sec-citas}
 
 Este diagrama modela la secuencia completa desde que el Administrador consulta la agenda del día, crea una nueva cita validando la disponibilidad del terapeuta, hasta el envío de recordatorios al paciente. Refleja el rol simplificado de Administrador como único responsable operativo de la clínica.
@@ -202,4 +198,4 @@ plantuml -tpng 11_secuencia_registro_feedback.puml
 plantuml -tpng 13_secuencia_gestion_citas.puml
 \end{lstlisting}
 
-El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.
+El código fuente completo se incluye en el anexo de código fuente PlantUML del Modelo de Análisis.

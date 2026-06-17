@@ -13,6 +13,9 @@
 *.snm
 *.vrb
 
-main.pdf
+proyFisioManager/**/figuras/.diagrams.stamp
 
-figuras/.diagrams.stamp
+proyFisioManager/Requerimientos/Requerimientos.pdf
+proyFisioManager/ModAnalisis/ModAnalisis.pdf
+proyFisioManager/ModDiseño/ModDiseno.pdf
+proyFisioManager/narrativa/narrativa.pdf

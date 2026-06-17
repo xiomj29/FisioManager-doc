@@ -1,0 +1,142 @@
+\documentclass[11pt,letterpaper,oneside]{report}
+
+\input{../logos/preambulo}
+
+\graphicspath{{../logos/}}
+
+\hypersetup{pdftitle={FisioManager - Narrativa del Proyecto}}
+
+\begin{document}
+
+\portadafm{Narrativa del Proyecto}
+
+\pagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\caratulacambios{
+  2026-04-30 & 1.0 & Narrativa del proyecto FisioManager: descripción, motivación, usuarios y justificación de la propuesta. & Equipo 4 \\
+}
+
+\chapter{Narrativa del Proyecto}
+
+\section{Resumen}
+
+FisioManager es una plataforma digital de apoyo a la rehabilitación física que conecta
+a una clínica de fisioterapia con sus pacientes mediante rutinas de ejercicio
+personalizadas, seguimiento continuo del tratamiento y retroalimentación inteligente
+basada en voz e Inteligencia Artificial. Su propósito es acompañar al paciente durante
+todo el proceso terapéutico, especialmente en el periodo que transcurre entre una
+consulta presencial y la siguiente, y dotar al terapeuta de información clínica
+oportuna y estructurada para tomar mejores decisiones. En esencia, FisioManager
+traslada al entorno digital aquello que hoy ocurre de forma dispersa e informal,
+convirtiéndolo en un proceso continuo, trazable y centrado en el paciente.
+
+\section{¿Qué hace el sistema?}
+
+FisioManager es una aplicación web responsiva, con soporte móvil, concebida para operar
+en el contexto de una única clínica de fisioterapia. El sistema integra, en un mismo
+lugar, todas las actividades que intervienen en el ciclo de atención. Gestiona a los
+usuarios bajo tres roles claramente diferenciados —el paciente, el terapeuta y un
+administrador único que concentra tanto la administración operativa de la clínica como
+la administración técnica de la plataforma— y organiza alrededor de ellos el resto de
+las funciones.
+
+Sobre esa base, la plataforma permite registrar y consultar el historial clínico, los
+diagnósticos y los planes de tratamiento organizados por fases, junto con las notas de
+evolución que el terapeuta genera durante el seguimiento. También administra la agenda
+de citas, contemplando la gestión de salas, horarios y recordatorios automáticos que
+ayudan a reducir las inasistencias. A partir de un catálogo de ejercicios, el terapeuta
+construye rutinas personalizadas y las asigna a cada paciente, quien posteriormente las
+ejecuta en casa mientras el sistema registra cada sesión realizada.
+
+El componente más distintivo es la captura y el análisis del feedback del paciente.
+Tras completar una rutina, el paciente comunica cómo se siente mediante una nota de
+audio, una escala de dolor y un indicador de estado emocional, todo ello con la menor
+fricción posible. Ese testimonio se transcribe y se analiza con Inteligencia Artificial
+para detectar señales relevantes —como niveles de dolor, grado de adherencia o cambios
+en el ánimo— que de otro modo pasarían inadvertidas. Finalmente, el sistema consolida
+esta información en reportes de progreso y tableros que permiten al terapeuta visualizar
+la evolución de cada paciente, y la complementa con módulos de bienestar de meditación,
+respiración y contenido motivacional que refuerzan la constancia durante el tratamiento.
+
+\section{¿Por qué se hace?}
+
+El tratamiento de fisioterapia ocurre mayoritariamente fuera de la clínica: su éxito
+depende de que el paciente realice correctamente sus ejercicios en casa y de que el
+terapeuta conozca con precisión cómo evoluciona entre una sesión y otra. En la práctica,
+sin embargo, ese seguimiento suele apoyarse en hojas impresas, en mensajería informal y
+en la memoria del propio paciente, lo que da lugar a una serie de problemas que
+comprometen los resultados clínicos.
+
+El primero de ellos es la baja adherencia, pues el paciente olvida o ejecuta de forma
+incorrecta los ejercicios y no recibe retroalimentación a tiempo para corregirse. A ello
+se suma la pérdida de información clínica relevante, ya que el dolor, las molestias y el
+estado de ánimo experimentados entre consultas rara vez quedan registrados de manera
+estructurada. Como consecuencia, el terapeuta termina tomando decisiones con datos
+incompletos, ajustando el tratamiento a partir de lo que el paciente recuerda en el
+momento de la consulta y no de evidencia continua y confiable. Por último, la operación
+de la clínica arrastra una carga administrativa considerable, porque la agenda, los
+expedientes y las rutinas se gestionan en herramientas dispersas que restan tiempo a la
+atención. FisioManager se construye precisamente para cerrar esa brecha entre consultas,
+aportando continuidad, trazabilidad y estructura a todo el proceso terapéutico.
+
+\section{¿Quién lo necesita?}
+
+FisioManager está pensado para atender las necesidades de cuatro destinatarios
+estrechamente relacionados. Los pacientes en rehabilitación necesitan saber con claridad
+qué ejercicios deben hacer y cómo realizarlos, así como contar con un medio sencillo para
+comunicar cómo se sienten, recibiendo acompañamiento y motivación a lo largo de todo el
+proceso. Los terapeutas, por su parte, requieren herramientas para diseñar y ajustar
+rutinas, dar seguimiento simultáneo a varios pacientes y disponer de información objetiva
+sobre el progreso de cada uno para sustentar sus decisiones clínicas.
+
+El administrador de la clínica necesita gestionar a los usuarios, la agenda, las salas y
+la operación general de la plataforma desde un único punto de control, sin depender de
+sistemas paralelos. Y, en un plano más amplio, la clínica entendida como organización es
+también beneficiaria directa de la solución, ya que de un mejor seguimiento se derivan
+resultados clínicos más sólidos, una mayor retención de pacientes y una operación
+sensiblemente más ordenada.
+
+\section{¿Por qué se propone esta solución?}
+
+Se propone FisioManager porque reúne en una sola plataforma las piezas que hoy se
+encuentran fragmentadas y porque introduce un diferenciador clave: el feedback por voz
+analizado con Inteligencia Artificial. En lugar de pedir al paciente que llene
+formularios extensos, el sistema le permite simplemente hablar; la IA transcribe y
+resume ese testimonio para el terapeuta, lo que reduce la fricción del registro y, al
+mismo tiempo, incrementa la cantidad y la calidad de la información clínica disponible.
+
+De esta propuesta se desprende un conjunto de valores que justifican su desarrollo. La
+plataforma aporta continuidad al tratamiento, al actuar como puente entre consultas
+presenciales y mantener el proceso de rehabilitación activo y monitoreado. Habilita
+mejores decisiones clínicas, porque convierte el feedback del paciente en información
+accionable para el terapeuta. Favorece una mayor adherencia, gracias a rutinas claras,
+recordatorios oportunos y módulos de bienestar que sostienen el compromiso del paciente.
+Y, finalmente, ofrece una operación integrada, en la que los usuarios, los expedientes,
+la agenda y las rutinas conviven en un mismo sistema, reduciendo de manera apreciable la
+carga administrativa de la clínica.
+
+\section{Alcance y límites}
+
+FisioManager está concebido para una sola clínica, de modo que no constituye una
+plataforma multiclínica, y contempla un único rol de Administrador que concentra las
+funciones operativas y técnicas. Es importante subrayar que el sistema no sustituye el
+criterio profesional del fisioterapeuta: la Inteligencia Artificial se concibe como una
+herramienta de apoyo a la decisión y nunca como un reemplazo del diagnóstico clínico, que
+permanece siempre bajo la responsabilidad del especialista.
+
+\section{Beneficios esperados}
+
+Con la adopción de FisioManager se espera mejorar la adherencia del paciente a su
+tratamiento, aumentar la trazabilidad clínica entre consultas y agilizar la operación
+cotidiana de la clínica. En conjunto, estos efectos apuntan a un objetivo último:
+elevar la calidad y los resultados del proceso de rehabilitación física, en beneficio
+tanto del paciente como del equipo terapéutico que lo acompaña.
+
+\end{document}

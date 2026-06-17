@@ -1,8 +1,7 @@
-% CAPITULO 9 - DIAGRAMA DE ROBUSTEZ
 
 \chapter{Diagrama de Robustez}\label{ch:diagramarobustez}
 
-El diagrama de robustez es un artefacto del método ICONIX que sirve de puente entre el análisis (casos de uso, modelo conceptual) y el diseño detallado. A diferencia del diagrama de clases conceptuales del Capítulo~\ref{ch:diagramaclases} (que solo muestra conceptos del problema), aquí ya se modelan \textbf{clases de software}, clasificadas en tres categorías:
+El diagrama de robustez es un artefacto del método ICONIX que sirve de puente entre el análisis (casos de uso, modelo conceptual) y el diseño detallado. A diferencia del diagrama de clases conceptuales del Modelo de Análisis (que solo muestra conceptos del problema), aquí ya se modelan \textbf{clases de software}, clasificadas en tres categorías:
 
 \begin{itemize}
   \item \textbf{Boundary (frontera):} interfaces de usuario y puntos de integración con sistemas externos. En FisioManager: pantallas (\codeinline{UIAgendaPaciente}, \codeinline{UIRegistroFeedback}, \ldots), el servicio de notificaciones y los servicios de IA externos.
@@ -50,4 +49,4 @@ El código fuente se entrega como \codeinline{08\_diagrama\_robustez.puml} en el
 plantuml -tpng 08_diagrama_robustez.puml
 \end{lstlisting}
 
-El código fuente completo se incluye en el Anexo~\ref{ch:anexos}.
+El código fuente completo se incluye en el anexo de código fuente PlantUML del Modelo de Análisis.
