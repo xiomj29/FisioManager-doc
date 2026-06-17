@@ -34,7 +34,10 @@ Las carpetas `crc_individuales/`, `figuras/` y `puml/` viven dentro de
 
 ## Compilación
 
+El `Makefile` está dentro de `proyFisioManager/`, así que primero entra a esa carpeta:
+
 ```bash
+cd proyFisioManager
 make                # Compila los cuatro artefactos
 make requerimientos # Solo Requerimientos
 make analisis       # Solo Modelo de Análisis
