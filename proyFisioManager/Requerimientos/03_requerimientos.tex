@@ -29,7 +29,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-004}{Recuperación de contraseña}{El sistema debe permitir la recuperación de contraseña mediante un enlace de un solo uso enviado por correo electrónico.}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-005}{Cambio de contraseña}{El usuario autenticado debe poder cambiar su contraseña actual por una nueva.}{\prMedia}
-  \rfrow{RF-006}{Gestión de perfil}{Cada usuario debe poder visualizar y actualizar sus datos de perfil (teléfono, foto, preferencias de notificación).}{\prMedia}
+  \rfrow{RF-006}{Gestión de perfil}{Cada usuario debe poder visualizar y actualizar sus datos de perfil (teléfono, foto). Las preferencias de notificación se gestionan según RF-072.}{\prMedia}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-007}{Control de acceso por rol}{El sistema debe restringir las funcionalidades disponibles según el rol del usuario autenticado (Paciente, Terapeuta o Administrador).}{\prAlta}
   \rfrow{RF-008}{Gestión de usuarios (admin)}{El administrador debe poder crear, editar, desactivar y eliminar lógicamente cualquier cuenta de usuario.}{\prAlta}
@@ -106,7 +106,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-025}{Visualización de rutina asignada}{El paciente debe poder visualizar las rutinas que tiene asignadas, con instrucciones, video e imágenes.}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-026}{Pausa o cancelación de asignación}{El terapeuta debe poder pausar, reanudar o cancelar una asignación de rutina.}{\prMedia}
-  \rfrow{RF-027}{Generación asistida de rutinas}{El sistema debe ofrecer al terapeuta sugerencias de rutinas generadas por IA con base en el perfil clínico del paciente.}{\prBaja}
+  \rfrow{RF-027}{Generación asistida de rutinas}{El sistema debe ofrecer al terapeuta sugerencias de rutinas generadas por IA con base en el perfil clínico del paciente. \descartado{requiere diseño de prompt y validación clínica del output; alto costo de desarrollo para el valor de demo actual.}}{\prDescartado}
   \bottomrule
 \end{longtable}
 
@@ -150,9 +150,9 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
 
   \rowcolor{fmTableAltRow}
   \rfrow{RF-040}{Transcripción de audio}{El sistema debe transcribir automáticamente el audio del feedback a texto en español mediante un servicio de IA.}{\prAlta}
-  \rfrow{RF-041}{Análisis de sentimiento}{El sistema debe analizar el texto transcrito y clasificar el sentimiento general (positivo, neutro, negativo).}{\prAlta}
+  \rfrow{RF-041}{Análisis de sentimiento}{El sistema debe analizar el texto transcrito y clasificar el sentimiento general (positivo, neutro, negativo). \descartado{satisfecho indirectamente por RF-044 (resumen clínico con LLM), que ya captura el tono general en lenguaje natural sin necesitar un clasificador separado.}}{\prDescartado}
   \rowcolor{fmTableAltRow}
-  \rfrow{RF-042}{Extracción de palabras clave}{El sistema debe identificar palabras clave clínicamente relevantes (síntomas, partes del cuerpo, intensidad).}{\prMedia}
+  \rfrow{RF-042}{Extracción de palabras clave}{El sistema debe identificar palabras clave clínicamente relevantes (síntomas, partes del cuerpo, intensidad). \descartado{satisfecho indirectamente por RF-044; el resumen clínico generado ya resalta síntomas y términos relevantes.}}{\prDescartado}
   \rfrow{RF-043}{Generación de alertas clínicas}{El sistema debe generar alertas automáticas cuando el feedback indique problemas o síntomas de deterioro del paciente (dolor alto sostenido, palabras de alerta).}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-044}{Resumen asistido para terapeuta}{El sistema debe generar un resumen breve del feedback procesado para facilitar su lectura por el terapeuta.}{\prMedia}
@@ -179,6 +179,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-053}{Gráficas de tendencia}{El sistema debe mostrar gráficas de tendencia de dolor, estado emocional y adherencia.}{\prMedia}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-054}{Indicadores de clínica}{El administrador de la clínica debe poder consultar indicadores agregados (pacientes activos, sesiones completadas, adherencia promedio).}{\prMedia}
+  \rfrow{RF-055}{Comparativo de desempeño de terapeutas}{El administrador debe poder consultar un comparativo de desempeño entre terapeutas de la clínica (pacientes activos, adherencia promedio de sus pacientes, sesiones completadas) para apoyar la supervisión operativa.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -239,8 +240,11 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-082}{Agendamiento de cita}{El sistema debe permitir agendar una cita entre un paciente y un terapeuta, validando la disponibilidad horaria y evitando colisiones con otras citas.}{\prAlta}
   \rfrow{RF-083}{Asignación de sala a la cita}{Una cita debe poder ocupar opcionalmente una sala que esté disponible en el horario solicitado.}{\prMedia}
   \rowcolor{fmTableAltRow}
-  \rfrow{RF-084}{Gestión del estado de la cita}{El sistema debe permitir confirmar, reprogramar o cancelar una cita, manteniendo la trazabilidad de su estado.}{\prAlta}
+  \rfrow{RF-084}{Confirmación de cita}{El sistema debe permitir confirmar una cita previamente agendada, actualizando su estado y notificando a las partes involucradas.}{\prAlta}
   \rfrow{RF-085}{Recordatorio de cita}{El sistema debe programar y enviar un recordatorio de la cita por los canales configurados (push y/o email) con anticipación.}{\prAlta}
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-088}{Reprogramación de cita}{El sistema debe permitir reprogramar una cita existente a una nueva fecha/hora, validando nuevamente la disponibilidad y manteniendo la trazabilidad del cambio.}{\prAlta}
+  \rfrow{RF-089}{Cancelación de cita}{El sistema debe permitir cancelar una cita existente, registrando el motivo y notificando a las partes involucradas.}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-086}{Consulta de agenda}{El terapeuta debe poder consultar su agenda diaria y semanal con las citas programadas.}{\prAlta}
   \rfrow{RF-087}{Vinculación de cita a plan de tratamiento}{Una cita debe poder asociarse a un plan de tratamiento para reflejar el contexto clínico de la consulta.}{\prBaja}
@@ -249,7 +253,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
 
 \section{Requerimientos No Funcionales}
 
-Los requerimientos no funcionales describen las propiedades de calidad del sistema. Se agrupan según la categorización ISO/IEC 25010.
+Los requerimientos no funcionales describen las propiedades de calidad del sistema. Se agrupan según la categorización ISO/IEC 25010. Las categorías aquí utilizadas (Escalabilidad, Privacidad y Disponibilidad) se presentan como secciones independientes para mayor claridad operativa, aunque en la norma ISO/IEC 25010 corresponden a subcaracterísticas de Eficiencia de Desempeño, Seguridad y Confiabilidad respectivamente.
 
 \subsection{Rendimiento}
 
@@ -264,11 +268,11 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-001}{Tiempo de respuesta API}{El 95 por ciento de las peticiones a endpoints REST debe resolverse en menos de 500 ms bajo carga normal (hasta 200 usuarios concurrentes).}{\prAlta}
-  \rfrow{RNF-002}{Tiempo de carga inicial}{La aplicación web debe cargar su pantalla inicial en menos de 3 segundos sobre conexión 4G.}{\prAlta}
+  \rfrow{RNF-001}{Tiempo de respuesta API}{Definición: el 95\% de las peticiones a endpoints REST debe resolverse en menos de 500 ms bajo carga normal (hasta 200 usuarios concurrentes). Verificación: pruebas de carga con k6 o Apache JMeter simulando 200 usuarios concurrentes contra los endpoints críticos (login, agenda, feedback), reportando el percentil 95 de latencia; complementar con Real User Monitoring (Boomerang.js o New Relic Browser) para medir el tiempo percibido en producción.}{\prAlta}
+  \rfrow{RNF-002}{Tiempo de carga inicial}{Definición: la aplicación web debe cargar su pantalla inicial en menos de 3 segundos sobre conexión 4G. Verificación: medición con Google Lighthouse (Time to Interactive / Largest Contentful Paint) simulando red 4G, y validación manual con throttling de red en Chrome DevTools.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-003}{Procesamiento de IA}{La transcripción y análisis de un audio de hasta 60 segundos deben completarse en menos de 15 segundos.}{\prMedia}
-  \rfrow{RNF-004}{Subida de audio}{Una grabación de hasta 5 MB debe poder subirse en menos de 10 segundos sobre conexión 4G.}{\prMedia}
+  \rfrow{RNF-003}{Procesamiento de IA}{Definición: la transcripción y análisis de un audio de hasta 60 segundos debe completarse en menos de 15 segundos. Verificación: prueba automatizada en el pipeline de CI que envía un audio de prueba de 60s al endpoint de transcripción/análisis y mide el tiempo de respuesta end-to-end.}{\prMedia}
+  \rfrow{RNF-004}{Subida de audio}{Definición: una grabación de hasta 5 MB debe poder subirse en menos de 10 segundos sobre conexión 4G. Verificación: prueba funcional con throttling de red simulando 4G, midiendo el tiempo total de subida del archivo al endpoint correspondiente.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -285,10 +289,10 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-010}{Escalabilidad horizontal}{El sistema debe soportar el escalado horizontal de servicios mediante manejo de contenedores (Docker/Podman).}{\prAlta}
-  \rfrow{RNF-011}{Capacidad inicial}{El sistema debe soportar al menos 5{,}000 usuarios registrados y 500 sesiones concurrentes en su versión inicial.}{\prAlta}
+  \rfrow{RNF-010}{Escalabilidad horizontal}{Definición: el sistema debe soportar el escalado horizontal de servicios mediante contenedores (Docker/Podman). Verificación: revisión de la configuración de orquestación (docker-compose/Kubernetes) confirmando soporte de múltiples réplicas por servicio, más prueba de carga incrementando réplicas y verificando que el throughput escale.}{\prAlta}
+  \rfrow{RNF-011}{Capacidad inicial}{Definición: el sistema debe soportar al menos 5{,}000 usuarios registrados y 500 sesiones concurrentes en su versión inicial. Verificación: prueba de carga con k6/Locust simulando 500 sesiones concurrentes verificando tasa de error menor a 1\%, más prueba de volumen con 5{,}000 registros sintéticos de usuario.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-012}{Crecimiento}{La arquitectura debe permitir crecer hasta 50{,}000 usuarios sin rediseño mayor.}{\prMedia}
+  \rfrow{RNF-012}{Crecimiento}{Definición: la arquitectura debe permitir crecer hasta 50{,}000 usuarios sin rediseño mayor. Verificación: revisión arquitectónica confirmando que el diseño soporta escalado horizontal de cada servicio sin cambios estructurales, validado con una proyección de carga extrapolada hasta 50{,}000 usuarios.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -305,16 +309,16 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-020}{Cifrado en tránsito}{Toda comunicación cliente-servidor y servicio-servicio debe usar TLS 1.2 o superior.}{\prAlta}
-  \rfrow{RNF-021}{Cifrado en reposo}{Los audios de feedback y los datos clínicos en base de datos deben almacenarse con cifrado en reposo (AES-256).}{\prAlta}
+  \rfrow{RNF-020}{Cifrado en tránsito}{Definición: toda comunicación cliente-servidor y servicio-servicio debe usar TLS 1.2 o superior. Verificación: escaneo con SSL Labs o testssl.sh confirmando que solo se aceptan conexiones TLS 1.2+ y que versiones anteriores están deshabilitadas.}{\prAlta}
+  \rfrow{RNF-021}{Cifrado en reposo}{Definición: los audios de feedback y los datos clínicos en base de datos deben almacenarse con cifrado en reposo (AES-256). Verificación: revisión de la configuración de cifrado de la base de datos y del repositorio de objetos confirmando AES-256 habilitado. \descartado{requiere migrar de almacenamiento local/SQLite a infraestructura productiva (object storage cifrado); fuera de alcance sin un entorno de despliegue real.}}{\prDescartado}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-022}{Hash de contraseñas}{Las contraseñas deben almacenarse con bcrypt con factor de costo moderado.}{\prAlta}
-  \rfrow{RNF-023}{Tokens JWT}{Los tokens JWT deben tener expiración máxima de 60 minutos, con refresh token de hasta 7 días.}{\prAlta}
+  \rfrow{RNF-022}{Hash de contraseñas}{Definición: las contraseñas deben almacenarse con bcrypt con factor de costo moderado. Verificación: revisión de código confirmando uso de bcrypt con factor $\geq 10$, más prueba unitaria que verifica que las contraseñas nunca se almacenan en texto plano.}{\prAlta}
+  \rfrow{RNF-023}{Tokens JWT}{Definición: los tokens JWT deben tener expiración máxima de 60 minutos, con refresh token de hasta 7 días. Verificación: prueba de integración que confirma expiración del token a los 60 minutos y del refresh token a los 7 días.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-024}{Auditoría de accesos}{Todos los accesos a datos clínicos deben registrarse en una bitácora con identificación del usuario, marca de tiempo y operación.}{\prAlta}
-  \rfrow{RNF-025}{Protección contra ataques comunes}{El sistema debe protegerse contra OWASP Top 10 (inyección, XSS, CSRF, etc.).}{\prAlta}
+  \rfrow{RNF-024}{Auditoría de accesos}{Definición: todos los accesos a datos clínicos deben registrarse en una bitácora con identificación del usuario, marca de tiempo y operación. Verificación: prueba funcional que accede a datos clínicos y confirma la generación de la entrada de bitácora correspondiente; revisión periódica de logs de auditoría. \descartado{requiere una bitácora de auditoría dedicada (no solo logs de aplicación); se deja fuera del alcance actual del proyecto.}}{\prDescartado}
+  \rfrow{RNF-025}{Protección contra ataques comunes}{Definición: el sistema debe protegerse contra OWASP Top 10 (inyección, XSS, CSRF, etc.). Verificación: análisis automatizado con OWASP ZAP o Burp Suite contra la API y el frontend, integrado al pipeline de CI/CD.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-026}{Rate limiting}{El API gateway debe aplicar límites de tasa para prevenir abuso (por ejemplo, 100 peticiones por minuto por usuario).}{\prAlta}
+  \rfrow{RNF-026}{Rate limiting}{Definición: el API gateway debe aplicar límites de tasa para prevenir abuso (ej. 100 peticiones por minuto por usuario). Verificación: prueba que envía más de 100 peticiones/minuto desde un mismo usuario y confirma respuesta 429 (Too Many Requests) al superar el límite.}{\prAlta}
   \bottomrule
 \end{longtable}
 
@@ -331,11 +335,11 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-030}{Cumplimiento de protección de datos}{El sistema debe cumplir con la legislación local de protección de datos personales (LFPDPPP en México, RGPD en Europa) y normativas de datos de salud aplicables.}{\prAlta}
-  \rfrow{RNF-031}{Consentimiento informado}{El sistema debe registrar el consentimiento explícito del paciente para almacenar audios y procesarlos con IA.}{\prAlta}
+  \rfrow{RNF-030}{Cumplimiento de protección de datos}{Definición: el sistema debe cumplir con la legislación local de protección de datos personales (LFPDPPP en México, RGPD en Europa) y normativas de salud aplicables. Verificación: checklist de cumplimiento revisado por el equipo, incluyendo aviso de privacidad y mecanismos de ejercicio de derechos ARCO.}{\prAlta}
+  \rfrow{RNF-031}{Consentimiento informado}{Definición: el sistema debe registrar el consentimiento explícito del paciente para almacenar audios y procesarlos con IA. Verificación: prueba funcional que confirma que no se puede grabar ni procesar audio sin un registro de consentimiento con timestamp.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-032}{Derecho al olvido}{El sistema debe permitir la eliminación completa de los datos personales y clínicos de un usuario a petición, dentro del plazo legal.}{\prAlta}
-  \rfrow{RNF-033}{Anonimización para análisis agregado}{Las métricas agregadas y reportes de clínica no deben permitir identificar individualmente a los pacientes.}{\prMedia}
+  \rfrow{RNF-032}{Derecho al olvido}{Definición: el sistema debe permitir la eliminación completa de los datos personales y clínicos de un usuario a petición, dentro del plazo legal. Verificación: prueba funcional que solicita eliminación de una cuenta de prueba y confirma que todos sus datos quedan eliminados dentro del plazo legal (ej. 20 días hábiles).}{\prAlta}
+  \rfrow{RNF-033}{Anonimización para análisis agregado}{Definición: las métricas agregadas y reportes de clínica no deben permitir identificar individualmente a los pacientes. Verificación: revisión manual de los dashboards/reportes confirmando ausencia de identificadores individuales y un tamaño mínimo de grupo en las agregaciones.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -352,11 +356,11 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-040}{Disponibilidad objetivo}{El sistema debe contar con un SLA de 99.5 por ciento de disponibilidad mensual.}{\prAlta}
-  \rfrow{RNF-041}{Respaldo automático}{Las bases de datos deben respaldarse automáticamente al menos cada 24 horas con retención mínima de 30 días.}{\prAlta}
+  \rfrow{RNF-040}{Disponibilidad objetivo}{Definición: el sistema debe contar con un SLA de 99.5\% de disponibilidad mensual. Verificación: monitoreo continuo con una herramienta de uptime (UptimeRobot, Pingdom o Better Uptime) calculando el porcentaje real de disponibilidad mensual.}{\prAlta}
+  \rfrow{RNF-041}{Respaldo automático}{Definición: las bases de datos deben respaldarse automáticamente al menos cada 24 horas con retención mínima de 30 días. Verificación: revisión de la configuración de respaldo programado, más prueba de restauración de un respaldo para confirmar la retención. \descartado{es una tarea de infraestructura/operación, no de código de aplicación; requiere un entorno de despliegue real.}}{\prDescartado}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-042}{Recuperación ante desastres}{El RTO objetivo debe ser menor a 4 horas y el RPO menor a 1 hora.}{\prMedia}
-  \rfrow{RNF-043}{Tolerancia a fallos de IA}{Si el servicio de IA externo no está disponible, el feedback debe poder almacenarse y procesarse posteriormente sin pérdida.}{\prAlta}
+  \rfrow{RNF-042}{Recuperación ante desastres}{Definición: el RTO objetivo debe ser menor a 4 horas y el RPO menor a 1 hora. Verificación: simulacro de recuperación ante desastres midiendo el tiempo real de recuperación y la pérdida de datos contra los objetivos definidos.}{\prMedia}
+  \rfrow{RNF-043}{Tolerancia a fallos de IA}{Definición: si el servicio de IA externo no está disponible, el feedback debe poder almacenarse y procesarse posteriormente sin pérdida. Verificación: prueba funcional que simula la caída del servicio de IA y confirma que el feedback queda en cola y se procesa correctamente al restablecerse el servicio.}{\prAlta}
   \bottomrule
 \end{longtable}
 
@@ -373,11 +377,11 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-050}{Interfaz responsiva}{La interfaz debe adaptarse a resoluciones desde 360 px (móvil) hasta 1920 px (escritorio).}{\prAlta}
-  \rfrow{RNF-051}{Idioma}{La interfaz debe estar disponible en español como idioma primario, con arquitectura preparada para internacionalización.}{\prAlta}
+  \rfrow{RNF-050}{Interfaz responsiva}{Definición: la interfaz debe adaptarse a resoluciones desde 360 px hasta 1920 px. Verificación: pruebas con Chrome DevTools Device Mode y/o BrowserStack cubriendo ese rango de anchos.}{\prAlta}
+  \rfrow{RNF-051}{Idioma}{Definición: la interfaz debe estar disponible en español como idioma primario, con arquitectura preparada para internacionalización. Verificación: revisión de que los textos usan un sistema i18n con archivos de idioma, aunque solo se publique español por ahora.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-052}{Accesibilidad WCAG}{La interfaz debe cumplir con WCAG 2.1 nivel AA en flujos críticos (login, ejecución de rutina, registro de feedback).}{\prMedia}
-  \rfrow{RNF-053}{Curva de aprendizaje}{Un terapeuta debe poder crear y asignar su primera rutina en menos de 10 minutos sin entrenamiento previo.}{\prMedia}
+  \rfrow{RNF-052}{Accesibilidad WCAG}{Definición: la interfaz debe cumplir con WCAG 2.1 nivel AA en flujos críticos (login, ejecución de rutina, registro de feedback). Verificación: auditoría automatizada con axe-core o Lighthouse Accessibility, más prueba manual con lector de pantalla (NVDA/VoiceOver) en esos flujos. \descartado{requiere una auditoría y remediación manual extensa de UI; se deja fuera del alcance actual del proyecto.}}{\prDescartado}
+  \rfrow{RNF-053}{Curva de aprendizaje}{Definición: un terapeuta debe poder crear y asignar su primera rutina en menos de 10 minutos sin entrenamiento previo. Verificación: prueba de usabilidad con un terapeuta sin entrenamiento previo, midiendo con cronómetro el tiempo real de la tarea.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -394,11 +398,11 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-060}{Cobertura de pruebas}{El código debe mantener al menos el 70 por ciento de cobertura de pruebas unitarias en la capa de dominio y aplicación.}{\prAlta}
-  \rfrow{RNF-061}{Documentación API}{Toda la API REST pública debe estar documentada con OpenAPI 3.0 (Swagger).}{\prAlta}
+  \rfrow{RNF-060}{Cobertura de pruebas}{Definición: el código debe mantener al menos 70\% de cobertura de pruebas unitarias en la capa de dominio y aplicación. Verificación: reporte de cobertura generado por la herramienta de pruebas del stack (Jest, JaCoCo o coverage.py) integrado al pipeline de CI, bloqueando el merge si cae por debajo del 70\%.}{\prAlta}
+  \rfrow{RNF-061}{Documentación API}{Definición: toda la API REST pública debe estar documentada con OpenAPI 3.0 (Swagger). Verificación: validación automática del esquema OpenAPI contra los endpoints reales en el pipeline de CI.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-062}{CI/CD}{Cada commit debe disparar el pipeline automatizado de build, pruebas y análisis estático.}{\prAlta}
-  \rfrow{RNF-063}{Logging estructurado}{Todos los servicios deben emitir logs estructurados (JSON) con nivel, marca de tiempo, correlation ID y contexto.}{\prAlta}
+  \rfrow{RNF-062}{CI/CD}{Definición: cada commit debe disparar el pipeline automatizado de build, pruebas y análisis estático. Verificación: revisión de la configuración del pipeline (GitHub Actions) confirmando que cada push ejecuta build, pruebas y análisis estático (SonarQube/ESLint).}{\prAlta}
+  \rfrow{RNF-063}{Logging estructurado}{Definición: todos los servicios deben emitir logs estructurados (JSON) con nivel, marca de tiempo, correlation ID y contexto. Verificación: revisión de logs en ambiente de pruebas confirmando el formato JSON y los campos requeridos.}{\prAlta}
   \bottomrule
 \end{longtable}
 
@@ -415,10 +419,10 @@ Los requerimientos no funcionales describen las propiedades de calidad del siste
   \endhead
 
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-070}{Compatibilidad de navegadores}{La aplicación debe funcionar en las dos últimas versiones estables de Chrome, Firefox, Safari y Edge.}{\prAlta}
-  \rfrow{RNF-071}{Containerización}{Todos los servicios deben distribuirse como contenedores Docker-Podman.}{\prAlta}
+  \rfrow{RNF-070}{Compatibilidad de navegadores}{Definición: la aplicación debe funcionar en las dos últimas versiones estables de Chrome, Firefox, Safari y Edge. Verificación: pruebas cross-browser con BrowserStack o Playwright configurado para esos navegadores.}{\prAlta}
+  \rfrow{RNF-071}{Containerización}{Definición: todos los servicios deben distribuirse como contenedores Docker-Podman. Verificación: confirmación de que cada servicio cuenta con su Dockerfile y se levanta correctamente como contenedor independiente.}{\prAlta}
   \rowcolor{fmTableAltRow}
-  \rfrow{RNF-072}{Independencia de proveedor de IA}{La capa de IA debe encapsular el proveedor concreto (Whisper, OpenAI, Ollama, Llama, etc.) tras una interfaz, permitiendo sustitución.}{\prMedia}
-  \rfrow{RNF-073}{Exportación de datos}{El sistema debe permitir la exportación de los datos del paciente en formato estándar (JSON / CSV / FHIR).}{\prBaja}
+  \rfrow{RNF-072}{Independencia de proveedor de IA}{Definición: la capa de IA debe encapsular el proveedor concreto (Whisper, OpenAI, Ollama, Llama, etc.) tras una interfaz, permitiendo sustitución. Verificación: revisión de arquitectura confirmando un patrón Adapter/Strategy, más prueba de sustitución cambiando el proveedor configurado sin modificar el código de negocio. \descartado{es un refactor sin funcionalidad visible nueva; solo aporta valor si se planea cambiar de proveedor de IA, lo cual no está en el plan actual.}}{\prDescartado}
+  \rfrow{RNF-073}{Exportación de datos}{Definición: el sistema debe permitir la exportación de los datos del paciente en formato estándar (JSON / CSV / FHIR). Verificación: prueba funcional que exporta los datos de un paciente y valida el archivo resultante contra el esquema correspondiente de cada formato. \descartado{el estándar FHIR es complejo de implementar correctamente; bajo valor de demo frente al esfuerzo requerido.}}{\prDescartado}
   \bottomrule
 \end{longtable}
