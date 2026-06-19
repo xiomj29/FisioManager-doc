@@ -1,6 +1,5 @@
 @startuml CRC_Feedback
 
-' FisioManager - CRC Card: Feedback
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

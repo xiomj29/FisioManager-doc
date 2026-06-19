@@ -1,6 +1,5 @@
 @startuml CRC_HistorialClinico
 
-' FisioManager - CRC Card: HistorialClinico
 
 
 skinparam backgroundColor #FAFAFA

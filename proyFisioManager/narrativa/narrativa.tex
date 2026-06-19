@@ -4,11 +4,18 @@
 
 \graphicspath{{../logos/}}
 
-\hypersetup{pdftitle={FisioManager - Narrativa del Proyecto}}
+\hypersetup{pdftitle={FisioManager - Narrativa del Sistema}}
+
+\usepackage{soul}
+\usepackage{soulutf8}
+\definecolor{susVerde}{RGB}{37,232,37}
+\definecolor{verbRosa}{RGB}{255,69,207}
+\newcommand{\sus}[1]{\begingroup\sethlcolor{susVerde}\hl{#1}\endgroup}
+\newcommand{\ver}[1]{\begingroup\sethlcolor{verbRosa}\hl{#1}\endgroup}
 
 \begin{document}
 
-\portadafm{Narrativa del Proyecto}
+\portadafm{Narrativa del Sistema}
 
 \pagestyle{empty}
 \tableofcontents
@@ -20,123 +27,222 @@
 \setcounter{page}{1}
 
 \caratulacambios{
-  2026-04-30 & 1.0 & Narrativa del proyecto FisioManager: descripción, motivación, usuarios y justificación de la propuesta. & Horta Hernández Andrea, Montes Jaimes Danna Xiomara, Pedraza Rangel Fátima Montserrat, Rosas Jiménez Brenda Sibhet \\
+  2026-06-18 & 1.0 & Narrativa del sistema FisioManager con identificación de sustantivos (verde) y verbos (rosa) y las tablas de clasificación de sustantivos en clases candidatas. & Horta Hernández Andrea, Montes Jaimes Danna Xiomara, Pedraza Rangel Fátima Montserrat, Rosas Jiménez Brenda Sibhet \\
 }
 
-\chapter{Narrativa del Proyecto}
+\chapter{Narrativa del sistema}\label{ch:narrativa-sistema}
 
-\section{Resumen}
+A continuación se presenta la narrativa descriptiva del sistema FisioManager, empleada
+como base para el análisis orientado a objetos. En ella se resaltan los
+\sus{sustantivos} (candidatos a clases, atributos o recursos del dominio) y los
+\ver{verbos} (candidatos a responsabilidades y operaciones del sistema). La
+clasificación de cada sustantivo se detalla en las tablas de la
+Sección~\ref{sec:tablas-sustantivos}.
 
-FisioManager es una plataforma digital de apoyo a la rehabilitación física que conecta
-a una clínica de fisioterapia con sus pacientes mediante rutinas de ejercicio
-personalizadas, seguimiento continuo del tratamiento y retroalimentación inteligente
-basada en voz e Inteligencia Artificial. Su propósito es acompañar al paciente durante
-todo el proceso terapéutico, especialmente en el periodo que transcurre entre una
-consulta presencial y la siguiente, y dotar al terapeuta de información clínica
-oportuna y estructurada para tomar mejores decisiones. En esencia, FisioManager
-traslada al entorno digital aquello que hoy ocurre de forma dispersa e informal,
-convirtiéndolo en un proceso continuo, trazable y centrado en el paciente.
+\vspace{0.5em}
+\noindent\sus{Sustantivos}\\[2pt]
+\noindent\ver{Verbos}
+\vspace{0.5em}
 
-\section{¿Qué hace el sistema?}
+\section{Descripción del sistema}
 
-FisioManager es una aplicación web responsiva, con soporte móvil, concebida para operar
-en el contexto de una única clínica de fisioterapia. El sistema integra, en un mismo
-lugar, todas las actividades que intervienen en el ciclo de atención. Gestiona a los
-usuarios bajo tres roles claramente diferenciados —el paciente, el terapeuta y un
-administrador único que concentra tanto la administración operativa de la clínica como
-la administración técnica de la plataforma— y organiza alrededor de ellos el resto de
-las funciones.
+FisioManager es una \sus{plataforma} web responsiva, con soporte móvil,
+\ver{diseñada} para \ver{apoyar} a una \sus{clínica} de \sus{fisioterapia} en la
+\sus{gestión} integral de \sus{pacientes} y \sus{tratamientos} de
+\sus{rehabilitación}. El \sus{sistema} \ver{busca} \ver{mejorar} el
+\sus{seguimiento} clínico, la \sus{organización} de la \sus{información} médica y la
+\sus{comunicación} entre \sus{terapeutas} y \sus{pacientes}, \ver{acompañando} al
+\sus{paciente} durante todo el \sus{proceso} terapéutico, especialmente en el
+\sus{periodo} que transcurre entre una \sus{consulta} presencial y la siguiente.
 
-Sobre esa base, la plataforma permite registrar y consultar el historial clínico, los
-diagnósticos y los planes de tratamiento organizados por fases, junto con las notas de
-evolución que el terapeuta genera durante el seguimiento. También administra la agenda
-de citas, contemplando la gestión de salas, horarios y recordatorios automáticos que
-ayudan a reducir las inasistencias. A partir de un catálogo de ejercicios, el terapeuta
-construye rutinas personalizadas y las asigna a cada paciente, quien posteriormente las
-ejecuta en casa mientras el sistema registra cada sesión realizada.
+La \sus{plataforma} \ver{opera} sobre tres \sus{roles} claramente diferenciados:
+\sus{administrador}, \sus{terapeuta} y \sus{paciente}. Cada \sus{usuario}
+\ver{tendrá} diferentes \sus{permisos} y \sus{funcionalidades} dentro del
+\sus{sistema} según su \sus{rol}. El \sus{administrador} es un \sus{rol} único que
+\ver{concentra} tanto la \sus{administración} operativa de la \sus{clínica} como la
+\sus{administración} técnica de la \sus{plataforma}: \ver{gestiona} a los
+\sus{usuarios}, \ver{supervisa} la \sus{operación} general y \ver{valida} el
+\sus{funcionamiento} del \sus{sistema}.
 
-El componente más distintivo es la captura y el análisis del feedback del paciente.
-Tras completar una rutina, el paciente comunica cómo se siente mediante una nota de
-audio, una escala de dolor y un indicador de estado emocional, todo ello con la menor
-fricción posible. Ese testimonio se transcribe y se analiza con Inteligencia Artificial
-para detectar señales relevantes —como niveles de dolor, grado de adherencia o cambios
-en el ánimo— que de otro modo pasarían inadvertidas. Finalmente, el sistema consolida
-esta información en reportes de progreso y tableros que permiten al terapeuta visualizar
-la evolución de cada paciente, y la complementa con módulos de bienestar de meditación,
-respiración y contenido motivacional que refuerzan la constancia durante el tratamiento.
+El \sus{terapeuta} \ver{podrá} \ver{registrar} \sus{pacientes}, \ver{consultar}
+\sus{información} clínica y \ver{administrar} el \sus{historial clínico} de cada
+\sus{paciente}. En dicho \sus{historial} se \ver{almacenan} \sus{antecedentes},
+\sus{alergias}, \sus{medicamentos}, \sus{diagnósticos} y \sus{notas clínicas}. Cada
+\sus{diagnóstico} \ver{registra} una \sus{condición} clínica con su
+\sus{descripción}, \sus{severidad} y \sus{código} CIE-10, mientras que cada
+\sus{nota clínica} \ver{documenta} la \sus{evolución} del \sus{paciente} con
+\sus{fecha} y \sus{autor} propios.
 
-\section{¿Por qué se hace?}
+El \sus{sistema} \ver{permitirá} al \sus{terapeuta} \ver{crear}
+\sus{planes de tratamiento} personalizados para cada \sus{paciente}. Cada
+\sus{plan de tratamiento} \ver{define} un \sus{objetivo} clínico y se \ver{divide}
+en \sus{fases} secuenciales según el \sus{avance} de la \sus{rehabilitación}. Dentro
+de cada \sus{fase}, el \sus{terapeuta} \ver{prescribe} \sus{rutinas} específicas que
+el \sus{paciente} \ver{deberá} \ver{ejecutar}.
 
-El tratamiento de fisioterapia ocurre mayoritariamente fuera de la clínica: su éxito
-depende de que el paciente realice correctamente sus ejercicios en casa y de que el
-terapeuta conozca con precisión cómo evoluciona entre una sesión y otra. En la práctica,
-sin embargo, ese seguimiento suele apoyarse en hojas impresas, en mensajería informal y
-en la memoria del propio paciente, lo que da lugar a una serie de problemas que
-comprometen los resultados clínicos.
+Las \sus{rutinas} se \ver{construyen} a partir de \sus{ejercicios} individuales
+obtenidos desde un \sus{catálogo} de \sus{ejercicios} del \sus{sistema}. Cada
+\sus{ejercicio} \ver{incluye} \sus{información} detallada como \sus{nombre},
+\sus{descripción}, \sus{video demostrativo}, \sus{imagen} de apoyo,
+\sus{zona corporal} y \sus{tipo}. Una \sus{rutina} se \ver{compone} mediante
+\sus{parámetros} que \ver{configuran} cada \sus{ejercicio} dentro de ella,
+especificando \sus{repeticiones}, \sus{series}, \sus{duración}, \sus{descanso} e
+\sus{intensidad} según las \sus{necesidades} del \sus{paciente}. El \sus{terapeuta}
+\ver{asigna} la \sus{rutina} al \sus{paciente} mediante una \sus{asignación} que
+\ver{indica} \sus{fecha de inicio}, \sus{fecha de fin}, \sus{frecuencia} semanal y
+\sus{estado}.
 
-El primero de ellos es la baja adherencia, pues el paciente olvida o ejecuta de forma
-incorrecta los ejercicios y no recibe retroalimentación a tiempo para corregirse. A ello
-se suma la pérdida de información clínica relevante, ya que el dolor, las molestias y el
-estado de ánimo experimentados entre consultas rara vez quedan registrados de manera
-estructurada. Como consecuencia, el terapeuta termina tomando decisiones con datos
-incompletos, ajustando el tratamiento a partir de lo que el paciente recuerda en el
-momento de la consulta y no de evidencia continua y confiable. Por último, la operación
-de la clínica arrastra una carga administrativa considerable, porque la agenda, los
-expedientes y las rutinas se gestionan en herramientas dispersas que restan tiempo a la
-atención. FisioManager se construye precisamente para cerrar esa brecha entre consultas,
-aportando continuidad, trazabilidad y estructura a todo el proceso terapéutico.
+El \sus{paciente} \ver{podrá} \ver{acceder} al \sus{sistema} desde una
+\sus{interfaz} optimizada para \sus{dispositivos} móviles. Dentro de su \sus{cuenta}
+\ver{podrá} \ver{consultar} sus \sus{rutinas} asignadas, \ver{visualizar}
+\sus{ejercicios}, \ver{revisar} \sus{instrucciones} y \ver{monitorear} el
+\sus{progreso} de su \sus{tratamiento}. Cada vez que el \sus{paciente} \ver{realiza}
+una \sus{rutina}, el \sus{sistema} \ver{crea} una \sus{sesión} de ejecución que
+\ver{registra} la \sus{fecha}, la \sus{duración} y el \sus{porcentaje} de
+\sus{cumplimiento}.
 
-\section{¿Quién lo necesita?}
+Al \ver{finalizar} una \sus{rutina}, el \sus{sistema} \ver{solicitará} al
+\sus{paciente} \ver{registrar} \sus{retroalimentación} sobre su \sus{estado} físico
+y emocional. El \sus{paciente} \ver{podrá} \ver{grabar} un \sus{audio},
+\ver{registrar} su \sus{nivel de dolor} y \ver{seleccionar} su \sus{estado emocional}
+para \ver{informar} al \sus{terapeuta} sobre su \sus{evolución} diaria.
 
-FisioManager está pensado para atender las necesidades de cuatro destinatarios
-estrechamente relacionados. Los pacientes en rehabilitación necesitan saber con claridad
-qué ejercicios deben hacer y cómo realizarlos, así como contar con un medio sencillo para
-comunicar cómo se sienten, recibiendo acompañamiento y motivación a lo largo de todo el
-proceso. Los terapeutas, por su parte, requieren herramientas para diseñar y ajustar
-rutinas, dar seguimiento simultáneo a varios pacientes y disponer de información objetiva
-sobre el progreso de cada uno para sustentar sus decisiones clínicas.
+El \sus{sistema} \ver{incorpora} un \sus{módulo} de \sus{inteligencia artificial}
+encargado de \ver{procesar} la \sus{información} proporcionada por el \sus{paciente}.
+Dicho \sus{módulo} \ver{transcribe} el \sus{audio} a \sus{texto}, \ver{genera} un
+\sus{análisis} con \sus{palabras clave}, \sus{sentimiento} detectado, \sus{alertas} y
+un \sus{resumen} sugerido que \ver{apoya} al \sus{terapeuta} en el \sus{análisis} del
+\sus{progreso} físico y emocional del \sus{usuario}.
 
-El administrador de la clínica necesita gestionar a los usuarios, la agenda, las salas y
-la operación general de la plataforma desde un único punto de control, sin depender de
-sistemas paralelos. Y, en un plano más amplio, la clínica entendida como organización es
-también beneficiaria directa de la solución, ya que de un mejor seguimiento se derivan
-resultados clínicos más sólidos, una mayor retención de pacientes y una operación
-sensiblemente más ordenada.
+El \sus{terapeuta} \ver{tendrá} \sus{acceso} a \sus{reportes de progreso} y
+\sus{tableros} relacionados con el \sus{tratamiento} del \sus{paciente}, que
+\ver{consolidan} el \sus{porcentaje} de \sus{adherencia}, la \sus{evolución} del
+\sus{dolor} y los \sus{registros} emocionales. El \sus{sistema} también
+\ver{permitirá} \ver{visualizar} los \sus{historiales} de \sus{sesiones} y los
+\sus{cambios} realizados dentro del \sus{plan de tratamiento}.
 
-\section{¿Por qué se propone esta solución?}
+Adicionalmente, FisioManager \ver{incluye} un \sus{módulo} de \sus{agenda} y
+\sus{citas} donde el \sus{terapeuta} \ver{podrá} \ver{programar}, \ver{consultar},
+\ver{reprogramar} o \ver{cancelar} \sus{citas} con sus \sus{pacientes}. Cada
+\sus{cita} \ver{ocurre} entre un \sus{paciente} y un \sus{terapeuta}, opcionalmente
+\ver{ocupa} una \sus{sala} y se \ver{valida} contra el \sus{horario disponible} del
+\sus{terapeuta}. El \sus{paciente} \ver{podrá} \ver{visualizar} sus próximas
+\sus{citas} y \ver{recibir} \sus{recordatorios} automáticos mediante
+\sus{notificaciones} dentro de la \sus{plataforma}.
 
-Se propone FisioManager porque reúne en una sola plataforma las piezas que hoy se
-encuentran fragmentadas y porque introduce un diferenciador clave: el feedback por voz
-analizado con Inteligencia Artificial. En lugar de pedir al paciente que llene
-formularios extensos, el sistema le permite simplemente hablar; la IA transcribe y
-resume ese testimonio para el terapeuta, lo que reduce la fricción del registro y, al
-mismo tiempo, incrementa la cantidad y la calidad de la información clínica disponible.
+El \sus{sistema} \ver{complementa} el \sus{tratamiento} con
+\sus{módulos de bienestar} de \sus{meditación}, \sus{respiración} y \sus{contenido}
+motivacional que \ver{refuerzan} la \sus{constancia} del \sus{paciente}. Asimismo,
+\ver{cuenta} con \sus{mecanismos} de \sus{autenticación} y \sus{control de acceso}
+para \ver{proteger} la \sus{información} clínica y \ver{garantizar} que cada
+\sus{usuario} únicamente \ver{pueda} \ver{acceder} a la \sus{información}
+correspondiente a su \sus{rol}.
 
-De esta propuesta se desprende un conjunto de valores que justifican su desarrollo. La
-plataforma aporta continuidad al tratamiento, al actuar como puente entre consultas
-presenciales y mantener el proceso de rehabilitación activo y monitoreado. Habilita
-mejores decisiones clínicas, porque convierte el feedback del paciente en información
-accionable para el terapeuta. Favorece una mayor adherencia, gracias a rutinas claras,
-recordatorios oportunos y módulos de bienestar que sostienen el compromiso del paciente.
-Y, finalmente, ofrece una operación integrada, en la que los usuarios, los expedientes,
-la agenda y las rutinas conviven en un mismo sistema, reduciendo de manera apreciable la
-carga administrativa de la clínica.
+En conjunto, FisioManager \ver{busca} \ver{convertirse} en una \sus{solución}
+integral para la \sus{rehabilitación} fisioterapéutica, \ver{combinando}
+\sus{herramientas} de \sus{gestión} clínica, \sus{seguimiento} remoto,
+\sus{monitoreo} emocional y \sus{apoyo} inteligente para \ver{mejorar} la
+\sus{experiencia} del \sus{paciente} y \ver{optimizar} el \sus{trabajo} de los
+\sus{profesionales} de la \sus{salud}.
 
-\section{Alcance y límites}
+\section{Clasificación de los sustantivos}\label{sec:tablas-sustantivos}
 
-FisioManager está concebido para una sola clínica, de modo que no constituye una
-plataforma multiclínica, y contempla un único rol de Administrador que concentra las
-funciones operativas y técnicas. Es importante subrayar que el sistema no sustituye el
-criterio profesional del fisioterapeuta: la Inteligencia Artificial se concibe como una
-herramienta de apoyo a la decisión y nunca como un reemplazo del diagnóstico clínico, que
-permanece siempre bajo la responsabilidad del especialista.
+La siguiente tabla clasifica cada sustantivo identificado en la narrativa, indicando
+si se considera una clase del sistema, su nombre formal y la razón de la decisión.
+Las clases resultantes corresponden al diagrama de clases conceptuales del Modelo de
+Análisis.
 
-\section{Beneficios esperados}
+\begingroup
+\arrayrulecolor{fmPrimary}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{longtable}{|L{3.5cm}|C{2.0cm}|L{3.3cm}|L{5.4cm}|}
+\hline
+\rowcolor{fmTableHeader}
+\textbf{Sustantivo identificado en la narrativa} &
+\textbf{¿Se considera clase del sistema?} &
+\textbf{Nombre formal de la clase} &
+\textbf{Razón} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{fmTableHeader}
+\textbf{Sustantivo identificado en la narrativa} &
+\textbf{¿Se considera clase del sistema?} &
+\textbf{Nombre formal de la clase} &
+\textbf{Razón} \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
 
-Con la adopción de FisioManager se espera mejorar la adherencia del paciente a su
-tratamiento, aumentar la trazabilidad clínica entre consultas y agilizar la operación
-cotidiana de la clínica. En conjunto, estos efectos apuntan a un objetivo último:
-elevar la calidad y los resultados del proceso de rehabilitación física, en beneficio
-tanto del paciente como del equipo terapéutico que lo acompaña.
+Plataforma / Sistema & No & --- & Representa al sistema en su conjunto, no un concepto del dominio \\ \hline
+Usuario & Sí & Usuario & Clase base abstracta para manejar información común y autenticación \\ \hline
+Administrador & Sí & Administrador & Supervisa y administra la operación y la plataforma \\ \hline
+Terapeuta & Sí & Terapeuta & Gestiona tratamientos y seguimiento clínico \\ \hline
+Paciente & Sí & Paciente & Entidad principal del proceso de rehabilitación \\ \hline
+Rol & No & --- & Clasificación de Usuario, no una clase \\ \hline
+Permiso & No & --- & Concepto de control de acceso \\ \hline
+Autenticación & No & --- & Representa un proceso o servicio del sistema \\ \hline
+Credenciales & No & --- & Atributos relacionados con autenticación \\ \hline
+Nombre & No & --- & Atributo de Usuario \\ \hline
+Correo electrónico & No & --- & Atributo de Usuario \\ \hline
+Contraseña & No & --- & Atributo de Usuario (credencial) \\ \hline
+Teléfono & No & --- & Atributo de Usuario \\ \hline
+Fecha de registro & No & --- & Atributo de Usuario \\ \hline
+Historial clínico & Sí & HistorialClinico & Almacena la información médica del paciente \\ \hline
+Antecedentes & No & --- & Atributo del historial clínico \\ \hline
+Alergias & No & --- & Atributo del historial clínico \\ \hline
+Medicamento & No & --- & Atributo (lista de medicamentos) del historial clínico \\ \hline
+Diagnóstico & Sí & Diagnostico & Representa una condición clínica registrada \\ \hline
+Severidad & No & --- & Atributo de Diagnostico \\ \hline
+Código CIE-10 & No & --- & Atributo de Diagnostico \\ \hline
+Nota clínica & Sí & NotaClinica & Registro con identidad propia de la evolución clínica \\ \hline
+Plan de tratamiento & Sí & PlanTratamiento & Organiza el proceso terapéutico por fases \\ \hline
+Objetivo clínico & No & --- & Atributo del plan de tratamiento \\ \hline
+Fase (terapéutica) & Sí & FaseTratamiento & Etapa secuencial del plan de tratamiento \\ \hline
+Rutina & Sí & Rutina & Plantilla reutilizable de ejercicios terapéuticos \\ \hline
+Catálogo & No & --- & Colección de ejercicios, no una clase del dominio \\ \hline
+Ejercicio & Sí & Ejercicio & Representa actividades terapéuticas individuales \\ \hline
+Video demostrativo & No & --- & Atributo (recurso) asociado al ejercicio \\ \hline
+Imagen de apoyo & No & --- & Recurso asociado al ejercicio \\ \hline
+Zona corporal & No & --- & Atributo de Ejercicio \\ \hline
+Tipo de ejercicio & No & --- & Atributo de Ejercicio \\ \hline
+Parámetros & Sí & ParametrosEjercicio & Configura un ejercicio dentro de una rutina \\ \hline
+Repeticiones & No & --- & Atributo de ParametrosEjercicio \\ \hline
+Series & No & --- & Atributo de ParametrosEjercicio \\ \hline
+Descanso & No & --- & Atributo de ParametrosEjercicio \\ \hline
+Asignación de rutina & Sí & AsignacionRutina & Prescribe una rutina concreta a un paciente \\ \hline
+Frecuencia & No & --- & Atributo de AsignacionRutina \\ \hline
+Fecha de inicio & No & --- & Atributo de varias entidades \\ \hline
+Fecha de finalización & No & --- & Atributo de varias entidades \\ \hline
+Estado & No & --- & Atributo de múltiples clases \\ \hline
+Sesión (de ejecución) & Sí & SesionEjecucion & Registra la realización de una rutina por el paciente \\ \hline
+Cumplimiento / Adherencia & No & --- & Atributo de SesionEjecucion y ReporteProgreso \\ \hline
+Dolor & No & --- & Atributo de Feedback \\ \hline
+Feedback / Retroalimentación & Sí & Feedback & Almacena la retroalimentación del paciente \\ \hline
+Estado emocional & No & --- & Atributo de Feedback \\ \hline
+Audio & No & --- & Recurso asociado al feedback \\ \hline
+Transcripción & No & --- & Atributo de Feedback \\ \hline
+Inteligencia artificial & No & --- & Representa un servicio o módulo lógico \\ \hline
+Análisis (IA) & Sí & AnalisisIA & Resultado procesado por la IA sobre el feedback \\ \hline
+Palabras clave & No & --- & Atributo de AnalisisIA \\ \hline
+Alertas & No & --- & Atributo de AnalisisIA \\ \hline
+Resumen & No & --- & Resultado (resumen sugerido) generado por la IA \\ \hline
+Reporte de progreso & Sí & ReporteProgreso & Genera información de seguimiento del paciente \\ \hline
+Cita & Sí & Cita & Evento de la agenda entre paciente y terapeuta \\ \hline
+Sala & Sí & Sala & Espacio físico que puede ocupar una cita \\ \hline
+Horario disponible & Sí & HorarioDisponible & Oferta semanal del terapeuta y de la sala \\ \hline
+Recordatorio & Sí & Recordatorio & Aviso automático asociado a una cita \\ \hline
+Notificación & No & --- & Mecanismo de envío que se materializa como Recordatorio \\ \hline
+Módulo de bienestar & Sí & ModuloBienestar & Representa contenido emocional/complementario \\ \hline
+Meditación & No & --- & Tipo de módulo de bienestar \\ \hline
+Respiración & No & --- & Tipo de módulo de bienestar \\ \hline
+Motivación & No & --- & Tipo de módulo de bienestar \\ \hline
+
+\end{longtable}
+\endgroup
 
 \end{document}

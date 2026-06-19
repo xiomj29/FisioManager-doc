@@ -1,6 +1,5 @@
 @startuml CRC_ModuloBienestar
 
-' FisioManager - CRC Card: ModuloBienestar
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

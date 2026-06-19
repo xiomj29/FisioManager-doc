@@ -1,6 +1,5 @@
 @startuml CRC_Rutina
 
-' FisioManager - CRC Card: Rutina
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

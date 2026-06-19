@@ -1,6 +1,5 @@
 @startuml CRC_SesionEjecucion
 
-' FisioManager - CRC Card: SesionEjecucion
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

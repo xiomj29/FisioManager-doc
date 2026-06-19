@@ -1,6 +1,5 @@
 @startuml CRC_Diagnostico
 
-' FisioManager - CRC Card: Diagnostico
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

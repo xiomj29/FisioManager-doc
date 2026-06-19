@@ -1,6 +1,5 @@
 @startuml CRC_ReporteProgreso
 
-' FisioManager - CRC Card: ReporteProgreso
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

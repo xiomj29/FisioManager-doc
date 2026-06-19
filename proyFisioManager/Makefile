@@ -8,8 +8,6 @@ NAR_DIR = narrativa
 PUML_SRC   = $(wildcard $(ANA_DIR)/puml/*.puml)
 DIAG_STAMP = $(ANA_DIR)/figuras/.diagrams.stamp
 
-NARR_PDF = narrativaEq\#4.pdf
-
 .PHONY: all clean distclean diagrams help requerimientos analisis diseno narrativa
 
 all: requerimientos analisis diseno narrativa
@@ -42,8 +40,6 @@ diseno: $(DIAG_STAMP)
 narrativa:
 	@echo ">> Compilando Narrativa..."
 	cd $(NAR_DIR) && $(LATEXMK) narrativa.tex
-	@cp $(NAR_DIR)/narrativa.pdf "$(NARR_PDF)"
-	@echo ">> Generado: $(NARR_PDF)"
 
 clean:
 	@echo ">> Limpiando archivos temporales..."
@@ -58,7 +54,6 @@ distclean:
 	-cd $(ANA_DIR) && $(LATEXMK) -C ModAnalisis.tex
 	-cd $(DIS_DIR) && $(LATEXMK) -C ModDiseno.tex
 	-cd $(NAR_DIR) && $(LATEXMK) -C narrativa.tex
-	@rm -f "$(NARR_PDF)"
 	@rm -f $(DIAG_STAMP)
 	@cd $(ANA_DIR)/puml && for f in *.puml; do \
 		name=$$(grep -m1 '@startuml' "$$f" | awk '{print $$2}'); \
@@ -71,7 +66,7 @@ help:
 	@echo "  make requerimientos - Compila solo Requerimientos.pdf"
 	@echo "  make analisis       - Compila solo ModAnalisis.pdf"
 	@echo "  make diseno         - Compila solo ModDiseno.pdf"
-	@echo "  make narrativa      - Compila la narrativa y genera narrativaEq#4.pdf"
+	@echo "  make narrativa      - Compila la narrativa (narrativa.pdf)"
 	@echo "  make diagrams       - Fuerza la regeneracion de los .png desde los .puml"
 	@echo "  make clean          - Borra archivos temporales de LaTeX"
 	@echo "  make distclean      - Borra PDFs y diagramas generados"

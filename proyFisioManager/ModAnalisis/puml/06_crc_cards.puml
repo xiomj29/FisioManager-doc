@@ -1,6 +1,5 @@
 @startuml FisioManager_CRC_Cards
 
-' FisioManager - CRC Cards (Class - Responsibilities - Collaborators)
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial
@@ -250,7 +249,6 @@ class "Recordatorio" as Recordatorio {
     ServicioNotificaciones
 }
 
-' Disposicion en grid
 Paciente -[hidden]right- Terapeuta
 Terapeuta -[hidden]right- HistorialClinico
 

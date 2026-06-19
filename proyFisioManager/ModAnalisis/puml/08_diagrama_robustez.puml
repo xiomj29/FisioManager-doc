@@ -1,14 +1,5 @@
 @startuml FisioManager_DiagramaRobustez
 
-' FisioManager - Diagrama de Robustez (clases de software)
-' Consolidado: agenda de cita, registro de feedback, prescripcion de plan
-' y elaboracion de nota clinica.
-'
-' Clases de software (ICONIX):
-'   <<actor>>     Actores externos al sistema
-'   <<boundary>>  Interfaces de usuario / sistemas externos
-'   <<control>>   Logica de aplicacion y orquestacion
-'   <<entity>>    Entidades persistentes del dominio
 
 skinparam backgroundColor #FAFAFA
 skinparam ArrowColor #2E75B6
@@ -29,15 +20,9 @@ skinparam class {
 
 title <b>FisioManager - Diagrama de Robustez</b>\n<size:11>Clases de software: Boundary / Control / Entity</size>
 
-' ============================================================
-' ACTORES
-' ============================================================
 class ActorPaciente <<actor>>
 class ActorTerapeuta <<actor>>
 
-' ============================================================
-' BOUNDARIES (interfaces)
-' ============================================================
 class UIAgendaPaciente <<boundary>>
 class UIAgendaTerapeuta <<boundary>>
 class UIRegistroFeedback <<boundary>>
@@ -46,9 +31,6 @@ class UIPlanTratamiento <<boundary>>
 class ServicioNotificaciones <<boundary>>
 class ServicioIAExterno <<boundary>>
 
-' ============================================================
-' CONTROLS (logica de aplicacion)
-' ============================================================
 class GestorCitas <<control>>
 class GestorRecordatorios <<control>>
 class GestorFeedback <<control>>
@@ -57,9 +39,6 @@ class GestorPlanTratamiento <<control>>
 class GestorNotasClinicas <<control>>
 class ValidadorDisponibilidad <<control>>
 
-' ============================================================
-' ENTITIES (dominio persistente)
-' ============================================================
 class Paciente <<entity>>
 class Terapeuta <<entity>>
 class Cita <<entity>>
@@ -75,9 +54,6 @@ class NotaClinica <<entity>>
 class HistorialClinico <<entity>>
 class AsignacionRutina <<entity>>
 
-' ============================================================
-' FLUJO 1: Agendar cita (Paciente)
-' ============================================================
 ActorPaciente --> UIAgendaPaciente
 UIAgendaPaciente --> GestorCitas : solicitar cita
 GestorCitas --> ValidadorDisponibilidad : verificar disponibilidad
@@ -92,9 +68,6 @@ GestorRecordatorios --> Recordatorio : crea
 GestorRecordatorios --> ServicioNotificaciones : enviar
 ServicioNotificaciones --> ActorPaciente : push / email
 
-' ============================================================
-' FLUJO 2: Registrar feedback de sesion (Paciente)
-' ============================================================
 ActorPaciente --> UIRegistroFeedback : graba audio + dolor + emocion
 UIRegistroFeedback --> GestorFeedback : enviar feedback
 GestorFeedback --> SesionEjecucion : consulta sesion
@@ -105,9 +78,6 @@ ServicioIAExterno --> AnalizadorIA : resultado
 AnalizadorIA --> AnalisisIA : crea
 AnalizadorIA --> Feedback : enlaza analisis
 
-' ============================================================
-' FLUJO 3: Elaborar plan de tratamiento (Terapeuta)
-' ============================================================
 ActorTerapeuta --> UIPlanTratamiento
 UIPlanTratamiento --> GestorPlanTratamiento : crear / editar plan
 GestorPlanTratamiento --> Paciente : selecciona paciente
@@ -116,18 +86,12 @@ GestorPlanTratamiento --> FaseTratamiento : agrega fases
 GestorPlanTratamiento --> AsignacionRutina : prescribe rutinas
 GestorPlanTratamiento --> HistorialClinico : vincula historial
 
-' ============================================================
-' FLUJO 4: Registrar nota clinica durante consulta (Terapeuta)
-' ============================================================
 ActorTerapeuta --> UIConsultaPaciente : abre expediente paciente
 UIConsultaPaciente --> GestorNotasClinicas : agregar nota
 GestorNotasClinicas --> HistorialClinico : ubica historial
 GestorNotasClinicas --> NotaClinica : crea
 GestorNotasClinicas --> PlanTratamiento : adjunta al plan
 
-' ============================================================
-' FLUJO 5: Consulta de agenda (Terapeuta)
-' ============================================================
 ActorTerapeuta --> UIAgendaTerapeuta : revisa agenda del dia
 UIAgendaTerapeuta --> GestorCitas : listar citas
 GestorCitas --> Cita : consulta

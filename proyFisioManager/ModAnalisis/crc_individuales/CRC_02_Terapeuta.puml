@@ -1,6 +1,5 @@
 @startuml CRC_Terapeuta
 
-' FisioManager - CRC Card: Terapeuta
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

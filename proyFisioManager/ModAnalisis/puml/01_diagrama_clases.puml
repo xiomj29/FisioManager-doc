@@ -1,8 +1,5 @@
 @startuml FisioManager_DiagramaClases
 
-' FisioManager - Diagrama de Clases Conceptuales
-' Modelo de dominio: solo conceptos, atributos y asociaciones.
-' No se incluyen tipos de datos, metodos ni servicios de software.
 
 skinparam backgroundColor #FAFAFA
 skinparam classBackgroundColor #E8F4F8
@@ -204,9 +201,6 @@ package "Bienestar" {
     }
 }
 
-' ============================================================
-' Relaciones (asociaciones conceptuales)
-' ============================================================
 
 Usuario <|-- Paciente
 Usuario <|-- Terapeuta
@@ -240,7 +234,6 @@ Feedback "1" -- "0..1" AnalisisIA : analizada por
 Paciente "1" -- "*" SesionEjecucion : ejecuta
 Paciente "*" -- "*" ModuloBienestar : accede
 
-' Agenda
 Cita "*" -- "1" Paciente : agendada para
 Cita "*" -- "1" Terapeuta : atendida por
 Cita "*" -- "0..1" Sala : ocupa

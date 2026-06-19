@@ -1,10 +1,5 @@
 @startuml FisioManager_DiagramaObjetos
 
-' FisioManager - Diagrama de Objetos
-' Instantanea del sistema: instancias concretas de las clases conceptuales
-' Escenario: paciente Ana en tratamiento de rodilla, con cita proxima,
-' (recordatorio enviado por push, coherente con los canales del sistema)
-' plan de tratamiento activo y una sesion con feedback ya analizado.
 
 skinparam backgroundColor #FAFAFA
 skinparam objectBackgroundColor #E8F4F8
@@ -16,9 +11,6 @@ skinparam objectAttributeFontSize 10
 
 title <b>FisioManager - Diagrama de Objetos</b>\n<size:11>Instantanea: tratamiento de rodilla en curso (paciente Ana Lopez)</size>
 
-' ============================================================
-' Usuarios
-' ============================================================
 
 object "ana : Paciente" as ana {
     nombre = "Ana"
@@ -40,9 +32,6 @@ object "drMartinez : Terapeuta" as ter {
     especialidad = "Rehabilitacion ortopedica"
 }
 
-' ============================================================
-' Clinico
-' ============================================================
 
 object "hcAna : HistorialClinico" as hc {
     fechaCreacion = "2026-02-10"
@@ -81,9 +70,6 @@ object "fase02 : FaseTratamiento" as fase {
     objetivos = "Recuperar fuerza cuadriceps e isquiotibiales"
 }
 
-' ============================================================
-' Agenda
-' ============================================================
 
 object "cita15Mayo : Cita" as cita {
     fechaHoraInicio = "2026-05-20 10:00"
@@ -116,9 +102,6 @@ object "recPush : Recordatorio" as rec {
     estado = ENVIADO
 }
 
-' ============================================================
-' Rutinas
-' ============================================================
 
 object "rutFortRodilla : Rutina" as rut {
     nombre = "Fortalecimiento rodilla nivel 2"
@@ -151,9 +134,6 @@ object "asigRut : AsignacionRutina" as asig {
     estado = ACTIVA
 }
 
-' ============================================================
-' Seguimiento
-' ============================================================
 
 object "sesion22Abr : SesionEjecucion" as ses {
     fechaInicio = "2026-04-22 18:30"
@@ -178,9 +158,6 @@ object "ia22Abr : AnalisisIA" as ia {
     fechaProcesamiento = "2026-04-22 19:01"
 }
 
-' ============================================================
-' Enlaces (links de instancias)
-' ============================================================
 
 ana --> ter : atendida por
 ana --> hc : posee

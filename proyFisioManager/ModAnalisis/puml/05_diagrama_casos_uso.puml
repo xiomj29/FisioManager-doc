@@ -1,6 +1,5 @@
 @startuml FisioManager_CasosDeUso
 
-' FisioManager - Diagrama de Casos de Uso
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial
@@ -70,7 +69,6 @@ rectangle "FisioManager" {
     usecase "Analizar sentimiento" as UC51
 }
 
-' Relaciones de paciente
 paciente --> UC01
 paciente --> UC02
 paciente --> UC03
@@ -82,7 +80,6 @@ paciente --> UC14
 paciente --> UC15
 paciente --> UC16
 
-' Relaciones de terapeuta
 terapeuta --> UC01
 terapeuta --> UC02
 terapeuta --> UC20
@@ -99,10 +96,8 @@ terapeuta --> UC60
 terapeuta --> UC61
 terapeuta --> UC62
 
-' Agenda (paciente puede solicitar cita)
 paciente --> UC61
 
-' Relaciones del administrador (unico)
 admin --> UC01
 admin --> UC30
 admin --> UC31
@@ -112,14 +107,12 @@ admin --> UC41
 admin --> UC42
 admin --> UC60
 
-' Sistema IA
 UC12 ..> UC50 : <<include>>
 UC12 ..> UC51 : <<include>>
 UC25 ..> UC51 : <<include>>
 ia --> UC50
 ia --> UC51
 
-' Extends
 UC11 ..> UC12 : <<extend>>
 UC15 ..> UC27 : <<extend>>
 

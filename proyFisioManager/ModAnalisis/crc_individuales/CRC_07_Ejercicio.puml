@@ -1,6 +1,5 @@
 @startuml CRC_Ejercicio
 
-' FisioManager - CRC Card: Ejercicio
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

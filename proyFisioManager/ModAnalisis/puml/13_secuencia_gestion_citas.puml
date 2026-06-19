@@ -81,7 +81,6 @@ alt Horario disponible y sin colisiones
     Cita --> Gestor : Cita confirmada
     deactivate Cita
 
-    ' --- Programacion de Recordatorio ---
     Gestor -> Recordatorio : programarRecordatorio(\ncitaId, pacienteId,\nfechaHora)
     activate Recordatorio
 

@@ -1,6 +1,5 @@
 @startuml FisioManager_C4_Contexto
 
-' FisioManager - C4 Nivel 1: Diagrama de Contexto del Sistema
 
 
 skinparam backgroundColor #FAFAFA

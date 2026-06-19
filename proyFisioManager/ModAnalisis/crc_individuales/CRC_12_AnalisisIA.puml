@@ -1,6 +1,5 @@
 @startuml CRC_AnalisisIA
 
-' FisioManager - CRC Card: AnalisisIA
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

@@ -1,6 +1,5 @@
 @startuml FisioManager_C4_Componentes
 
-' FisioManager - C4 Nivel 3: Componentes del Servicio de Feedback
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial

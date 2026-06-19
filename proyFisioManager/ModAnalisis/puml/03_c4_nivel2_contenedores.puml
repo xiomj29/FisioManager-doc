@@ -1,6 +1,5 @@
 @startuml FisioManager_C4_Contenedores
 
-' FisioManager - C4 Nivel 2: Diagrama de Contenedores
 
 skinparam backgroundColor #FAFAFA
 skinparam defaultFontName Arial
