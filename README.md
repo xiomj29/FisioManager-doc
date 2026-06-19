@@ -9,14 +9,13 @@ Carátula de Cambios (Historial de versiones).
 
 ```
 proyFisioManager/
-├── narrativaEq#4.pdf      Narrativa del proyecto (PDF generado)
 ├── Requerimientos/        Visión, actores/stakeholders y SRS (RF y RNF)
 ├── ModAnalisis/           Modelo de Análisis (+ figuras, puml y crc_individuales)
 ├── ModDiseño/             Modelo de Diseño
+├── narrativa/             Fuente LaTeX de la Narrativa del Sistema (-> narrativa.pdf)
 ├── Implementación/        (reservada)
 ├── VideoEntrega/          (reservada)
 ├── logos/                 Preámbulo compartido y escudos institucionales
-├── narrativa/             Fuente LaTeX de la narrativa
 └── Makefile               Compila los cuatro artefactos
 ```
 
