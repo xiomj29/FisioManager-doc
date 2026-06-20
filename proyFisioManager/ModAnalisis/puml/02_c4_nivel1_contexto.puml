@@ -31,23 +31,24 @@ actor "Paciente\n<size:10>[Persona]</size>" as paciente
 actor "Fisioterapeuta\n<size:10>[Persona]</size>" as terapeuta
 actor "Administrador\n<size:10>[Persona]</size>" as admin
 
-rectangle "**FisioManager**\n<size:10>[Sistema]</size>\n<size:10>Plataforma de rehabilitacion</size>\n<size:10>con feedback por voz e IA</size>" as fisio <<sistema>>
+rectangle "**FisioManager**\n<size:10>[Sistema]</size>\n<size:10>Plataforma de rehabilitacion con</size>\n<size:10>mensajeria en vivo, feedback por voz e IA</size>" as fisio <<sistema>>
 
-rectangle "Servicio de IA\n(STT + LLM)\n<size:10>[Sistema externo]</size>" as ia <<externo>>
-rectangle "ElevenLabs TTS\n<size:10>[Sistema externo]</size>" as tts <<externo>>
+rectangle "Ollama (LLM local)\n<size:10>Resumenes clinicos</size>\n<size:10>[Sistema externo]</size>" as llm <<externo>>
 rectangle "Almacenamiento\nde Objetos\n<size:10>[MinIO / S3]</size>" as storage <<externo>>
-rectangle "Proveedor SMTP\n<size:10>[Sistema externo]</size>" as email <<externo>>
-rectangle "Notificaciones\nPush (FCM)\n<size:10>[Sistema externo]</size>" as push <<externo>>
+rectangle "Proveedor SMTP\n<size:10>[Correo]</size>" as email <<externo>>
 
-paciente --> fisio : Rutinas, feedback,\nprogreso\n<size:9>[HTTPS]</size>
-terapeuta --> fisio : Gestion clinica,\nanalisis\n<size:9>[HTTPS]</size>
-admin --> fisio : Supervision\ny operacion\n<size:9>[HTTPS]</size>
+paciente --> fisio : Rutinas, citas, mensajes,\nfeedback, progreso\n<size:9>[HTTPS]</size>
+terapeuta --> fisio : Gestion clinica,\nanalisis, mensajes\n<size:9>[HTTPS]</size>
+admin --> fisio : Supervision, usuarios\ny auditoria\n<size:9>[HTTPS]</size>
 
-fisio --> ia : Transcribe y\nanaliza audio
-fisio --> tts : Genera audio
-fisio --> storage : Audios/videos
-fisio --> email : Notifica
-fisio --> push : Recordatorios
+fisio --> llm : Resume el feedback
+fisio --> storage : Avatares, documentos,\naudios
+fisio --> email : Notifica y recuerda
+
+note bottom of fisio
+  La transcripcion de voz (Whisper) se
+  ejecuta dentro del propio sistema.
+end note
 
 legend right
     | Color | Tipo |

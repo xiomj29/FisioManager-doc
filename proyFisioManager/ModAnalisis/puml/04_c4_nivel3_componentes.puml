@@ -23,64 +23,48 @@ skinparam database {
     FontColor white
 }
 
-skinparam queue {
-    BackgroundColor #438DD5
-    BorderColor #2E6295
-    FontColor white
-}
-
-title <b>FisioManager - C4 Nivel 3: Componentes del Servicio de Feedback</b>
+title <b>FisioManager - C4 Nivel 3: Componentes de la API (flujo de Feedback)</b>
 
 rectangle "SPA Web\n<size:9>[React + TS]</size>" as spa <<container>>
-database "PostgreSQL\n<size:9>BD Relacional</size>" as bd
-rectangle "MinIO\n<size:9>Object Storage</size>" as minio <<container>>
-queue "RabbitMQ\n<size:9>Eventos</size>" as cola
-rectangle "Servicio de IA\n<size:9>[Python FastAPI]</size>" as svcIA <<container>>
+database "PostgreSQL\n<size:9>[Prisma]</size>" as bd
+rectangle "MinIO / disco\n<size:9>Object Storage</size>" as minio <<container>>
+rectangle "Whisper\n<size:9>[Python]</size>" as whisper <<container>>
+rectangle "Ollama\n<size:9>[LLM]</size>" as ollama <<container>>
 
-rectangle "**Servicio de Feedback**" as boundary {
+rectangle "**API Express (modular)**" as boundary {
 
-    rectangle "FeedbackController\n<size:9>[ASP.NET Controller]</size>\n<size:9>POST /feedback</size>\n<size:9>GET /feedback/{id}</size>" as ctrlFb <<componente>>
+    rectangle "Middlewares\n<size:9>auth (JWT), role,</size>\n<size:9>validate (Zod), rate-limit</size>" as mw <<componente>>
 
-    rectangle "SesionController\n<size:9>[ASP.NET Controller]</size>\n<size:9>Inicio/fin sesiones</size>" as ctrlSes <<componente>>
+    rectangle "feedback.routes\n<size:9>[Express Router]</size>\n<size:9>POST /feedback</size>\n<size:9>POST /feedback/audio</size>" as routes <<componente>>
 
-    rectangle "FeedbackApplicationService\n<size:9>[Servicio de aplicacion]</size>\n<size:9>Orquesta caso de uso</size>\n<size:9>de registro de feedback</size>" as appFb <<componente>>
+    rectangle "feedback.controller\n<size:9>catchAsync, ok/created</size>" as ctrl <<componente>>
 
-    rectangle "SesionApplicationService\n<size:9>[Servicio de aplicacion]</size>\n<size:9>Ciclo de vida de sesion</size>" as appSes <<componente>>
+    rectangle "feedback.service\n<size:9>Reglas de negocio;</size>\n<size:9>dispara alerta de dolor</size>" as svc <<componente>>
 
-    rectangle "AudioStorageService\n<size:9>[Infraestructura]</size>\n<size:9>Sube/descarga audios</size>" as audioSvc <<componente>>
+    rectangle "ai.service\n<size:9>transcribeAudio (Whisper)</size>\n<size:9>generateClinicalSummary (Ollama)</size>" as ai <<componente>>
 
-    rectangle "AnalisisIAClient\n<size:9>[HTTP Client]</size>\n<size:9>Cliente con reintentos</size>\n<size:9>y circuit breaker</size>" as iaClient <<componente>>
+    rectangle "storage (lib)\n<size:9>local | S3/MinIO</size>" as storage <<componente>>
 
-    rectangle "EventPublisher\n<size:9>[Publisher]</size>\n<size:9>Publica eventos\nde dominio</size>" as pub <<componente>>
+    rectangle "notification.service\n<size:9>Centro in-app + email +</size>\n<size:9>push por Socket.IO</size>" as notif <<componente>>
 
-    rectangle "FeedbackRepository\n<size:9>[EF Core]</size>" as repoFb <<componente>>
+    rectangle "feedback.repository\n<size:9>[Prisma Client]</size>" as repo <<componente>>
 
-    rectangle "SesionRepository\n<size:9>[EF Core]</size>" as repoSes <<componente>>
-
-    rectangle "FeedbackValidator\n<size:9>[FluentValidation]</size>" as validator <<componente>>
-
-    rectangle "FeedbackMapper\n<size:9>[AutoMapper]</size>" as mapper <<componente>>
+    rectangle "painPoint.repository\n<size:9>[Prisma Client]</size>" as repoPain <<componente>>
 }
 
-spa --> ctrlFb : POST audio +\ndatos\n<size:9>[multipart]</size>
-spa --> ctrlSes : Sesion\n<size:9>[HTTPS]</size>
-
-ctrlFb --> validator
-ctrlFb --> mapper
-ctrlFb --> appFb
-ctrlSes --> appSes
-
-appFb --> audioSvc : Almacena audio
-appFb --> repoFb : Persiste
-appFb --> iaClient : Solicita analisis
-appFb --> pub : Publica evento
-
-appSes --> repoSes
-
-audioSvc --> minio : <size:9>[S3 API]</size>
-iaClient --> svcIA : <size:9>[HTTPS]</size>
-pub --> cola : <size:9>[AMQP]</size>
-repoFb --> bd : <size:9>[Npgsql]</size>
-repoSes --> bd
+spa --> mw : POST audio + datos\n<size:9>[multipart / JSON]</size>
+mw --> routes
+routes --> ctrl
+ctrl --> svc
+ctrl --> ai : Audio -> transcripcion + resumen
+ai --> whisper
+ai --> ollama
+ctrl --> storage : Guarda audio
+storage --> minio
+svc --> repo : Persiste feedback
+svc --> repoPain : Guarda puntos de dolor
+svc --> notif : Alerta de dolor alto
+repo --> bd
+repoPain --> bd
 
 @enduml

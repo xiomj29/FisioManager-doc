@@ -1,0 +1,49 @@
+@startuml FisioManager_Secuencia_Mensajeria
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #2E75B6
+  LifeLineBorderColor #2E75B6
+  ParticipantBorderColor #2E6295
+  ParticipantBackgroundColor #438DD5
+  ParticipantFontColor white
+  ActorBorderColor #073B6F
+  ActorBackgroundColor #08427B
+  ActorFontColor #08427B
+}
+
+title Secuencia: Mensajeria en tiempo real (Paciente -> Terapeuta)
+
+actor "Paciente" as paciente
+participant "SPA\n(ChatView)" as spa
+participant "API Express\n(chat.controller)" as api
+participant "chat.service" as svc
+participant "message.repository" as repo
+participant "Socket.IO" as io
+participant "notification.service" as notif
+actor "Terapeuta" as terapeuta
+
+paciente -> spa : Escribe y envia mensaje
+spa -> api : POST /conversations/{id}/messages\n[JWT]
+api -> svc : sendMessage(actor, id, contenido)
+svc -> svc : assertParticipant(conversacion, actor)
+svc -> repo : create(conversacionId, emisor, contenido)
+repo --> svc : mensaje
+svc -> repo : touch(conversacion)
+svc -> io : emitToUser(receptor, "message:new")
+io --> terapeuta : message:new (en vivo)
+svc -> notif : createInApp(receptor, MESSAGE)
+notif -> io : emitToUser(receptor, "notification:new")
+io --> terapeuta : notification:new (campana)
+svc --> api : mensaje
+api --> spa : 201 Created
+spa --> paciente : Mensaje mostrado en el hilo
+
+note over io
+  Con el adapter de Redis los eventos
+  se propagan entre varias instancias.
+end note
+
+@enduml

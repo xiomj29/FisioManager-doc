@@ -17,150 +17,91 @@ title Diagrama de Secuencia - Flujo 3: Gestion de Citas (Admin)
 
 actor "Administrador" as Admin #AED6F1
 participant "UIAgenda" as UI #D6EAF8
-participant "GestorCitas" as Gestor #D6EAF8
-participant "ValidadorDisponibilidad" as Validador #D6EAF8
-participant "Cita" as Cita #E8DAEF
-participant "Recordatorio" as Recordatorio #E8DAEF
-database "Base de Datos" as DB #E8DAEF
+participant "appointment.service" as Gestor #D6EAF8
+participant "availability.service" as Validador #D6EAF8
+participant "notification.service" as Notif #D6EAF8
+participant "email.service" as Email #D6EAF8
+database "PostgreSQL" as DB #E8DAEF
 
 == Consulta de Agenda ==
 
-Admin -> UI : Accede a la agenda\ndel dia
+Admin -> UI : Accede a la agenda del dia
 activate UI
-
-UI -> Gestor : listarCitas(fecha,\nterapeutaId?, estado?)
+UI -> Gestor : getAll(fecha, terapeutaId?, estado?)
 activate Gestor
-
-Gestor -> DB : SELECT citas\nWHERE fecha = hoy\nAND filtros
+Gestor -> DB : SELECT citas WHERE fecha\nAND filtros
 activate DB
-DB --> Gestor : Lista de citas\n(SCHEDULED, COMPLETED,\nCANCELLED)
+DB --> Gestor : citas (SCHEDULED/CONFIRMED/\nCOMPLETED/CANCELLED)
 deactivate DB
-
 Gestor --> UI : citasDelDia[]
 deactivate Gestor
-
-UI --> Admin : Mostrar agenda con\ncitas, estados y\nestadisticas del dia
+UI --> Admin : Muestra agenda con estados
 
 == Creacion de Nueva Cita ==
 
-Admin -> UI : Click "Nueva Cita"\ny completar formulario\n(paciente, terapeuta,\nfechaHora, motivo)
-
-UI -> Gestor : crearCita(pacienteId,\nterapeutaId, fechaHora,\nmotivo, modalidad)
+Admin -> UI : "Nueva cita" (paciente,\nterapeuta, fechaHora, sala?,\nrecurrencia?)
+UI -> Gestor : create(datos, actor=ADMIN)
 activate Gestor
 
-Gestor -> Gestor : Validar campos\nrequeridos y formatos
-
-Gestor -> Validador : verificarDisponibilidad(\nterapeutaId, fechaHora)
+Gestor -> Validador : assertWithinAvailability(\nterapeutaId, fechaHora)
 activate Validador
-
-Validador -> DB : SELECT HorarioDisponible\nWHERE terapeutaId\nAND diaSemana
+Validador -> DB : SELECT disponibilidad\ndel terapeuta
 activate DB
-DB --> Validador : Horarios del terapeuta
+DB --> Validador : franjas
+deactivate DB
+Validador --> Gestor : dentro de horario
+deactivate Validador
+
+Gestor -> DB : findConflict(terapeutaId,\nfechaHora)
+activate DB
+DB --> Gestor : sin colision
 deactivate DB
 
-Validador -> Validador : Verificar que fechaHora\nesta dentro del horario\ndel terapeuta
-
-Validador -> DB : SELECT citas\nWHERE terapeutaId\nAND fechaHora\nAND estado = 'SCHEDULED'
-activate DB
-DB --> Validador : Citas existentes\nen ese horario
-deactivate DB
-
-Validador -> Validador : Detectar colisiones\ncon citas existentes
-
-alt Horario disponible y sin colisiones
-    Validador --> Gestor : disponible = true
-    deactivate Validador
-
-    Gestor -> DB : INSERT Cita\n(pacienteId, terapeutaId,\nfechaHora, motivo,\nestado='SCHEDULED')
+alt Disponible y sin colisiones
+    Gestor -> DB : INSERT Cita (estado='SCHEDULED',\ngrupoRecurrencia? para serie)
     activate DB
-    DB --> Gestor : Cita creada (citaId)
+    DB --> Gestor : citaId
     deactivate DB
-
-    Gestor -> Cita : instanciar(citaId,\nfechaHora, estado)
-    activate Cita
-    Cita --> Gestor : Cita confirmada
-    deactivate Cita
-
-    Gestor -> Recordatorio : programarRecordatorio(\ncitaId, pacienteId,\nfechaHora)
-    activate Recordatorio
-
-    Recordatorio -> Recordatorio : Calcular fecha de envio\n(24h antes de la cita)
-
-    Recordatorio -> DB : INSERT Recordatorio\n(citaId, canal='EMAIL',\nfechaEnvioProgramada,\nestado='PENDIENTE')
-    activate DB
-    DB --> Recordatorio : Recordatorio creado
-    deactivate DB
-
-    Recordatorio --> Gestor : Recordatorio programado
-    deactivate Recordatorio
-
-    Gestor --> UI : Cita creada exitosamente\ncon recordatorio programado
+    Gestor -> Email : sendAppointmentReminder(...)
+    Gestor --> UI : Cita creada
     deactivate Gestor
-
-    UI --> Admin : Confirmacion:\n"Cita agendada para\n[fecha] con recordatorio"
-
-else Horario no disponible o colision detectada
-    Validador --> Gestor : disponible = false,\nmotivo: "Colision con\ncita existente" o\n"Fuera de horario"
-    deactivate Validador
-
-    Gestor --> UI : Error de disponibilidad\n(motivo)
+    UI --> Admin : "Cita agendada"
+else Fuera de horario o colision
+    Gestor --> UI : Error de disponibilidad
     deactivate Gestor
-
-    UI --> Admin : Alerta: "El horario\nseleccionado no esta\ndisponible. Seleccione\notro horario."
+    UI --> Admin : "El horario no esta disponible"
 end
+
+== Recordatorio 24h (automatico) ==
+
+note over Notif, DB
+  Un planificador en notification.service
+  se ejecuta cada hora: detecta las citas
+  a ~24h con recordada_24h=false, crea la
+  Notificacion in-app, envia el correo y
+  marca recordada_24h=true.
+end note
 
 == Envio Manual de Recordatorio ==
 
-Admin -> UI : Click "Recordatorio"\nen cita SCHEDULED
-
-UI -> Gestor : enviarRecordatorio(citaId)
+Admin -> UI : "Recordatorio" en una cita
+UI -> Gestor : sendReminder(citaId)
 activate Gestor
-
-Gestor -> DB : SELECT Cita\nJOIN Paciente, Terapeuta\nWHERE id = citaId
+Gestor -> DB : SELECT cita + paciente + terapeuta
 activate DB
-DB --> Gestor : Datos de la cita\n(paciente, terapeuta,\nfechaHora)
+DB --> Gestor : datos de la cita
 deactivate DB
-
-Gestor -> Recordatorio : enviarAhora(citaId,\npacienteEmail,\nterapeutaNombre, fechaHora)
-activate Recordatorio
-
-Recordatorio -> Recordatorio : Generar contenido\ndel mensaje\n(HTML con datos de cita)
-
-Recordatorio -> DB : UPDATE Recordatorio\nSET estado='ENVIADO',\nfechaEnvioReal=now()
-activate DB
-DB --> Recordatorio : OK
-deactivate DB
-
-Recordatorio --> Gestor : Recordatorio enviado\n(messageId)
-deactivate Recordatorio
-
-Gestor --> UI : Recordatorio enviado\nexitosamente
+Gestor -> Email : sendAppointmentReminder(\npaciente, terapeuta, fechaHora)
+Email --> Gestor : messageId
+Gestor --> UI : Recordatorio enviado
 deactivate Gestor
-
-UI --> Admin : Confirmacion:\n"Recordatorio enviado\nal paciente"
+UI --> Admin : "Recordatorio enviado al paciente"
 deactivate UI
 
-note over Admin, UI
-  El Administrador gestiona la agenda
-  de toda la clinica: puede filtrar
-  por terapeuta, fecha y estado
-  de las citas (SCHEDULED, COMPLETED,
-  CANCELLED)
-end note
-
 note over Validador
-  Verifica dos condiciones:
-  1. Que la fechaHora este dentro
-     del horario del terapeuta
-  2. Que no existan colisiones
-     con citas ya agendadas
-end note
-
-note over Recordatorio
-  El recordatorio se programa
-  automaticamente al crear la cita
-  (24h antes) y puede enviarse
-  manualmente por el Admin
+  Valida dos condiciones: que la fecha
+  este dentro del horario del terapeuta
+  y que no exista colision con otra cita.
 end note
 
 @enduml

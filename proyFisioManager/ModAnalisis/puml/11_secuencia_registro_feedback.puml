@@ -17,126 +17,83 @@ title Diagrama de Secuencia - Flujo 1: Registro de Feedback
 
 actor "Paciente" as Paciente #AED6F1
 participant "UIRegistroFeedback" as UI #D6EAF8
-participant "GestorFeedback" as Gestor #D6EAF8
-participant "AudioStorageService" as Audio #D6EAF8
-participant "AnalisisIAClient" as IAClient #D6EAF8
-participant "AnalisisIA" as IA #E8DAEF
-database "Base de Datos" as DB #E8DAEF
-
-== Inicio del Registro de Feedback ==
-
-Paciente -> UI : Accede al formulario\nde feedback tras\ncompletar rutina
-activate UI
-
-UI -> UI : Cargar formulario\n(estado emocional,\nnivel de dolor, audio)
-UI --> Paciente : Mostrar interfaz\nde registro de feedback
+participant "feedback.controller" as Ctrl #D6EAF8
+participant "ai.service\n(Whisper + Ollama)" as AI #E8DAEF
+participant "storage" as Audio #D6EAF8
+participant "feedback.service" as Svc #D6EAF8
+participant "notification.service" as Notif #D6EAF8
+database "PostgreSQL" as DB #E8DAEF
 
 == Captura de Datos ==
 
-Paciente -> UI : Seleccionar estado\nemocional (GREAT/GOOD/\nOK/BAD/TERRIBLE)
+Paciente -> UI : Selecciona estado emocional,\nnivel de dolor y marca el\nmapa corporal de dolor
+activate UI
 
-Paciente -> UI : Ajustar nivel de dolor\n(slider 1-10)
-
-opt Grabacion de Audio (Opcional)
-    Paciente -> UI : Iniciar grabacion\nde audio
-    UI -> UI : Capturar audio\ndel microfono
-    Paciente -> UI : Detener grabacion
-    UI --> Paciente : Preview del audio\ngrabado
+opt Grabacion de audio (opcional)
+    Paciente -> UI : Graba una nota de voz
+    UI -> Ctrl : POST /feedback/audio\n(audio multipart)
+    activate Ctrl
+    Ctrl -> Ctrl : Verifica consentimiento\nde audio del paciente
+    Ctrl -> Audio : guarda el audio
+    Audio --> Ctrl : audioUrl
+    Ctrl -> AI : transcribeAudio(audio)
+    AI --> Ctrl : transcripcion (Whisper)
+    Ctrl -> AI : generateClinicalSummary(transcripcion)
+    AI --> Ctrl : resumen clinico (Ollama)
+    Ctrl --> UI : { audioUrl, transcripcion, resumenIA }
+    deactivate Ctrl
 end
 
 == Envio del Feedback ==
 
-Paciente -> UI : Confirmar y enviar\nfeedback
+Paciente -> UI : Confirmar y enviar
+UI -> Ctrl : POST /feedback\n(painLevel, emotionalState,\npainPoints, audioUrl?,\ntranscripcion?, resumenIA?)
+activate Ctrl
+Ctrl -> Svc : create(data, patientId)
+activate Svc
 
-UI -> Gestor : registrarFeedback(\nroutineId, patientId,\npainLevel, emotionalState,\naudioBlob?)
-activate Gestor
+Svc -> Svc : Valida painLevel in [1..10]\ny estado emocional
 
-Gestor -> Gestor : Validar datos:\npainLevel in [1..10],\nemotionalState valido
-
-alt Audio incluido
-    Gestor -> Audio : almacenarAudio(\naudioBlob, pacienteId,\nfeedbackId)
-    activate Audio
-
-    Audio -> Audio : Generar nombre unico\ny ruta de almacenamiento
-
-    Audio -> Audio : Guardar archivo de\naudio en servidor\n(/uploads/)
-
-    Audio --> Gestor : audioRecordUrl
-    deactivate Audio
-else Sin audio
-    Gestor -> Gestor : audioRecordUrl = null
-end
-
-Gestor -> DB : INSERT Feedback\n(routineId, patientId,\npainLevel, emotionalState,\naudioRecordUrl, date)
+Svc -> DB : INSERT Feedback\n(painLevel, emotionalState,\naudioUrl, transcripcion,\nresumenIA, date)
 activate DB
-DB --> Gestor : Feedback creado\n(feedbackId)
+DB --> Svc : feedbackId
 deactivate DB
 
-Gestor --> UI : Feedback registrado\nexitosamente
-UI --> Paciente : Confirmacion:\n"Feedback enviado\ncorrectamente"
-deactivate UI
-
-== Analisis Asincrono de IA ==
-
-alt Audio disponible para analisis
-    Gestor ->> IAClient : solicitarAnalisis(\nfeedbackId, audioUrl,\npainLevel, emotionalState)
-    activate IAClient
-    note right of Gestor
-      Llamada asincrona:
-      el paciente no espera
-      la respuesta de la IA
-    end note
-    deactivate Gestor
-
-    IAClient -> IAClient : Preparar payload\n(audio + metadatos\ndel feedback)
-
-    IAClient -> IA : POST /analyze\n(audioFile, contexto\nclinico)
-    activate IA
-
-    IA -> IA : Transcripcion de audio\n(Speech-to-Text)
-    IA -> IA : Analisis de sentimiento\ny contenido clinico
-    IA -> IA : Generar resumen\ny recomendaciones
-
-    IA --> IAClient : AnalisisResultado\n(transcripcion, resumen,\nalertas, recomendaciones)
-    deactivate IA
-
-    IAClient -> DB : UPDATE Feedback\nSET aiSummary = resumen\nWHERE id = feedbackId
+opt Hay puntos de dolor
+    Svc -> DB : INSERT PuntoDolor[]\n(feedbackId, parteCuerpo,\nlado, intensidad)
     activate DB
-    DB --> IAClient : Feedback actualizado
+    DB --> Svc : OK
     deactivate DB
-
-    IAClient -> IAClient : Verificar alertas\ncriticas (dolor alto,\nestado emocional negativo)
-
-    opt Alerta critica detectada
-        IAClient -> DB : Registrar alerta\npara el terapeuta
-        activate DB
-        DB --> IAClient : Alerta creada
-        deactivate DB
-    end
-
-    deactivate IAClient
-else Sin audio
-    deactivate Gestor
-    note over IAClient, IA
-      Sin audio no se invoca
-      el servicio de IA.
-      El feedback queda registrado
-      solo con datos numericos.
-    end note
 end
 
-note over Paciente, UI
-  El formulario muestra 5 opciones
-  de estado emocional con iconos
-  y un slider interactivo para
-  el nivel de dolor (1-10)
+opt painLevel >= 7 (dolor alto)
+    Svc -> Notif : alertHighPain(patientId,\npainLevel, emotionalState)
+    Notif -> DB : INSERT Notificacion\n(terapeuta, HIGH_PAIN)
+    activate DB
+    DB --> Notif : OK
+    deactivate DB
+    Notif -->> Svc : aviso enviado (in-app + email)
+end
+
+Svc --> Ctrl : Feedback creado
+deactivate Svc
+Ctrl --> UI : 201 Created
+deactivate Ctrl
+UI --> Paciente : "Feedback enviado correctamente"
+deactivate UI
+
+note over AI
+  La transcripcion (Whisper) y el
+  resumen (Ollama) se ejecutan al
+  subir el audio y se guardan dentro
+  del propio Feedback. No hay una
+  entidad separada de analisis.
 end note
 
-note over Gestor, DB
-  El feedback queda disponible
-  inmediatamente para el terapeuta
-  en la vista de detalle del paciente
-  con graficas de tendencia
+note over Svc, DB
+  El feedback queda disponible de
+  inmediato para el terapeuta, con
+  graficas de tendencia y mapa de dolor.
 end note
 
 @enduml

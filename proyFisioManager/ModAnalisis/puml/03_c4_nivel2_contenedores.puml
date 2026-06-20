@@ -19,9 +19,9 @@ skinparam rectangle {
     BackgroundColor<<container>> #438DD5
     BorderColor<<container>> #2E6295
     FontColor<<container>> white
-    BackgroundColor<<db>> #438DD5
-    BorderColor<<db>> #2E6295
-    FontColor<<db>> white
+    BackgroundColor<<infra>> #6FA8DC
+    BorderColor<<infra>> #2E6295
+    FontColor<<infra>> white
     BackgroundColor<<externo>> #999999
     BorderColor<<externo>> #6B6B6B
     FontColor<<externo>> white
@@ -29,12 +29,6 @@ skinparam rectangle {
 }
 
 skinparam database {
-    BackgroundColor #438DD5
-    BorderColor #2E6295
-    FontColor white
-}
-
-skinparam queue {
     BackgroundColor #438DD5
     BorderColor #2E6295
     FontColor white
@@ -48,61 +42,37 @@ actor "Admin" as admin
 
 rectangle "**FisioManager**" as boundary {
 
-    rectangle "Aplicacion Web SPA\n<size:9>[React + TypeScript]</size>\n<size:9>Interfaz responsiva.</size>\n<size:9>Captura de audio en navegador.</size>" as spa <<container>>
+    rectangle "Reverse-proxy / TLS\n<size:9>[Caddy / nginx]</size>\n<size:9>HTTPS, sirve la SPA y</size>\n<size:9>enruta /api y /socket.io</size>" as proxy <<infra>>
 
-    rectangle "API Gateway / BFF\n<size:9>[ASP.NET Core 8]</size>\n<size:9>Auth JWT, autorizacion,</size>\n<size:9>rate limit, validacion</size>" as gateway <<container>>
+    rectangle "Aplicacion Web SPA\n<size:9>[React + TypeScript + Vite, PWA]</size>\n<size:9>Interfaz responsiva, i18n,</size>\n<size:9>modo claro/oscuro, offline</size>" as spa <<container>>
 
-    rectangle "Servicio de\nPacientes\n<size:9>[ASP.NET Core]</size>\n<size:9>Pacientes, historial,</size>\n<size:9>diagnosticos</size>" as svcPacientes <<container>>
+    rectangle "API REST + WebSocket\n<size:9>[Node.js + Express + Socket.IO]</size>\n<size:9>Rutas -> Controladores -> Servicios</size>\n<size:9>-> Repositorios. JWT, Zod, Prisma,</size>\n<size:9>rate-limit, auditoria</size>" as api <<container>>
 
-    rectangle "Servicio de\nRutinas\n<size:9>[ASP.NET Core]</size>\n<size:9>Ejercicios, rutinas,</size>\n<size:9>asignaciones, sesiones</size>" as svcRutinas <<container>>
+    rectangle "Transcripcion de voz\n<size:9>[Python + Whisper, en proceso]</size>\n<size:9>Convierte audio a texto</size>" as whisper <<container>>
 
-    rectangle "Servicio de\nFeedback\n<size:9>[ASP.NET Core]</size>\n<size:9>Recibe audio, coordina</size>\n<size:9>analisis con IA</size>" as svcFeedback <<container>>
-
-    rectangle "Servicio de IA\n/ Orquestador\n<size:9>[Python FastAPI]</size>\n<size:9>Whisper, analisis</size>\n<size:9>de sentimientos</size>" as svcIA <<container>>
-
-    rectangle "Servicio de\nReportes\n<size:9>[ASP.NET Core]</size>\n<size:9>Dashboards, PDF,</size>\n<size:9>metricas</size>" as svcReportes <<container>>
-
-    rectangle "Servicio de\nNotificaciones\n<size:9>[ASP.NET Core Worker]</size>\n<size:9>Cola de email/push</size>" as svcNotif <<container>>
-
-    database "Base de Datos\nRelacional\n<size:9>[PostgreSQL 16]</size>" as bd
-    database "Cache\nDistribuido\n<size:9>[Redis]</size>" as cache
-    queue "Cola de\nMensajes\n<size:9>[RabbitMQ]</size>" as cola
+    database "Base de Datos\n<size:9>[PostgreSQL 16 + Prisma]</size>" as bd
+    rectangle "Cache / PubSub\n<size:9>[Redis] (escalado)</size>\n<size:9>Adapter de Socket.IO</size>" as redis <<infra>>
+    rectangle "Object Storage\n<size:9>[MinIO / S3]</size>\n<size:9>Avatares y documentos</size>" as minio <<infra>>
+    rectangle "Respaldos BD\n<size:9>[pg_dump programado]</size>" as backup <<infra>>
 }
 
-rectangle "Whisper / OpenAI\n<size:9>STT</size>" as whisper <<externo>>
-rectangle "LLM Externo\n<size:9>Sentimiento</size>" as llm <<externo>>
-rectangle "ElevenLabs\n<size:9>TTS</size>" as eleven <<externo>>
-rectangle "MinIO / S3\n<size:9>Object storage</size>" as minio <<externo>>
-rectangle "SMTP / SendGrid\n<size:9>Email</size>" as smtp <<externo>>
-rectangle "Firebase FCM\n<size:9>Push</size>" as fcm <<externo>>
+rectangle "Ollama\n<size:9>[LLM local]</size>\n<size:9>Resumenes clinicos</size>" as ollama <<externo>>
+rectangle "Proveedor SMTP\n<size:9>[Correo]</size>" as smtp <<externo>>
 
-paciente --> spa : Usa\n<size:9>[HTTPS]</size>
-terapeuta --> spa
-admin --> spa
+paciente --> proxy : Usa\n<size:9>[HTTPS]</size>
+terapeuta --> proxy
+admin --> proxy
 
-spa --> gateway : <size:9>[HTTPS / JSON]</size>
+proxy --> spa : Sirve estaticos
+proxy --> api : /api, /uploads,\n/socket.io
+spa --> api : <size:9>[HTTPS / JSON + WebSocket]</size>
 
-gateway --> svcPacientes
-gateway --> svcRutinas
-gateway --> svcFeedback
-gateway --> svcReportes
-gateway --> cache : Sesiones/tokens
-
-svcPacientes --> bd : <size:9>[EF Core]</size>
-svcRutinas --> bd
-svcFeedback --> bd
-svcReportes --> bd
-
-svcFeedback --> minio : Sube audio
-svcFeedback --> cola : Publica eventos
-svcFeedback --> svcIA : Solicita analisis
-
-svcIA --> whisper
-svcIA --> llm
-svcIA --> eleven
-
-svcNotif --> cola : Consume
-svcNotif --> smtp
-svcNotif --> fcm
+api --> bd : <size:9>[Prisma]</size>
+api --> redis : <size:9>Eventos en vivo (multi-instancia)</size>
+api --> minio : <size:9>[S3 API] uploads</size>
+api --> whisper : <size:9>Transcribe audio</size>
+api --> ollama : <size:9>[HTTP] resumenes</size>
+api --> smtp : <size:9>Correos/recordatorios</size>
+backup --> bd : <size:9>pg_dump</size>
 
 @enduml

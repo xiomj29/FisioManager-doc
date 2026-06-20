@@ -3,7 +3,7 @@
 
 El diagrama de clases conceptuales representa la estructura estática del \emph{dominio del problema}. A diferencia de un diagrama de clases de software o de diseño, aquí no se incluyen tipos de datos, métodos, ni elementos de la capa de servicios, infraestructura o tecnología: solo conceptos del dominio, sus atributos esenciales y las asociaciones entre ellos. Estas clases conceptuales son las candidatas a convertirse, durante el diseño, en clases de software.
 
-Para FisioManager se modelan las clases conceptuales agrupadas en paquetes que reflejan los \textit{bounded contexts}: Usuarios, Clínico, Agenda, Rutinas, Seguimiento y Bienestar.
+Para FisioManager se modelan las clases conceptuales agrupadas en paquetes que reflejan los \textit{bounded contexts}: Usuarios, Clínico, Agenda, Rutinas, Seguimiento, Comunicación y Plataforma.
 
 \begin{figure}[H]
   \centering
@@ -21,17 +21,25 @@ Las siguientes decisiones de modelado fueron tomadas durante el análisis orient
 
   \item \textbf{Separación Rutina vs AsignacionRutina:} una \codeinline{Rutina} es una plantilla reutilizable; \codeinline{AsignacionRutina} representa la instancia concreta para un paciente con fechas y estado. Esto permite asignar la misma \codeinline{Rutina} a múltiples pacientes sin duplicarla.
 
-  \item \textbf{Composición ParametrosEjercicio:} la relación entre \codeinline{Rutina} y \codeinline{Ejercicio} se modela mediante \codeinline{ParametrosEjercicio} (clase intermedia con datos propios), no como simple muchos-a-muchos. Permite especificar series, repeticiones y notas que dependen del contexto de la rutina.
+  \item \textbf{PlantillaActividad vs Actividad:} el catálogo reutilizable se modela como \codeinline{PlantillaActividad}; cada \codeinline{Actividad} es la instancia concreta dentro de una \codeinline{Rutina}, con sus propios parámetros (duración, repeticiones, descanso y orden) que dependen del contexto de la rutina.
 
   \item \textbf{SesionEjecucion como agregado de seguimiento:} cada vez que el paciente realiza una rutina se crea una \codeinline{SesionEjecucion}. Esta es la entidad sobre la que pivotan el feedback y el cálculo de adherencia.
 
-  \item \textbf{Feedback con cardinalidad 0..1 hacia AnalisisIA:} el análisis es opcional porque el procesamiento es asíncrono y puede no haberse realizado aún, o haber fallado y estar pendiente de reintento.
+  \item \textbf{Feedback con resultados de IA en línea:} el resultado del procesamiento (transcripción de Whisper y resumen clínico de Ollama) se almacena como atributos del propio \codeinline{Feedback} (\codeinline{transcripcion}, \codeinline{resumenIA}); son opcionales porque solo existen cuando el paciente graba audio. No se modela una entidad separada de análisis.
+
+  \item \textbf{Mapa corporal y escalas:} el \codeinline{PuntoDolor} registra la localización del dolor asociada a un \codeinline{Feedback}, y la \codeinline{EscalaResultado} captura mediciones clínicas objetivas (ROM, fuerza, escalas funcionales, VAS) que registra el terapeuta para seguir la evolución.
 
   \item \textbf{PlanTratamiento y FaseTratamiento:} el plan agrupa fases secuenciales y prescribe las rutinas que el paciente debe ejecutar. La separación entre \codeinline{PlanTratamiento} y \codeinline{AsignacionRutina} permite que el plan exprese intención clínica (objetivos, fases) mientras que la asignación expresa la prescripción operativa.
 
   \item \textbf{NotaClinica como concepto propio:} las notas que el terapeuta registra durante consultas no se modelan como simples atributos de texto en \codeinline{HistorialClinico} o \codeinline{PlanTratamiento}, sino como un concepto independiente con identidad propia, fecha y autor. Esto permite trazabilidad de la evolución clínica y reutilizar la nota en distintos contextos.
 
-  \item \textbf{Paquete Agenda:} se introduce \codeinline{Cita} como concepto central de la planeación clínica. La cita ocurre entre un paciente y un terapeuta, opcionalmente ocupa una \codeinline{Sala} y dispara uno o más \codeinline{Recordatorio}. El \codeinline{HorarioDisponible} expresa la oferta semanal del terapeuta (y de la sala) y es la base contra la que se valida una nueva cita. La cita puede ligarse a un \codeinline{PlanTratamiento} para reflejar el contexto clínico de la consulta.
+  \item \textbf{Paquete Agenda:} se introduce \codeinline{Cita} como concepto central de la planeación clínica. La cita ocurre entre un paciente y un terapeuta, opcionalmente ocupa una \codeinline{Sala} y puede ligarse a un \codeinline{PlanTratamiento}. El \codeinline{HorarioDisponible} expresa la oferta semanal del terapeuta y es la base contra la que se validan tanto las citas que crea el administrador como las que el paciente agenda por sí mismo. La \codeinline{ListaEspera} permite avisar al paciente cuando se libera un hueco.
+
+  \item \textbf{Paquete Comunicación:} la mensajería en tiempo real se modela con \codeinline{Conversacion} (única entre un paciente y su terapeuta) que agrupa \codeinline{Mensaje}s. La \codeinline{Notificacion} representa el centro de avisos in-app y la \codeinline{PreferenciaNotificacion} guarda las preferencias de cada usuario (correo, recordatorios, horario silencioso).
+
+  \item \textbf{Paquete Plataforma:} el \codeinline{RegistroAuditoria} captura las acciones sensibles del sistema (inicios de sesión, consulta de historial, gestión de documentos) con su actor, entidad afectada e IP, dando trazabilidad de cumplimiento.
+
+  \item \textbf{DocumentoClinico:} los archivos del expediente (radiografías, laboratorios, consentimientos) se modelan como concepto propio del paquete Clínico, con su categoría y bandera de visibilidad para el paciente.
 \end{itemize}
 
 \section{Código PlantUML del diagrama}

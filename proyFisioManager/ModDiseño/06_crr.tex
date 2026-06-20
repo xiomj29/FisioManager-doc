@@ -17,20 +17,20 @@ Para cada componente principal se documenta: descripción, responsabilidades cla
   \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
   \midrule
   \rowcolor{fmTableAltRow}
-  Tecnología & React 18 + TypeScript + Vite + TanStack Query + Tailwind CSS \\
-  Responsabilidades & Renderizar UI responsiva para los tres roles; gestionar estado de sesión del usuario; capturar audio del paciente con MediaRecorder API; realizar llamadas autenticadas al API Gateway; mostrar dashboards y gráficas de progreso. \\
+  Tecnología & React 19 + TypeScript + Vite (PWA) + Zustand + React Router + Tailwind CSS + Socket.IO client \\
+  Responsabilidades & Renderizar UI responsiva para los tres roles; gestionar estado y sesión con Zustand; capturar audio con MediaRecorder; consumir la API por REST y recibir eventos en tiempo real por WebSocket; soportar i18n, modo claro/oscuro y uso offline (service worker). \\
   \rowcolor{fmTableAltRow}
-  Entradas & Interacción del usuario, respuestas del API Gateway, audio del micrófono. \\
-  Salidas & Peticiones HTTP/JSON al API Gateway, archivos de audio multipart, eventos analíticos. \\
+  Entradas & Interacción del usuario, respuestas REST, eventos de Socket.IO, audio del micrófono. \\
+  Salidas & Peticiones HTTP/JSON, audio multipart, mensajes por WebSocket. \\
   \rowcolor{fmTableAltRow}
-  Dependencias & API Gateway, navegador con soporte de MediaRecorder y WebRTC. \\
-  Riesgos & Compatibilidad de captura de audio en Safari iOS; fallos de red durante grabación (mitigado con reintentos y almacenamiento local temporal). \\
+  Dependencias & API REST + WebSocket; navegador con soporte de MediaRecorder. \\
+  Riesgos & Compatibilidad de captura de audio en Safari iOS; fallos de red (mitigado con reintentos, caché offline y cola de feedback diferido). \\
   \rowcolor{fmTableAltRow}
-  Atributos de calidad & Usabilidad (RNF-050, RNF-052), Rendimiento (RNF-002), Compatibilidad (RNF-070). \\
+  Atributos de calidad & Usabilidad (RNF-050, RNF-051), Compatibilidad (RNF-070). \\
   \bottomrule
 \end{tabularx}
 
-\section{CRR --- API Gateway / BFF}
+\section{CRR --- Reverse-proxy / TLS}
 
 \begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
   \toprule
@@ -38,20 +38,20 @@ Para cada componente principal se documenta: descripción, responsabilidades cla
   \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
   \midrule
   \rowcolor{fmTableAltRow}
-  Tecnología & ASP.NET Core 8 + YARP + JWT Bearer + Swagger / OpenAPI \\
-  Responsabilidades & Autenticar peticiones (JWT); autorizar según rol y política; aplicar rate limiting por usuario y por endpoint; validar contrato de entrada; enrutar a servicios de dominio; agregar respuestas cuando aplique (BFF). \\
+  Tecnología & nginx (sirve la SPA) y Caddy (HTTPS automático en producción) \\
+  Responsabilidades & Terminar TLS; servir los estáticos de la SPA; enrutar \texttt{/api}, \texttt{/uploads} y \texttt{/socket.io} hacia la API (mismo origen, sin CORS). \\
   \rowcolor{fmTableAltRow}
-  Entradas & Peticiones HTTPS desde la SPA con tokens JWT. \\
-  Salidas & Peticiones HTTP a servicios internos, respuestas JSON al cliente. \\
+  Entradas & Peticiones HTTPS de los navegadores. \\
+  Salidas & Estáticos de la SPA; proxy a la API y al canal WebSocket. \\
   \rowcolor{fmTableAltRow}
-  Dependencias & Todos los servicios de dominio, Redis (cache de tokens), proveedor de identidad. \\
-  Riesgos & Single point of failure (mitigado con réplicas y balanceador); cuellos de botella si se aplican demasiadas reglas en síncrono. \\
+  Dependencias & API REST + WebSocket; Let's Encrypt (certificados). \\
+  Riesgos & Configuración del upgrade de WebSocket; renovación de certificados (automática con Caddy). \\
   \rowcolor{fmTableAltRow}
-  Atributos de calidad & Seguridad (RNF-020, RNF-023, RNF-025, RNF-026), Rendimiento (RNF-001), Disponibilidad (RNF-040). \\
+  Atributos de calidad & Seguridad (RNF-020), Disponibilidad (RNF-040). \\
   \bottomrule
 \end{tabularx}
 
-\section{CRR --- Servicio de Pacientes}
+\section{CRR --- API REST + WebSocket}
 
 \begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
   \toprule
@@ -59,20 +59,20 @@ Para cada componente principal se documenta: descripción, responsabilidades cla
   \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
   \midrule
   \rowcolor{fmTableAltRow}
-  Tecnología & ASP.NET Core + EF Core + PostgreSQL \\
-  Responsabilidades & CRUD de pacientes y de su historial clínico; registro y edición de diagnósticos; consulta del historial completo en orden cronológico; gestión de la relación paciente-terapeuta. \\
+  Tecnología & Node.js + Express + Socket.IO + Prisma + Zod + Swagger/OpenAPI \\
+  Responsabilidades & Monolito modular (rutas → controladores → servicios → repositorios). Autenticar (JWT con refresh), autorizar por rol, validar con Zod, aplicar rate limiting, registrar auditoría, exponer la API REST y el canal en tiempo real. Concentra los módulos de pacientes, clínico, rutinas, sesiones, feedback, agenda, mensajería y notificaciones. \\
   \rowcolor{fmTableAltRow}
-  Entradas & Peticiones REST desde el API Gateway. \\
-  Salidas & Respuestas JSON, eventos de actualización en cola (PacienteAsignado, DiagnosticoRegistrado). \\
+  Entradas & Peticiones HTTPS/JSON y multipart desde la SPA; handshakes de Socket.IO con JWT. \\
+  Salidas & Respuestas JSON; eventos en vivo (\texttt{message:new}, \texttt{notification:new}); correos por SMTP. \\
   \rowcolor{fmTableAltRow}
-  Dependencias & PostgreSQL, RabbitMQ (publicación de eventos). \\
-  Riesgos & Manejo de información sensible (datos clínicos); necesidad de auditoría detallada. \\
+  Dependencias & PostgreSQL (Prisma), Redis (adapter Socket.IO), MinIO/S3, Whisper, Ollama, SMTP. \\
+  Riesgos & Punto único de despliegue (mitigado con réplicas + adapter de Redis); latencia de la IA (mitigada ejecutándola fuera del camino crítico). \\
   \rowcolor{fmTableAltRow}
-  Atributos de calidad & Privacidad (RNF-030, RNF-031), Auditoría (RNF-024), Mantenibilidad (RNF-061). \\
+  Atributos de calidad & Seguridad (RNF-020, RNF-023, RNF-026), Auditoría (RNF-024), Mantenibilidad (RNF-061, RNF-063), Disponibilidad (RNF-040). \\
   \bottomrule
 \end{tabularx}
 
-\section{CRR --- Servicio de Rutinas}
+\section{CRR --- Transcripción de voz (Whisper)}
 
 \begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
   \toprule
@@ -80,78 +80,17 @@ Para cada componente principal se documenta: descripción, responsabilidades cla
   \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
   \midrule
   \rowcolor{fmTableAltRow}
-  Tecnología & ASP.NET Core + EF Core + PostgreSQL \\
-  Responsabilidades & Mantener catálogo de ejercicios; crear, clonar y gestionar rutinas; gestionar asignaciones de rutina a paciente; manejar el ciclo de vida de SesionEjecucion. \\
+  Tecnología & Python + Whisper (CPU), invocado como subproceso desde la API \\
+  Responsabilidades & Transcribir a texto el audio del feedback del paciente. \\
   \rowcolor{fmTableAltRow}
-  Entradas & Peticiones REST desde el API Gateway, eventos de SesionFinalizada del Servicio de Feedback. \\
-  Salidas & Respuestas JSON, eventos RutinaAsignada y RutinaCompletada. \\
+  Entradas & Archivo de audio guardado por la API. \\
+  Salidas & Transcripción en texto. \\
   \rowcolor{fmTableAltRow}
-  Dependencias & PostgreSQL, RabbitMQ, Almacenamiento de objetos (videos de ejercicios). \\
-  Riesgos & Crecimiento del catálogo y necesidad de cache; concurrencia en actualización de asignaciones. \\
+  Dependencias & ffmpeg; modelo Whisper precargado en la imagen. \\
+  Riesgos & Costo de CPU de la inferencia (modelo \texttt{tiny} para acotarlo). \\
   \rowcolor{fmTableAltRow}
-  Atributos de calidad & Rendimiento (RNF-001), Escalabilidad (RNF-011, RNF-012). \\
+  Atributos de calidad & Rendimiento (RNF-003), Independencia de proveedor de IA (RNF-072). \\
   \bottomrule
 \end{tabularx}
 
-\section{CRR --- Servicio de Feedback}
-
-\begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
-  \toprule
-  \rowcolor{fmTableHeader}
-  \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
-  \midrule
-  \rowcolor{fmTableAltRow}
-  Tecnología & ASP.NET Core + EF Core + Polly + AWS SDK (S3) + RabbitMQ.Client \\
-  Responsabilidades & Recibir feedback (audio + datos); validar y persistir feedback; almacenar audio en MinIO/S3; solicitar análisis al Servicio de IA; publicar eventos de dominio. \\
-  \rowcolor{fmTableAltRow}
-  Entradas & Peticiones multipart con audio y JSON, respuesta del Servicio de IA. \\
-  Salidas & Respuestas JSON, audios en object storage, eventos publicados (FeedbackRegistrado, AlertaDolorAlto). \\
-  \rowcolor{fmTableAltRow}
-  Dependencias & PostgreSQL, MinIO/S3, RabbitMQ, Servicio de IA. \\
-  Riesgos & Latencia y caídas del servicio de IA externo (mitigado con Polly y procesamiento asíncrono); tamaño de audios y throughput de subida. \\
-  \rowcolor{fmTableAltRow}
-  Atributos de calidad & Confiabilidad (RNF-043), Seguridad (RNF-021), Rendimiento (RNF-003, RNF-004). \\
-  \bottomrule
-\end{tabularx}
-
-\section{CRR --- Servicio de IA / Orquestador}
-
-\begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
-  \toprule
-  \rowcolor{fmTableHeader}
-  \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
-  \midrule
-  \rowcolor{fmTableAltRow}
-  Tecnología & Python 3.11 + FastAPI + Whisper / OpenAI client + ElevenLabs SDK \\
-  Responsabilidades & Transcribir audio a texto; analizar sentimiento y extraer palabras clave; generar resumen y alertas clínicas; sintetizar voz cuando aplique; encapsular el proveedor concreto de IA. \\
-  \rowcolor{fmTableAltRow}
-  Entradas & Peticiones HTTP con audio o texto desde el Servicio de Feedback. \\
-  Salidas & Resultados estructurados de análisis (JSON con transcripción, sentimiento, alertas). \\
-  \rowcolor{fmTableAltRow}
-  Dependencias & Servicios externos de IA (Whisper, LLM, ElevenLabs). \\
-  Riesgos & Costo variable por uso de APIs externas; cambios de formato del proveedor (mitigado con interfaz). \\
-  \rowcolor{fmTableAltRow}
-  Atributos de calidad & Interoperabilidad (RNF-072), Rendimiento (RNF-003), Confiabilidad (RNF-043). \\
-  \bottomrule
-\end{tabularx}
-
-\section{CRR --- Servicio de Notificaciones}
-
-\begin{tabularx}{\textwidth}{>{\bfseries}L{3.5cm} X}
-  \toprule
-  \rowcolor{fmTableHeader}
-  \textbf{\color{fmAccent}Atributo} & \textbf{\color{fmAccent}Detalle} \\
-  \midrule
-  \rowcolor{fmTableAltRow}
-  Tecnología & ASP.NET Core Worker + RabbitMQ.Client + SendGrid SDK + FCM SDK \\
-  Responsabilidades & Consumir eventos de la cola; componer mensajes a partir de plantillas; enviar email y push notifications; registrar entregas y rebotes. \\
-  \rowcolor{fmTableAltRow}
-  Entradas & Eventos: RutinaAsignada, FeedbackRegistrado, AlertaDolorAlto, RecordatorioProgramado. \\
-  Salidas & Email enviado vía SMTP/SendGrid, notificaciones push vía FCM. \\
-  \rowcolor{fmTableAltRow}
-  Dependencias & RabbitMQ, SMTP/SendGrid, FCM. \\
-  Riesgos & Límites del proveedor de email; tokens FCM expirados. \\
-  \rowcolor{fmTableAltRow}
-  Atributos de calidad & Confiabilidad (RNF-040, RNF-043), Mantenibilidad (RNF-063). \\
-  \bottomrule
-\end{tabularx}
+El resumen clínico del feedback lo genera \textbf{Ollama} (LLM local) como sistema externo; el módulo de notificaciones de la API envía correos por \textbf{SMTP} y empuja avisos en vivo por \textbf{Socket.IO} (con Redis para varias instancias). La persistencia es \textbf{PostgreSQL} (Prisma), el object storage \textbf{MinIO/S3} para avatares y documentos, y los respaldos se generan con \texttt{pg\_dump} programado.

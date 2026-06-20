@@ -1,0 +1,52 @@
+@startuml FisioManager_Secuencia_AutoAgenda
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #2E75B6
+  LifeLineBorderColor #2E75B6
+  ParticipantBorderColor #2E6295
+  ParticipantBackgroundColor #438DD5
+  ParticipantFontColor white
+  ActorBorderColor #073B6F
+  ActorBackgroundColor #08427B
+  ActorFontColor #08427B
+}
+
+title Secuencia: Auto-agendamiento de cita por el paciente
+
+actor "Paciente" as paciente
+participant "SPA\n(BookAppointment)" as spa
+participant "API Express\n(appointment.controller)" as api
+participant "availability.service" as avail
+participant "appointment.service" as appt
+participant "appointment.repository" as repo
+participant "notification.service" as notif
+actor "Terapeuta" as terapeuta
+
+paciente -> spa : Abre "Agendar cita"
+spa -> api : GET /disponibilidad/{terapeuta}/slots?from&to
+api -> avail : getAvailableSlots(terapeuta, rango)
+avail -> repo : findConflict(...) por cada franja
+repo --> avail : citas existentes
+avail --> api : franjas libres
+api --> spa : lista de horarios disponibles
+spa --> paciente : Muestra horarios
+
+paciente -> spa : Selecciona un horario
+spa -> api : POST /appointments [JWT, rol PATIENT]
+api -> appt : create(datos, actor=PATIENT)
+appt -> appt : valida terapeuta asignado
+appt -> appt : assertWithinAvailability(...)
+appt -> repo : findConflict(terapeuta, fecha)
+repo --> appt : sin conflicto
+appt -> repo : create(cita)
+repo --> appt : cita
+appt -> notif : createInApp(terapeuta, "Nueva cita agendada")
+notif --> terapeuta : notification:new
+appt --> api : cita
+api --> spa : 201 Created
+spa --> paciente : Confirmacion de la cita
+
+@enduml

@@ -57,6 +57,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-013}{Consulta de historial}{El terapeuta y el paciente (en modo lectura) deben poder consultar el historial clínico completo en orden cronológico.}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-014}{Edición de diagnóstico}{El terapeuta debe poder editar los diagnósticos registrados por él mismo.}{\prMedia}
+  \rfrow{RF-090}{Gestión de documentos clínicos}{El terapeuta debe poder adjuntar al historial del paciente documentos (imágenes o PDF, como radiografías, laboratorios o consentimientos), categorizarlos y marcar su visibilidad para el paciente.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -133,6 +134,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-035}{Registro de estado emocional}{El paciente debe poder registrar su estado emocional mediante una escala visual (muy bien, bien, neutro, mal, muy mal).}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-036}{Almacenamiento seguro del audio}{El sistema debe almacenar el audio en un repositorio de objetos cifrado, asociado al feedback correspondiente.}{\prAlta}
+  \rfrow{RF-091}{Mapa corporal de dolor}{El paciente debe poder marcar sobre un mapa corporal las zonas donde siente dolor y su intensidad al registrar el feedback, para localizar el malestar.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -180,6 +182,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rowcolor{fmTableAltRow}
   \rfrow{RF-054}{Indicadores de clínica}{El administrador de la clínica debe poder consultar indicadores agregados (pacientes activos, sesiones completadas, adherencia promedio).}{\prMedia}
   \rfrow{RF-055}{Comparativo de desempeño de terapeutas}{El administrador debe poder consultar un comparativo de desempeño entre terapeutas de la clínica (pacientes activos, adherencia promedio de sus pacientes, sesiones completadas) para apoyar la supervisión operativa.}{\prMedia}
+  \rfrow{RF-092}{Escalas de resultado clínico}{El terapeuta debe poder registrar mediciones clínicas objetivas del paciente (rango de movimiento, fuerza, escalas funcionales, EVA) y visualizar su evolución en el tiempo mediante gráficas.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -218,6 +221,7 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rfrow{RF-071}{Notificación de feedback al terapeuta}{El sistema debe notificar al terapeuta cuando un paciente registre feedback con alerta clínica.}{\prAlta}
   \rowcolor{fmTableAltRow}
   \rfrow{RF-072}{Preferencias de notificación}{El usuario debe poder configurar canales y horarios de notificación preferidos.}{\prMedia}
+  \rfrow{RF-093}{Centro de notificaciones in-app}{El sistema debe ofrecer un centro de notificaciones dentro de la aplicación (campana con conteo de no leídas y listado), con avisos en tiempo real de citas, rutinas, mensajes y alertas de dolor; respetando el horario silencioso configurado.}{\prMedia}
   \bottomrule
 \end{longtable}
 
@@ -248,6 +252,25 @@ Esta sección describe los requerimientos funcionales (RF) y no funcionales (RNF
   \rowcolor{fmTableAltRow}
   \rfrow{RF-086}{Consulta de agenda}{El terapeuta debe poder consultar su agenda diaria y semanal con las citas programadas.}{\prAlta}
   \rfrow{RF-087}{Vinculación de cita a plan de tratamiento}{Una cita debe poder asociarse a un plan de tratamiento para reflejar el contexto clínico de la consulta.}{\prBaja}
+  \rfrow{RF-094}{Auto-agendamiento del paciente}{El paciente debe poder consultar las franjas libres de su terapeuta asignado y agendar por sí mismo una cita, validando disponibilidad y colisiones.}{\prMedia}
+  \rfrow{RF-095}{Citas recurrentes y lista de espera}{El sistema debe permitir crear series de citas recurrentes y que el paciente se inscriba en una lista de espera para ser avisado cuando se libere un hueco dentro de un rango de fechas.}{\prBaja}
+  \bottomrule
+\end{longtable}
+
+\subsection{Módulo de Mensajería}
+
+\begin{longtable}{L{1.6cm} L{3.2cm} L{8cm} L{1.5cm}}
+  \toprule
+  \rowcolor{fmTableHeader}
+  \textbf{\color{fmAccent}ID} &
+  \textbf{\color{fmAccent}Nombre} &
+  \textbf{\color{fmAccent}Descripcion} &
+  \textbf{\color{fmAccent}Prioridad} \\
+  \midrule
+  \endhead
+
+  \rowcolor{fmTableAltRow}
+  \rfrow{RF-096}{Mensajería en tiempo real}{El paciente y su terapeuta asignado deben poder intercambiar mensajes en una conversación privada, con entrega en tiempo real, indicador de no leídos y notificación al receptor.}{\prMedia}
   \bottomrule
 \end{longtable}
 

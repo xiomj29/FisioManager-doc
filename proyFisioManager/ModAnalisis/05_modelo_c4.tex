@@ -21,12 +21,12 @@ El diagrama de contexto muestra a FisioManager como una caja azul y describe sus
   \item \actor{Paciente:} interactúa con FisioManager vía web responsiva para visualizar rutinas, ejecutar ejercicios y registrar feedback por voz.
   \item \actor{Terapeuta:} gestiona pacientes, crea rutinas, asigna y supervisa progreso.
   \item \actor{Administrador:} actor único que supervisa indicadores agregados de uso y desempeño de la clínica y, a la vez, gestiona usuarios, accesos y monitoreo técnico de la plataforma.
-  \item \actor{Servicio de IA (STT + LLM):} transcribe audio y analiza sentimientos.
-  \item \actor{ElevenLabs (TTS):} genera audio de respuesta cuando aplique.
-  \item \actor{Almacenamiento de Objetos (MinIO/S3):} persiste audios y videos.
-  \item \actor{Proveedor de Email (SMTP/SendGrid):} envía notificaciones por correo.
-  \item \actor{Notificaciones Push (FCM):} envía recordatorios a dispositivos móviles.
+  \item \actor{Ollama (LLM local):} genera el resumen clínico del feedback del paciente.
+  \item \actor{Almacenamiento de Objetos (MinIO/S3):} persiste avatares, documentos clínicos y audios.
+  \item \actor{Proveedor de Email (SMTP):} envía notificaciones y recordatorios por correo.
 \end{itemize}
+
+La transcripción de voz (Whisper) se ejecuta dentro del propio sistema, por lo que no constituye un sistema externo.
 
 \section{Nivel 2: Diagrama de Contenedores}
 
@@ -51,61 +51,49 @@ El diagrama de contenedores descompone FisioManager en sus aplicaciones, servici
   \endhead
 
   \rowcolor{fmTableAltRow}
+  \actor{Reverse-proxy / TLS} &
+  Caddy / nginx &
+  Termina HTTPS, sirve los archivos estáticos de la SPA y enruta \texttt{/api}, \texttt{/uploads} y \texttt{/socket.io} hacia la API. \\
+
   \actor{Aplicación Web SPA} &
-  React + TypeScript &
-  Interfaz de usuario única para los tres tipos de actores. Captura audio del paciente directamente en el navegador. \\
-
-  \actor{API Gateway / BFF} &
-  ASP.NET Core 8 &
-  Punto de entrada unificado. Realiza autenticación JWT, autorización por rol, validación, rate limiting y enrutamiento hacia los servicios de dominio. \\
+  React + TypeScript + Vite (PWA) &
+  Interfaz de usuario única para los tres actores. Captura audio en el navegador, soporta i18n, modo claro/oscuro y uso offline. \\
 
   \rowcolor{fmTableAltRow}
-  \actor{Servicio de Pacientes} &
-  ASP.NET Core &
-  Gestiona pacientes, historial clínico, diagnósticos y la relación con terapeutas. \\
+  \actor{API REST + WebSocket} &
+  Node.js + Express + Socket.IO &
+  Monolito modular (rutas → controladores → servicios → repositorios). Autenticación JWT, autorización por rol, validación con Zod, rate limiting, auditoría y acceso a datos con Prisma. \\
 
-  \actor{Servicio de Rutinas} &
-  ASP.NET Core &
-  Mantiene catálogo de ejercicios, gestiona rutinas, asignaciones y sesiones de ejecución. \\
-
-  \rowcolor{fmTableAltRow}
-  \actor{Servicio de Feedback} &
-  ASP.NET Core &
-  Recibe el audio y datos del feedback del paciente. Coordina su almacenamiento, publicación de eventos y solicitud de análisis con IA. \\
-
-  \actor{Servicio de IA / Orquestador} &
-  Python FastAPI &
-  Encapsula los proveedores externos de IA. Realiza transcripción (Whisper), análisis de sentimiento y generación asistida de rutinas. \\
+  \actor{Transcripción de voz} &
+  Python + Whisper &
+  Convierte el audio del feedback a texto; se ejecuta como subproceso dentro de la imagen de la API. \\
 
   \rowcolor{fmTableAltRow}
-  \actor{Servicio de Reportes} &
-  ASP.NET Core &
-  Genera dashboards, reportes de progreso PDF y métricas agregadas de la clínica. \\
+  \actor{Base de Datos} &
+  PostgreSQL 16 (Prisma) &
+  Persistencia transaccional principal: usuarios, historial clínico, rutinas, sesiones, feedback, citas, mensajes y auditoría. \\
 
-  \actor{Servicio de Notificaciones} &
-  ASP.NET Worker &
-  Consume eventos de la cola de mensajes y envía recordatorios por email y push notifications. \\
-
-  \rowcolor{fmTableAltRow}
-  \actor{BD Relacional} &
-  PostgreSQL 16 &
-  Persistencia transaccional principal: usuarios, rutinas, sesiones, feedback, historial clínico. \\
-
-  \actor{Cache Distribuido} &
+  \actor{Cache / PubSub} &
   Redis &
-  Sesiones, tokens, resultados temporales de IA y cola de espera ligera. \\
+  Adapter de Socket.IO para propagar mensajes y notificaciones entre varias instancias de la API (escalado horizontal). \\
 
   \rowcolor{fmTableAltRow}
-  \actor{Cola de Mensajes} &
-  RabbitMQ &
-  Comunicación asíncrona entre servicios. Publica eventos como FeedbackRegistrado o AlertaDolorAlto. \\
+  \actor{Object Storage} &
+  MinIO / S3 &
+  Almacena avatares y documentos clínicos cuando se activa el modo de almacenamiento de objetos. \\
+
+  \actor{Respaldos de BD} &
+  pg\_dump programado &
+  Genera copias de seguridad periódicas de PostgreSQL con retención configurable. \\
 
   \bottomrule
 \end{longtable}
 
+Ollama (LLM local) y el proveedor SMTP se consideran sistemas externos a la frontera de despliegue.
+
 \section{Nivel 3: Diagrama de Componentes}
 
-El nivel 3 descompone un contenedor específico en sus componentes internos. Para FisioManager se documenta el \textbf{Servicio de Feedback}, por ser el componente con mayor complejidad de orquestación (audio, IA, eventos asíncronos).
+El nivel 3 descompone la \textbf{API} en sus componentes internos, tomando como ejemplo el flujo de \textbf{Feedback}, por ser el de mayor complejidad de orquestación (audio, transcripción y resumen con IA, alertas). Todos los módulos siguen el mismo patrón en capas: \textit{rutas → controladores → servicios → repositorios}.
 
 \begin{figure}[H]
   \centering
@@ -114,17 +102,15 @@ El nivel 3 descompone un contenedor específico en sus componentes internos. Par
   \label{fig:c4-componentes}
 \end{figure}
 
-\subsection{Componentes del Servicio de Feedback}
+\subsection{Componentes del flujo de Feedback}
 
 \begin{itemize}
-  \item \textbf{FeedbackController:} expone los endpoints REST públicos para registro y consulta de feedback.
-  \item \textbf{SesionController:} expone los endpoints de inicio, marcado de ejercicios y finalización de sesión.
-  \item \textbf{FeedbackApplicationService:} implementa el caso de uso de registro de feedback orquestando almacenamiento de audio, persistencia, publicación de eventos y solicitud de análisis.
-  \item \textbf{SesionApplicationService:} gestiona el ciclo de vida de las sesiones de ejecución.
-  \item \textbf{AudioStorageService:} encapsula la subida y descarga de audio sobre MinIO/S3, aplicando compresión y conversión de formato cuando aplique.
-  \item \textbf{AnalisisIAClient:} cliente HTTP tipado hacia el Servicio de IA, con políticas de reintento exponencial y circuit breaker.
-  \item \textbf{EventPublisher:} publica eventos de dominio (FeedbackRegistrado, AlertaDolorAlto) sobre RabbitMQ.
-  \item \textbf{FeedbackRepository / SesionRepository:} abstraen el acceso a datos sobre Entity Framework Core.
-  \item \textbf{FeedbackValidator:} valida los datos recibidos (rango de dolor, formato y tamaño de audio, longitud de transcripción) usando FluentValidation.
-  \item \textbf{FeedbackMapper:} convierte entre DTOs públicos y entidades de dominio mediante AutoMapper.
+  \item \textbf{Middlewares:} \texttt{auth} (verificación JWT), \texttt{role} (autorización por rol), \texttt{validate} (esquemas Zod) y \texttt{rate-limit} se aplican antes de cada ruta.
+  \item \textbf{feedback.routes:} define los endpoints \texttt{POST /feedback} y \texttt{POST /feedback/audio} sobre un Router de Express.
+  \item \textbf{feedback.controller:} adapta la petición/respuesta (\texttt{catchAsync}, helpers \texttt{ok}/\texttt{created}) y delega en los servicios.
+  \item \textbf{feedback.service:} implementa las reglas de negocio del registro de feedback y dispara la alerta de dolor alto.
+  \item \textbf{ai.service:} ejecuta \texttt{transcribeAudio} con Whisper y \texttt{generateClinicalSummary} con Ollama.
+  \item \textbf{storage (lib):} guarda el audio en disco local o en MinIO/S3 según la configuración.
+  \item \textbf{notification.service:} crea la notificación in-app, envía el correo y empuja el evento por Socket.IO.
+  \item \textbf{feedback.repository / painPoint.repository:} encapsulan el acceso a datos mediante Prisma Client.
 \end{itemize}

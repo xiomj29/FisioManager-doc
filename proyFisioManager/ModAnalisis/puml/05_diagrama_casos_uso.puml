@@ -54,10 +54,6 @@ rectangle "FisioManager" {
     usecase "Elaborar plan\nde tratamiento" as UC28
     usecase "Registrar nota\nclinica" as UC29
 
-    usecase "Definir disponibilidad\ny salas" as UC60
-    usecase "Agendar cita" as UC61
-    usecase "Consultar agenda" as UC62
-
     usecase "Supervisar uso\ndel sistema" as UC30
     usecase "Evaluar desempeno\nde terapeutas" as UC31
 
@@ -66,7 +62,18 @@ rectangle "FisioManager" {
     usecase "Monitorear sistema" as UC42
 
     usecase "Transcribir audio" as UC50
-    usecase "Analizar sentimiento" as UC51
+    usecase "Resumir feedback\nclinico (LLM)" as UC51
+
+    usecase "Definir disponibilidad\ny salas" as UC60
+    usecase "Agendar cita" as UC61
+    usecase "Consultar agenda" as UC62
+
+    usecase "Unirse a lista\nde espera" as UC64
+    usecase "Enviar mensajes\nen tiempo real" as UC65
+    usecase "Consultar centro\nde notificaciones" as UC66
+    usecase "Gestionar documentos\nclinicos" as UC67
+    usecase "Registrar escalas\nde resultado" as UC68
+    usecase "Marcar mapa\ncorporal de dolor" as UC69
 }
 
 paciente --> UC01
@@ -79,6 +86,11 @@ paciente --> UC13
 paciente --> UC14
 paciente --> UC15
 paciente --> UC16
+paciente --> UC61
+paciente --> UC64
+paciente --> UC65
+paciente --> UC66
+paciente --> UC69
 
 terapeuta --> UC01
 terapeuta --> UC02
@@ -95,8 +107,10 @@ terapeuta --> UC29
 terapeuta --> UC60
 terapeuta --> UC61
 terapeuta --> UC62
-
-paciente --> UC61
+terapeuta --> UC65
+terapeuta --> UC66
+terapeuta --> UC67
+terapeuta --> UC68
 
 admin --> UC01
 admin --> UC30
@@ -106,6 +120,7 @@ admin --> UC40
 admin --> UC41
 admin --> UC42
 admin --> UC60
+admin --> UC66
 
 UC12 ..> UC50 : <<include>>
 UC12 ..> UC51 : <<include>>
@@ -114,6 +129,7 @@ ia --> UC50
 ia --> UC51
 
 UC11 ..> UC12 : <<extend>>
+UC12 ..> UC69 : <<extend>>
 UC15 ..> UC27 : <<extend>>
 
 @enduml

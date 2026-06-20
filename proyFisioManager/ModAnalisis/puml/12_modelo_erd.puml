@@ -17,296 +17,376 @@ skinparam class {
 hide circle
 hide methods
 
-title Modelo de Base de Datos ERD - FisioManager
+title Modelo de Base de Datos ERD - FisioManager\n<size:11>PostgreSQL gestionado con Prisma ORM (claves primarias tipo cuid)</size>
 
 entity "usuarios" as usuarios {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * nombre : VARCHAR(100) <<NOT NULL>>
-  * email : VARCHAR(150) <<UNIQUE, NOT NULL>>
-  * password_hash : VARCHAR(255) <<NOT NULL>>
-  * rol : ENUM('PACIENTE','TERAPEUTA','ADMIN') <<NOT NULL>>
-  avatar_url : VARCHAR(500)
-  telefono : VARCHAR(20)
+  * nombre : TEXT <<NOT NULL>>
+  * email : TEXT <<UNIQUE, NOT NULL>>
+  * password : TEXT <<NOT NULL>>
+  * rol : TEXT <<PATIENT|THERAPIST|ADMIN>>
   * activo : BOOLEAN <<DEFAULT true>>
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  * email_verificado : BOOLEAN <<DEFAULT true>>
+  avatar_url : TEXT
+  telefono : TEXT
+  consentimiento_audio_at : TIMESTAMP
+  * created_at : TIMESTAMP <<DEFAULT now()>>
   * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
-entity "pacientes" as pacientes {
-  * **usuario_id** : INT <<PK, FK>>
+entity "perfiles_paciente" as pacientes {
+  * **usuario_id** : TEXT <<PK, FK>>
   --
   * edad : INT <<NOT NULL>>
-  condicion : VARCHAR(255)
-  * terapeuta_id : INT <<FK -> usuarios.id>>
-  fecha_nacimiento : DATE
-  genero : ENUM('M','F','OTRO')
-  direccion : VARCHAR(300)
-  contacto_emergencia : VARCHAR(100)
+  * condicion : TEXT <<NOT NULL>>
+  * terapeuta_id : TEXT <<FK -> usuarios.id>>
 }
 
-entity "terapeutas" as terapeutas {
-  * **usuario_id** : INT <<PK, FK>>
+entity "perfiles_terapeuta" as terapeutas {
+  * **usuario_id** : TEXT <<PK, FK>>
   --
-  especialidad : VARCHAR(150)
-  cedula_profesional : VARCHAR(50) <<UNIQUE>>
-  anios_experiencia : INT
-  horario_atencion : VARCHAR(100)
-  max_pacientes : INT <<DEFAULT 20>>
+  cedula : TEXT
+  especialidad : TEXT
 }
 
-entity "administradores" as administradores {
-  * **usuario_id** : INT <<PK, FK>>
+entity "disponibilidad_terapeuta" as disponibilidad {
+  * **id** : TEXT <<PK, cuid>>
   --
-  nivel_acceso : ENUM('TOTAL','PARCIAL') <<DEFAULT 'TOTAL'>>
-  area_responsable : VARCHAR(100)
+  * terapeuta_id : TEXT <<FK -> usuarios.id>>
+  * dia_semana : INT <<0=Dom..6=Sab>>
+  * hora_inicio : TEXT <<HH:MM>>
+  * hora_fin : TEXT <<HH:MM>>
+  .. UNIQUE(terapeuta_id, dia_semana) ..
 }
 
 entity "historial_clinico" as historial {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * fecha_apertura : DATE <<NOT NULL>>
-  antecedentes_personales : TEXT
-  antecedentes_familiares : TEXT
+  * paciente_id : TEXT <<UNIQUE, FK>>
+  tipo_sangre : TEXT
   alergias : TEXT
-  medicamentos_actuales : TEXT
-  * estado : ENUM('ACTIVO','CERRADO') <<DEFAULT 'ACTIVO'>>
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  antecedentes : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
   * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
 entity "diagnosticos" as diagnosticos {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * historial_id : INT <<FK -> historial_clinico.id>>
-  * terapeuta_id : INT <<FK -> terapeutas.usuario_id>>
-  * codigo_cie10 : VARCHAR(10) <<NOT NULL>>
+  * historial_id : TEXT <<FK>>
+  * codigo_cie10 : TEXT <<NOT NULL>>
   * descripcion : TEXT <<NOT NULL>>
-  * fecha_diagnostico : DATE <<NOT NULL>>
-  severidad : ENUM('LEVE','MODERADO','SEVERO')
-  * activo : BOOLEAN <<DEFAULT true>>
+  * estado : TEXT <<ACTIVE|RESOLVED>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+  * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
 entity "notas_clinicas" as notas {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * historial_id : INT <<FK -> historial_clinico.id>>
-  * terapeuta_id : INT <<FK -> terapeutas.usuario_id>>
+  * historial_id : TEXT <<FK>>
+  * autor_id : TEXT <<FK -> usuarios.id>>
   * contenido : TEXT <<NOT NULL>>
-  * tipo : ENUM('EVOLUCION','INTERCONSULTA','ALTA')
-  * fecha : TIMESTAMP <<NOT NULL>>
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  * visible_paciente : BOOLEAN <<DEFAULT false>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "documentos_clinicos" as documentos {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * paciente_id : TEXT <<FK>>
+  * subido_por : TEXT <<FK -> usuarios.id>>
+  * nombre_archivo : TEXT <<NOT NULL>>
+  * url_archivo : TEXT <<NOT NULL>>
+  * mime_type : TEXT <<NOT NULL>>
+  * tamano_bytes : INT <<NOT NULL>>
+  * categoria : TEXT <<XRAY|LAB|CONSENT|REPORT|OTHER>>
+  * visible_paciente : BOOLEAN <<DEFAULT false>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
 }
 
 entity "planes_tratamiento" as planes {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * terapeuta_id : INT <<FK -> terapeutas.usuario_id>>
-  * diagnostico_id : INT <<FK -> diagnosticos.id>>
-  * titulo : VARCHAR(200) <<NOT NULL>>
-  * objetivo : TEXT <<NOT NULL>>
-  * fecha_inicio : DATE <<NOT NULL>>
-  fecha_fin_estimada : DATE
-  * estado : ENUM('ACTIVO','PAUSADO','COMPLETADO','CANCELADO')
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  * paciente_id : TEXT <<FK>>
+  * terapeuta_id : TEXT <<FK>>
+  * nombre : TEXT <<NOT NULL>>
+  objetivo_clinico : TEXT
+  * fecha_inicio : TIMESTAMP <<NOT NULL>>
+  fecha_fin : TIMESTAMP
+  * estado : TEXT <<ACTIVE|COMPLETED|SUSPENDED>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
   * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
 entity "fases_tratamiento" as fases {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * plan_id : INT <<FK -> planes_tratamiento.id>>
-  * nombre : VARCHAR(150) <<NOT NULL>>
-  * numero_fase : INT <<NOT NULL>>
-  * objetivo_fase : TEXT <<NOT NULL>>
-  duracion_semanas : INT
-  * estado : ENUM('PENDIENTE','EN_CURSO','COMPLETADA')
+  * plan_id : TEXT <<FK>>
+  * nombre : TEXT <<NOT NULL>>
+  * orden : INT <<NOT NULL>>
+  * duracion_semanas : INT <<NOT NULL>>
+  objetivos : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "plantillas_actividad" as plantillas {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * titulo : TEXT <<NOT NULL>>
+  * descripcion : TEXT <<NOT NULL>>
+  * tipo : TEXT <<PHYSICAL|BREATHING>>
+  parte_cuerpo : TEXT <<KNEE|BACK|...>>
+  video_url : TEXT
+  imagen_url : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
 }
 
 entity "rutinas" as rutinas {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * titulo : VARCHAR(200) <<NOT NULL>>
-  * tipo : ENUM('TRATAMIENTO','RELAJACION') <<NOT NULL>>
+  paciente_id : TEXT <<FK (null=plantilla)>>
+  * titulo : TEXT <<NOT NULL>>
+  * tipo : TEXT <<TREATMENT|RELAXATION>>
   * completada : BOOLEAN <<DEFAULT false>>
-  fecha_asignacion : DATE
-  descripcion : TEXT
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  fecha_asignacion : TIMESTAMP
+  * created_at : TIMESTAMP <<DEFAULT now()>>
   * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
-entity "ejercicios" as ejercicios {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+entity "actividades" as actividades {
+  * **id** : TEXT <<PK, cuid>>
   --
-  * titulo : VARCHAR(200) <<NOT NULL>>
-  descripcion : TEXT
-  * tipo : ENUM('FISICO','RESPIRACION') <<NOT NULL>>
-  parte_cuerpo : ENUM('RODILLA','ESPALDA','HOMBRO',\n'CUELLO','BRAZO','CADERA','TOBILLO','OTRO')
-  video_url : VARCHAR(500)
-  imagen_url : VARCHAR(500)
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
-}
-
-entity "parametros_ejercicio" as parametros {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
-  --
-  * rutina_id : INT <<FK -> rutinas.id>>
-  * ejercicio_id : INT <<FK -> ejercicios.id>>
+  * rutina_id : TEXT <<FK>>
+  plantilla_id : TEXT
+  * titulo : TEXT <<NOT NULL>>
+  * descripcion : TEXT <<NOT NULL>>
+  * duracion_minutos : INT <<NOT NULL>>
+  descanso_segundos : INT
+  * repeticiones : INT <<NOT NULL>>
+  * tipo : TEXT <<PHYSICAL|BREATHING>>
   * orden : INT <<NOT NULL>>
-  * duracion_minutos : DECIMAL(5,2) <<NOT NULL>>
-  * repeticiones : INT <<DEFAULT 1>>
-  * descanso_segundos : INT <<DEFAULT 30>>
-  instrucciones_extra : TEXT
 }
 
 entity "asignaciones_rutina" as asignaciones {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * rutina_origen_id : INT <<FK -> rutinas.id>>
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * terapeuta_id : INT <<FK -> terapeutas.usuario_id>>
-  * fecha_asignacion : TIMESTAMP <<DEFAULT NOW()>>
-  fecha_inicio : DATE
-  fecha_fin : DATE
-  * estado : ENUM('ACTIVA','PAUSADA','COMPLETADA','CANCELADA')
-  notas_terapeuta : TEXT
-}
-
-entity "sesiones_ejecucion" as sesiones {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
-  --
-  * asignacion_id : INT <<FK -> asignaciones_rutina.id>>
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
+  * rutina_id : TEXT <<FK>>
+  * paciente_id : TEXT <<FK>>
+  * terapeuta_id : TEXT <<FK>>
+  fase_id : TEXT <<FK -> fases.id>>
   * fecha_inicio : TIMESTAMP <<NOT NULL>>
   fecha_fin : TIMESTAMP
-  * estado : ENUM('EN_CURSO','COMPLETADA','ABANDONADA')
-  progreso_porcentaje : DECIMAL(5,2)
-  ejercicios_completados : INT
-  tiempo_total_minutos : DECIMAL(5,2)
+  * frecuencia : TEXT <<DAILY|EVERY_OTHER_DAY|WEEKLY>>
+  * estado : TEXT <<ACTIVE|PAUSED|CANCELLED>>
+  ultimo_recordatorio_at : TIMESTAMP
+}
+
+entity "sesiones" as sesiones {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * rutina_id : TEXT <<FK>>
+  * paciente_id : TEXT <<FK>>
+  * estado : TEXT <<IN_PROGRESS|FINISHED>>
+  tasa_cumplimiento : FLOAT
+  * iniciada_at : TIMESTAMP <<DEFAULT now()>>
+  finalizada_at : TIMESTAMP
+}
+
+entity "sesion_ejercicios" as sesionEj {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * sesion_id : TEXT <<FK>>
+  * actividad_id : TEXT
+  * orden : INT
+  * estado : TEXT <<COMPLETED|SKIPPED>>
+  .. UNIQUE(sesion_id, actividad_id) ..
 }
 
 entity "feedback" as feedback {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * sesion_id : INT <<FK -> sesiones_ejecucion.id>>
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * rutina_id : INT <<FK -> rutinas.id>>
-  * nivel_dolor : INT <<CHECK (1-10)>>
-  * estado_emocional : ENUM('EXCELENTE','BIEN',\n'REGULAR','MAL','TERRIBLE')
-  audio_url : VARCHAR(500)
-  comentario_texto : TEXT
-  * fecha : TIMESTAMP <<DEFAULT NOW()>>
+  rutina_id : TEXT <<FK>>
+  * paciente_id : TEXT <<FK>>
+  * nivel_dolor : INT <<1-10>>
+  * estado_emocional : TEXT <<GREAT|GOOD|OK|BAD|TERRIBLE>>
+  audio_url : TEXT
+  transcripcion : TEXT
+  resumen_ia : TEXT
+  * fecha : TIMESTAMP <<DEFAULT now()>>
 }
 
-entity "analisis_ia" as analisis_ia {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+entity "puntos_dolor" as puntosDolor {
+  * **id** : TEXT <<PK, cuid>>
   --
-  * feedback_id : INT <<FK -> feedback.id, UNIQUE>>
-  transcripcion_audio : TEXT
-  * resumen : TEXT <<NOT NULL>>
-  sentimiento : ENUM('POSITIVO','NEUTRAL','NEGATIVO')
-  alertas : TEXT
-  recomendaciones : TEXT
-  * confianza_score : DECIMAL(3,2) <<CHECK (0-1)>>
-  * procesado_at : TIMESTAMP <<NOT NULL>>
-  * modelo_version : VARCHAR(50)
+  feedback_id : TEXT <<FK>>
+  * paciente_id : TEXT
+  * parte_cuerpo : TEXT <<KNEE|BACK|...>>
+  lado : TEXT <<LEFT|RIGHT|CENTER>>
+  * intensidad : INT <<1-10>>
+  nota : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "escalas_resultado" as escalas {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * paciente_id : TEXT
+  * terapeuta_id : TEXT
+  * tipo : TEXT <<ROM|STRENGTH|FUNCTIONAL|VAS>>
+  etiqueta : TEXT
+  * valor : FLOAT <<NOT NULL>>
+  unidad : TEXT
+  * medido_at : TIMESTAMP <<DEFAULT now()>>
 }
 
 entity "citas" as citas {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * terapeuta_id : INT <<FK -> terapeutas.usuario_id>>
+  * paciente_id : TEXT <<FK>>
+  * terapeuta_id : TEXT <<FK>>
   * fecha_hora : TIMESTAMP <<NOT NULL>>
-  * estado : ENUM('PROGRAMADA','CANCELADA','COMPLETADA')
-  * sala_id : INT <<FK -> salas.id>>
+  * estado : TEXT <<SCHEDULED|CONFIRMED|CANCELLED|COMPLETED>>
+  sala_id : TEXT <<FK>>
+  plan_tratamiento_id : TEXT <<FK>>
   notas : TEXT
-  recordatorio_enviado : BOOLEAN <<DEFAULT false>>
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  * recordada_24h : BOOLEAN <<DEFAULT false>>
+  grupo_recurrencia_id : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
   * updated_at : TIMESTAMP <<ON UPDATE>>
 }
 
 entity "salas" as salas {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+  * **id** : TEXT <<PK, cuid>>
   --
-  * nombre : VARCHAR(100) <<NOT NULL>>
+  * nombre : TEXT <<NOT NULL>>
+  ubicacion : TEXT
   * capacidad : INT <<DEFAULT 1>>
   equipamiento : TEXT
-  * piso : INT
-  * disponible : BOOLEAN <<DEFAULT true>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
 }
 
-entity "recordatorios" as recordatorios {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+entity "lista_espera" as listaEspera {
+  * **id** : TEXT <<PK, cuid>>
   --
-  * cita_id : INT <<FK -> citas.id>>
-  * usuario_id : INT <<FK -> usuarios.id>>
-  * tipo : ENUM('EMAIL','SMS','PUSH') <<NOT NULL>>
-  * mensaje : TEXT <<NOT NULL>>
-  * fecha_envio : TIMESTAMP <<NOT NULL>>
-  * enviado : BOOLEAN <<DEFAULT false>>
-  fecha_enviado_real : TIMESTAMP
-  * intentos : INT <<DEFAULT 0>>
+  * paciente_id : TEXT
+  * terapeuta_id : TEXT
+  * desde : TIMESTAMP <<NOT NULL>>
+  * hasta : TIMESTAMP <<NOT NULL>>
+  * estado : TEXT <<WAITING|NOTIFIED|FULFILLED|CANCELLED>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
 }
 
-entity "modulos_bienestar" as bienestar {
-  * **id** : INT <<PK, AUTO_INCREMENT>>
+entity "conversaciones" as conversaciones {
+  * **id** : TEXT <<PK, cuid>>
   --
-  * paciente_id : INT <<FK -> pacientes.usuario_id>>
-  * fecha : DATE <<NOT NULL>>
-  horas_sueno : DECIMAL(3,1)
-  nivel_estres : INT <<CHECK (1-10)>>
-  nivel_energia : INT <<CHECK (1-10)>>
-  hidratacion_litros : DECIMAL(3,1)
-  notas : TEXT
-  * created_at : TIMESTAMP <<DEFAULT NOW()>>
+  * paciente_id : TEXT
+  * terapeuta_id : TEXT
+  * ultimo_mensaje_at : TIMESTAMP <<DEFAULT now()>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+  .. UNIQUE(paciente_id, terapeuta_id) ..
 }
 
+entity "mensajes" as mensajes {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * conversacion_id : TEXT <<FK>>
+  * emisor_id : TEXT
+  * contenido : TEXT <<NOT NULL>>
+  leido_at : TIMESTAMP
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "notificaciones" as notificaciones {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * usuario_id : TEXT <<FK>>
+  * tipo : TEXT <<APPOINTMENT|ROUTINE|HIGH_PAIN|MESSAGE|SYSTEM>>
+  * titulo : TEXT <<NOT NULL>>
+  * cuerpo : TEXT <<NOT NULL>>
+  link_url : TEXT
+  * leida : BOOLEAN <<DEFAULT false>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "preferencias_notificacion" as prefsNotif {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * usuario_id : TEXT <<UNIQUE, FK>>
+  * email_habilitado : BOOLEAN <<DEFAULT true>>
+  * recordatorios_rutina : BOOLEAN <<DEFAULT true>>
+  * recordatorios_cita : BOOLEAN <<DEFAULT true>>
+  silencio_inicio : TEXT <<HH:MM>>
+  silencio_fin : TEXT <<HH:MM>>
+}
+
+entity "auditoria" as auditoria {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  usuario_id : TEXT
+  * accion : TEXT <<LOGIN|VIEW_CLINICAL_HISTORY|...>>
+  * entidad : TEXT
+  entidad_id : TEXT
+  metadata : TEXT <<JSON>>
+  ip : TEXT
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
+
+entity "tokens_refresco" as refresh {
+  * **id** : TEXT <<PK, cuid>>
+  --
+  * token : TEXT <<UNIQUE>>
+  * usuario_id : TEXT <<FK>>
+  * expira_at : TIMESTAMP <<NOT NULL>>
+  * created_at : TIMESTAMP <<DEFAULT now()>>
+}
 
 usuarios ||--o| pacientes : "es un"
 usuarios ||--o| terapeutas : "es un"
-usuarios ||--o| administradores : "es un"
+usuarios ||--o| prefsNotif : "configura"
+usuarios ||--o{ notificaciones : "recibe"
+usuarios ||--o{ refresh : "posee"
+usuarios ||--o{ disponibilidad : "ofrece"
 
 pacientes }|--|| terapeutas : "asignado a"
-
-pacientes ||--|{ historial : "tiene"
+pacientes ||--|| historial : "tiene"
 historial ||--o{ diagnosticos : "contiene"
-historial ||--o{ notas : "tiene"
-terapeutas ||--o{ diagnosticos : "registra"
-terapeutas ||--o{ notas : "escribe"
+historial ||--o{ notas : "registra"
+pacientes ||--o{ documentos : "adjunta"
 
 pacientes ||--o{ planes : "recibe"
 terapeutas ||--o{ planes : "define"
-diagnosticos ||--o{ planes : "origina"
 planes ||--|{ fases : "compuesto por"
 
+plantillas ||--o{ actividades : "instancia"
 rutinas }o--o| pacientes : "asignada a"
-ejercicios ||--o{ parametros : "configurado en"
-rutinas ||--|{ parametros : "contiene"
+rutinas ||--|{ actividades : "contiene"
 
 terapeutas ||--o{ asignaciones : "asigna"
 pacientes ||--o{ asignaciones : "recibe"
 rutinas ||--o{ asignaciones : "origen"
+fases ||--o{ asignaciones : "prescribe"
 
 asignaciones ||--o{ sesiones : "genera"
-pacientes ||--o{ sesiones : "ejecuta"
+rutinas ||--o{ sesiones : "ejecuta"
+sesiones ||--|{ sesionEj : "detalla"
 
-sesiones ||--o| feedback : "produce"
 pacientes ||--o{ feedback : "registra"
 rutinas ||--o{ feedback : "evaluada en"
-
-feedback ||--o| analisis_ia : "analizado por"
+feedback ||--o{ puntosDolor : "localiza"
+pacientes ||--o{ escalas : "medido en"
+terapeutas ||--o{ escalas : "evalua"
 
 pacientes ||--o{ citas : "asiste a"
 terapeutas ||--o{ citas : "atiende"
 salas ||--o{ citas : "reservada para"
+planes ||--o{ citas : "contexto de"
+pacientes ||--o{ listaEspera : "espera"
+terapeutas ||--o{ listaEspera : "cola de"
 
-citas ||--o{ recordatorios : "genera"
-usuarios ||--o{ recordatorios : "recibe"
-
-pacientes ||--o{ bienestar : "registra"
+pacientes ||--o{ conversaciones : "participa"
+terapeutas ||--o{ conversaciones : "participa"
+conversaciones ||--|{ mensajes : "contiene"
 
 @enduml

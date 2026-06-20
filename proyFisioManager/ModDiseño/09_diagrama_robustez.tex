@@ -4,20 +4,21 @@
 El diagrama de robustez es un artefacto del método ICONIX que sirve de puente entre el análisis (casos de uso, modelo conceptual) y el diseño detallado. A diferencia del diagrama de clases conceptuales del Modelo de Análisis (que solo muestra conceptos del problema), aquí ya se modelan \textbf{clases de software}, clasificadas en tres categorías:
 
 \begin{itemize}
-  \item \textbf{Boundary (frontera):} interfaces de usuario y puntos de integración con sistemas externos. En FisioManager: pantallas (\codeinline{UIAgendaPaciente}, \codeinline{UIRegistroFeedback}, \ldots), el servicio de notificaciones y los servicios de IA externos.
-  \item \textbf{Control:} lógica de aplicación que orquesta el flujo entre fronteras y entidades. En FisioManager: \codeinline{GestorCitas}, \codeinline{GestorFeedback}, \codeinline{AnalizadorIA}, \codeinline{GestorPlanTratamiento}, \codeinline{GestorNotasClinicas}, etc.
+  \item \textbf{Boundary (frontera):} interfaces de usuario y puntos de integración. En FisioManager: pantallas (\codeinline{UIAgendaPaciente}, \codeinline{UIRegistroFeedback}, \codeinline{UIMensajeria}, \ldots), el servicio de notificaciones (correo), el servicio de tiempo real (\codeinline{ServicioTiempoReal}, Socket.IO) y el servicio de IA (\codeinline{ServicioIA}: Whisper para transcribir y Ollama para resumir).
+  \item \textbf{Control:} lógica de aplicación que orquesta el flujo entre fronteras y entidades. En FisioManager: \codeinline{GestorCitas}, \codeinline{GestorFeedback}, \codeinline{AnalizadorIA}, \codeinline{GestorMensajeria}, \codeinline{GestorNotificaciones}, \codeinline{GestorPlanTratamiento}, \codeinline{GestorNotasClinicas}, etc.
   \item \textbf{Entity (entidad):} entidades persistentes del dominio, generalmente derivadas del diagrama de clases conceptuales.
 \end{itemize}
 
 \section{Flujos consolidados}
 
-Para mantener una visión integrada del sistema se presenta un único diagrama de robustez consolidado que muestra cinco flujos representativos:
+Para mantener una visión integrada del sistema se presenta un único diagrama de robustez consolidado que muestra seis flujos representativos:
 
 \begin{enumerate}
-  \item \textbf{Agendar cita (Paciente):} el paciente solicita una cita, el \codeinline{GestorCitas} delega en \codeinline{ValidadorDisponibilidad} para verificar horarios, salas y colisiones, crea la \codeinline{Cita}, programa un \codeinline{Recordatorio} y dispara una notificación.
-  \item \textbf{Registrar feedback de sesión (Paciente):} el paciente envía audio, nivel de dolor y estado emocional; el \codeinline{GestorFeedback} crea la entidad \codeinline{Feedback} y delega en \codeinline{AnalizadorIA}, que invoca el servicio de IA externo y persiste \codeinline{AnalisisIA}.
-  \item \textbf{Elaborar plan de tratamiento (Terapeuta):} el terapeuta crea o edita un \codeinline{PlanTratamiento} con sus \codeinline{FaseTratamiento} y prescribe \codeinline{AsignacionRutina}, vinculando todo al \codeinline{HistorialClinico} del paciente.
-  \item \textbf{Registrar nota clínica durante consulta (Terapeuta):} desde el expediente del paciente, el terapeuta agrega una \codeinline{NotaClinica} que el \codeinline{GestorNotasClinicas} adjunta al historial y, cuando aplica, al plan de tratamiento activo.
+  \item \textbf{Agendar cita (Paciente):} el paciente consulta franjas libres y solicita una cita; el \codeinline{GestorCitas} delega en \codeinline{ValidadorDisponibilidad} para verificar horario y colisiones, crea la \codeinline{Cita}, avisa a la \codeinline{ListaEspera} si procede y, vía \codeinline{GestorNotificaciones}, genera la \codeinline{Notificacion} (correo y aviso en vivo).
+  \item \textbf{Registrar feedback de sesión (Paciente):} el paciente envía audio, dolor, emoción y mapa de dolor; el \codeinline{GestorFeedback} crea el \codeinline{Feedback} y los \codeinline{PuntoDolor}, y delega en \codeinline{AnalizadorIA}, que usa \codeinline{ServicioIA} (Whisper + Ollama) y escribe la transcripción y el resumen \emph{en el propio} \codeinline{Feedback}.
+  \item \textbf{Mensajería en tiempo real:} el paciente escribe un mensaje; el \codeinline{GestorMensajeria} ubica/crea la \codeinline{Conversacion}, persiste el \codeinline{Mensaje} y lo entrega al terapeuta mediante \codeinline{ServicioTiempoReal} (Socket.IO), notificando al receptor.
+  \item \textbf{Elaborar plan de tratamiento (Terapeuta):} el terapeuta crea o edita un \codeinline{PlanTratamiento} con sus \codeinline{FaseTratamiento} y prescribe \codeinline{AsignacionRutina}.
+  \item \textbf{Registrar nota clínica (Terapeuta):} desde el expediente, el terapeuta agrega una \codeinline{NotaClinica} que el \codeinline{GestorNotasClinicas} adjunta al \codeinline{HistorialClinico}.
   \item \textbf{Consulta de agenda (Terapeuta):} el terapeuta consulta su agenda del día; el \codeinline{GestorCitas} devuelve las citas programadas.
 \end{enumerate}
 

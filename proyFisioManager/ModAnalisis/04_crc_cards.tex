@@ -404,6 +404,126 @@ A continuación se presentan las tarjetas CRC del modelo de dominio de FisioMana
 \end{itemize}
 }
 
+\subsection{Conversacion}
+\CRC{Conversacion}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Vincular a un paciente con su terapeuta asignado
+  \item Garantizar una sola conversación por par
+  \item Agrupar y ordenar los mensajes intercambiados
+  \item Conocer la fecha del último mensaje
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (participante)
+  \item Terapeuta (participante)
+  \item Mensaje
+\end{itemize}
+}
+
+\subsection{Mensaje}
+\CRC{Mensaje}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Almacenar el contenido y el emisor del mensaje
+  \item Registrar fecha de envío y de lectura
+  \item Entregarse al receptor en tiempo real
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Conversacion (contenedor)
+  \item Usuario (emisor)
+  \item Notificacion (aviso al receptor)
+\end{itemize}
+}
+
+\subsection{Notificacion}
+\CRC{Notificacion}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Avisar al usuario de eventos (cita, rutina, mensaje, dolor alto)
+  \item Conocer su tipo, título, cuerpo y enlace de destino
+  \item Registrar si ya fue leída
+  \item Respetar las preferencias y el horario silencioso del usuario
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Usuario (destinatario)
+  \item PreferenciaNotificacion
+\end{itemize}
+}
+
+\subsection{ListaEspera}
+\CRC{ListaEspera}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Registrar el interés del paciente por una cita con su terapeuta
+  \item Conocer el rango de fechas deseado
+  \item Mantener su estado (en espera, avisado, atendida, cancelada)
+  \item Permitir el aviso cuando se libere un hueco compatible
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (solicitante)
+  \item Terapeuta (objetivo)
+  \item Cita (hueco liberado)
+  \item Notificacion
+\end{itemize}
+}
+
+\subsection{DocumentoClinico}
+\CRC{DocumentoClinico}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Adjuntar un archivo (imagen o PDF) al expediente del paciente
+  \item Conocer su nombre, tipo MIME, tamaño y categoría
+  \item Indicar su visibilidad para el paciente
+  \item Conocer quién lo subió
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (titular)
+  \item Terapeuta (autor de la carga)
+  \item HistorialClinico (contexto)
+\end{itemize}
+}
+
+\subsection{PuntoDolor}
+\CRC{PuntoDolor}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Localizar el dolor sobre el mapa corporal (parte y lado)
+  \item Registrar la intensidad reportada (1--10)
+  \item Asociarse al feedback que lo originó
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Feedback (origen)
+  \item Paciente (autor)
+\end{itemize}
+}
+
+\subsection{EscalaResultado}
+\CRC{EscalaResultado}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Registrar una medición clínica objetiva (ROM, fuerza, funcional, EVA)
+  \item Conocer su valor, unidad y fecha de medición
+  \item Permitir el seguimiento de la evolución del paciente
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Paciente (medido)
+  \item Terapeuta (evaluador)
+\end{itemize}
+}
+
+\subsection{RegistroAuditoria}
+\CRC{RegistroAuditoria}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Registrar acciones sensibles (login, consulta de historial, documentos)
+  \item Conocer el actor, la entidad afectada y la dirección IP
+  \item Conservar la marca de tiempo para trazabilidad de cumplimiento
+\end{itemize}
+}{
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Usuario (actor)
+\end{itemize}
+}
+
 \section{Diagrama visual de CRC Cards}
 
 La siguiente figura presenta una vista panorámica de las tarjetas CRC del sistema, generada con PlantUML y disponible como artefacto compilable en el repositorio del proyecto:

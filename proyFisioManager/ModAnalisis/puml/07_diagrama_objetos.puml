@@ -13,45 +13,44 @@ title <b>FisioManager - Diagrama de Objetos</b>\n<size:11>Instantanea: tratamien
 
 
 object "ana : Paciente" as ana {
-    nombre = "Ana"
-    apellidos = "Lopez Garcia"
+    nombre = "Ana Lopez Garcia"
     email = "ana.lopez@correo.com"
     telefono = "5512345678"
-    fechaNacimiento = "1992-04-18"
-    genero = FEMENINO
-    peso = 62.5
-    altura = 1.68
+    edad = 33
+    condicion = "Esguince LCM rodilla derecha"
     activo = true
 }
 
 object "drMartinez : Terapeuta" as ter {
-    nombre = "Carlos"
-    apellidos = "Martinez Ruiz"
+    nombre = "Carlos Martinez Ruiz"
     email = "c.martinez@fisio.mx"
-    cedulaProfesional = "9876543"
+    cedula = "9876543"
     especialidad = "Rehabilitacion ortopedica"
 }
 
 
 object "hcAna : HistorialClinico" as hc {
-    fechaCreacion = "2026-02-10"
-    antecedentes = "Sin cirugias previas"
+    tipoSangre = "O+"
     alergias = "Ninguna conocida"
-    medicamentos = "Ibuprofeno 400mg PRN"
+    antecedentes = "Sin cirugias previas"
 }
 
 object "diagRodilla : Diagnostico" as diag {
-    fecha = "2026-02-10"
-    descripcion = "Esguince ligamento colateral medial"
     codigoCIE10 = "S83.4"
-    severidad = MODERADA
+    descripcion = "Esguince ligamento colateral medial"
+    estado = ACTIVE
 }
 
 object "nota01 : NotaClinica" as nota1 {
-    fecha = "2026-04-22"
     contenido = "Paciente reporta dolor 6/10 al subir escaleras"
-    tipo = EVOLUCION
     visibleParaPaciente = false
+    fecha = "2026-04-22"
+}
+
+object "rxRodilla : DocumentoClinico" as doc {
+    nombreArchivo = "rx_rodilla.pdf"
+    categoria = XRAY
+    visibleParaPaciente = true
 }
 
 object "planRodilla : PlanTratamiento" as plan {
@@ -59,8 +58,7 @@ object "planRodilla : PlanTratamiento" as plan {
     objetivoClinico = "Restaurar ROM 0-130 grados y fuerza 80%"
     fechaInicio = "2026-02-15"
     fechaFinEstimada = "2026-06-15"
-    estado = ACTIVO
-    observaciones = "Progresion gradual de carga"
+    estado = ACTIVE
 }
 
 object "fase02 : FaseTratamiento" as fase {
@@ -71,12 +69,10 @@ object "fase02 : FaseTratamiento" as fase {
 }
 
 
-object "cita15Mayo : Cita" as cita {
-    fechaHoraInicio = "2026-05-20 10:00"
-    fechaHoraFin = "2026-05-20 10:45"
-    motivo = "Revaloracion fase 2"
-    modalidad = PRESENCIAL
-    estado = CONFIRMADA
+object "cita20Mayo : Cita" as cita {
+    fechaHora = "2026-05-20 10:00"
+    estado = CONFIRMED
+    notas = "Revaloracion fase 2"
 }
 
 object "sala03 : Sala" as sala {
@@ -87,75 +83,74 @@ object "sala03 : Sala" as sala {
 }
 
 object "horarioMartes : HorarioDisponible" as horario {
-    diaSemana = MARTES
+    diaSemana = 2
     horaInicio = "09:00"
     horaFin = "14:00"
-    vigenteDesde = "2026-01-01"
-    vigenteHasta = "2026-12-31"
 }
 
-object "recPush : Recordatorio" as rec {
-    canal = PUSH
-    fechaEnvioProgramada = "2026-05-19 10:00"
-    fechaEnvioReal = "2026-05-19 10:00"
-    mensaje = "Recuerde su cita manana a las 10:00"
-    estado = ENVIADO
+object "notifCita : Notificacion" as notif {
+    tipo = APPOINTMENT
+    titulo = "Recordatorio de cita"
+    cuerpo = "Tienes una cita manana a las 10:00"
+    leida = false
 }
 
 
 object "rutFortRodilla : Rutina" as rut {
-    nombre = "Fortalecimiento rodilla nivel 2"
-    descripcion = "Trabajo de cuadriceps con banda elastica"
-    duracionEstimada = 25
-    nivel = INTERMEDIO
-    fechaCreacion = "2026-03-01"
+    titulo = "Fortalecimiento rodilla nivel 2"
+    tipo = TREATMENT
+    completada = false
 }
 
-object "ejSentadilla : Ejercicio" as ej {
-    nombre = "Sentadilla asistida con banda"
-    zonaCorporal = RODILLA
-    tipo = FUERZA
+object "plantSentadilla : PlantillaActividad" as plant {
+    titulo = "Sentadilla asistida con banda"
+    parteCuerpo = KNEE
+    tipo = PHYSICAL
     videoUrl = "vid/sentadilla_banda.mp4"
 }
 
-object "paramSentadilla : ParametrosEjercicio" as param {
+object "actSentadilla : Actividad" as act {
+    titulo = "Sentadilla asistida con banda"
+    duracionMinutos = 5
     repeticiones = 12
-    series = 3
     descansoSegundos = 45
     orden = 1
-    notasTerapeuta = "Banda verde, mantener tronco erguido"
 }
 
 object "asigRut : AsignacionRutina" as asig {
-    fechaAsignacion = "2026-04-15"
     fechaInicio = "2026-04-15"
     fechaFin = "2026-05-30"
-    frecuenciaSemanal = 3
-    estado = ACTIVA
+    frecuencia = WEEKLY
+    estado = ACTIVE
 }
 
 
 object "sesion22Abr : SesionEjecucion" as ses {
-    fechaInicio = "2026-04-22 18:30"
-    fechaFin = "2026-04-22 18:58"
-    completada = true
-    porcentajeCumplimiento = 95.0
+    estado = FINISHED
+    tasaCumplimiento = 95.0
+    iniciadaEn = "2026-04-22 18:30"
+    finalizadaEn = "2026-04-22 18:58"
 }
 
 object "fb22Abr : Feedback" as fb {
-    fechaRegistro = "2026-04-22 19:00"
     nivelDolor = 4
-    estadoEmocional = BIEN
-    duracionAudioSegundos = 38
+    estadoEmocional = GOOD
     transcripcion = "Senti el ejercicio mas comodo que la semana pasada"
+    resumenIA = "Evolucion favorable; menor dolor, sin alertas."
+    fecha = "2026-04-22 19:00"
 }
 
-object "ia22Abr : AnalisisIA" as ia {
-    sentimientoDetectado = "Positivo"
-    palabrasClave = ["comodo", "mejor", "semana pasada"]
-    alertas = []
-    confianza = 0.91
-    fechaProcesamiento = "2026-04-22 19:01"
+object "dolorRodilla : PuntoDolor" as dolor {
+    parteCuerpo = KNEE
+    lado = RIGHT
+    intensidad = 4
+}
+
+object "romRodilla : EscalaResultado" as escala {
+    tipo = ROM
+    etiqueta = "Flexion rodilla derecha"
+    valor = 115
+    unidad = "grados"
 }
 
 
@@ -163,32 +158,32 @@ ana --> ter : atendida por
 ana --> hc : posee
 hc --> diag
 hc --> nota1
+ana --> doc : adjunta
 diag --> ter
 nota1 --> ter
 
 ana --> plan : tiene
 plan --> ter : elaborado por
 plan --> fase : contiene
-plan --> nota1 : documentado por
 plan --> asig : prescribe
 
 cita --> ana
 cita --> ter
 cita --> sala
-cita --> rec
 cita --> plan
 ter --> horario
-sala --> horario
+ana --> notif : recibe
 
 ter --> rut : crea
-rut *-- param
-param --> ej
-
+plant --> act : instancia
+rut *-- act
 asig --> rut
 asig --> ana
 asig --> ter
 asig --> ses
 ses --> fb
-fb --> ia
+fb --> dolor : localiza
+ana --> escala : medido en
+escala --> ter : evaluada por
 
 @enduml

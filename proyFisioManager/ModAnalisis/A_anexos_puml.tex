@@ -13,7 +13,7 @@ plantuml -tsvg *.puml          # SVG (vectorial, mejor para impresion)
   \item \codeinline{01\_diagrama\_clases.puml}: diagrama de clases conceptuales del modelo de dominio.
   \item \codeinline{02\_c4\_nivel1\_contexto.puml}: C4 nivel 1 --- contexto del sistema.
   \item \codeinline{03\_c4\_nivel2\_contenedores.puml}: C4 nivel 2 --- contenedores.
-  \item \codeinline{04\_c4\_nivel3\_componentes.puml}: C4 nivel 3 --- componentes del Servicio de Feedback.
+  \item \codeinline{04\_c4\_nivel3\_componentes.puml}: C4 nivel 3 --- componentes de la API (flujo de Feedback).
   \item \codeinline{05\_diagrama\_casos\_uso.puml}: diagrama de casos de uso UML.
   \item \codeinline{06\_crc\_cards.puml}: CRC Cards renderizadas en formato visual.
   \item \codeinline{07\_diagrama\_objetos.puml}: diagrama de objetos (instantánea del dominio).
@@ -22,6 +22,8 @@ plantuml -tsvg *.puml          # SVG (vectorial, mejor para impresion)
   \item \codeinline{10\_secuencia\_asignacion\_rutina.puml}: diagrama de secuencia --- flujo de asignación de rutina.
   \item \codeinline{11\_secuencia\_registro\_feedback.puml}: diagrama de secuencia --- flujo de registro de feedback.
   \item \codeinline{13\_secuencia\_gestion\_citas.puml}: diagrama de secuencia --- flujo de gestión de citas (Admin).
+  \item \codeinline{14\_secuencia\_mensajeria.puml}: diagrama de secuencia --- mensajería en tiempo real (Socket.IO).
+  \item \codeinline{15\_secuencia\_autoagenda.puml}: diagrama de secuencia --- auto-agendamiento de cita por el paciente.
   \item \codeinline{12\_modelo\_erd.puml}: modelo de base de datos entidad-relación (ERD).
 \end{itemize}
 
@@ -85,6 +87,12 @@ A continuacion se incluye el codigo fuente completo de cada archivo.
 
 \section{Secuencia: Gestión de Citas (Admin)}
 \lstinputlisting[language=plantuml,caption={\codeinline{13\_secuencia\_gestion\_citas.puml}}]{puml/13_secuencia_gestion_citas.puml}
+
+\section{Secuencia: Mensajería en tiempo real}
+\lstinputlisting[language=plantuml,caption={\codeinline{14\_secuencia\_mensajeria.puml}}]{puml/14_secuencia_mensajeria.puml}
+
+\section{Secuencia: Auto-agendamiento de cita}
+\lstinputlisting[language=plantuml,caption={\codeinline{15\_secuencia\_autoagenda.puml}}]{puml/15_secuencia_autoagenda.puml}
 
 \section{Modelo ERD}
 \lstinputlisting[language=plantuml,caption={\codeinline{12\_modelo\_erd.puml}}]{puml/12_modelo_erd.puml}

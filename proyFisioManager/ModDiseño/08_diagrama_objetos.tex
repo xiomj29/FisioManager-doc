@@ -11,8 +11,9 @@ Se modela una instantánea realista del sistema centrada en una paciente, \texti
   \item La paciente (\codeinline{ana}) atendida por el terapeuta \codeinline{drMartinez}.
   \item Su \codeinline{HistorialClinico} con un diagnóstico CIE-10 \codeinline{S83.4} y una \codeinline{NotaClinica} de evolución.
   \item Un \codeinline{PlanTratamiento} activo (\textit{Recuperación LCM rodilla derecha}) con la \codeinline{FaseTratamiento} \textit{Fase 2: Fortalecimiento} en curso.
-  \item Una \codeinline{Cita} de revaloración programada en el \codeinline{Consultorio 3}, con un \codeinline{Recordatorio} push ya enviado.
-  \item La \codeinline{AsignacionRutina} de la rutina \textit{Fortalecimiento rodilla nivel 2}, con una \codeinline{SesionEjecucion} completada y un \codeinline{Feedback} ya analizado por IA.
+  \item Una \codeinline{Cita} de revaloración programada en el \codeinline{Consultorio 3}, con una \codeinline{Notificacion} de recordatorio enviada a la paciente.
+  \item Un \codeinline{DocumentoClinico} (radiografía) adjunto al expediente.
+  \item La \codeinline{AsignacionRutina} de la rutina \textit{Fortalecimiento rodilla nivel 2}, con una \codeinline{SesionEjecucion} completada y un \codeinline{Feedback} cuya transcripción y resumen de IA se almacenan en línea, junto con un \codeinline{PuntoDolor} en la rodilla y una \codeinline{EscalaResultado} de rango de movimiento.
 \end{itemize}
 
 \begin{figure}[H]
@@ -28,8 +29,8 @@ Esta instantánea permite verificar varios aspectos del modelo conceptual:
 
 \begin{itemize}
   \item \textbf{Coherencia de cardinalidades:} una paciente tiene exactamente un historial clínico y un terapeuta asignado; el plan de tratamiento agrupa fases y asignaciones de rutina.
-  \item \textbf{Trazabilidad clínica:} cada nota clínica está vinculada al historial y al plan de tratamiento; cada feedback está vinculado a su sesión y, opcionalmente, a un análisis de IA.
-  \item \textbf{Validación del paquete de agenda:} la cita se relaciona simultáneamente con paciente, terapeuta, sala, plan y recordatorio, mostrando que el paquete cubre todos los puntos de integración previstos.
+  \item \textbf{Trazabilidad clínica:} cada nota clínica está vinculada al historial; cada feedback está vinculado a su sesión e incorpora su transcripción y resumen de IA, además de los puntos de dolor reportados.
+  \item \textbf{Validación del paquete de agenda:} la cita se relaciona simultáneamente con paciente, terapeuta, sala y plan, y genera una notificación, mostrando que el paquete cubre todos los puntos de integración previstos.
   \item \textbf{Estado del sistema en un instante:} a diferencia del diagrama de clases, aquí cada objeto tiene valores concretos, lo que sirve como caso de prueba conceptual y guía para los datos de \textit{seed} en pruebas e historias de usuario.
 \end{itemize}
 

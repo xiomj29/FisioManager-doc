@@ -26,15 +26,17 @@ class ActorTerapeuta <<actor>>
 class UIAgendaPaciente <<boundary>>
 class UIAgendaTerapeuta <<boundary>>
 class UIRegistroFeedback <<boundary>>
-class UIConsultaPaciente <<boundary>>
+class UIMensajeria <<boundary>>
 class UIPlanTratamiento <<boundary>>
 class ServicioNotificaciones <<boundary>>
-class ServicioIAExterno <<boundary>>
+class ServicioTiempoReal <<boundary>>
+class ServicioIA <<boundary>>
 
 class GestorCitas <<control>>
-class GestorRecordatorios <<control>>
+class GestorNotificaciones <<control>>
 class GestorFeedback <<control>>
 class AnalizadorIA <<control>>
+class GestorMensajeria <<control>>
 class GestorPlanTratamiento <<control>>
 class GestorNotasClinicas <<control>>
 class ValidadorDisponibilidad <<control>>
@@ -44,39 +46,53 @@ class Terapeuta <<entity>>
 class Cita <<entity>>
 class Sala <<entity>>
 class HorarioDisponible <<entity>>
-class Recordatorio <<entity>>
+class ListaEspera <<entity>>
+class Notificacion <<entity>>
 class SesionEjecucion <<entity>>
 class Feedback <<entity>>
-class AnalisisIA <<entity>>
+class PuntoDolor <<entity>>
+class Conversacion <<entity>>
+class Mensaje <<entity>>
 class PlanTratamiento <<entity>>
 class FaseTratamiento <<entity>>
 class NotaClinica <<entity>>
 class HistorialClinico <<entity>>
 class AsignacionRutina <<entity>>
 
-ActorPaciente --> UIAgendaPaciente
+ActorPaciente --> UIAgendaPaciente : consultar horarios y agendar
 UIAgendaPaciente --> GestorCitas : solicitar cita
 GestorCitas --> ValidadorDisponibilidad : verificar disponibilidad
 ValidadorDisponibilidad --> HorarioDisponible : consulta horarios
-ValidadorDisponibilidad --> Sala : consulta salas
 ValidadorDisponibilidad --> Cita : consulta colisiones
 GestorCitas --> Cita : crea
 GestorCitas --> Paciente : asocia
 GestorCitas --> Terapeuta : asocia
-GestorCitas --> GestorRecordatorios : programar recordatorio
-GestorRecordatorios --> Recordatorio : crea
-GestorRecordatorios --> ServicioNotificaciones : enviar
-ServicioNotificaciones --> ActorPaciente : push / email
+GestorCitas --> Sala : asigna (opcional)
+GestorCitas --> ListaEspera : avisa al liberar hueco
+GestorCitas --> GestorNotificaciones : notificar
+GestorNotificaciones --> Notificacion : crea
+GestorNotificaciones --> ServicioNotificaciones : email
+GestorNotificaciones --> ServicioTiempoReal : push in-app
+ServicioTiempoReal --> ActorPaciente : notification:new
 
-ActorPaciente --> UIRegistroFeedback : graba audio + dolor + emocion
+ActorPaciente --> UIRegistroFeedback : graba audio + dolor + emocion + mapa
 UIRegistroFeedback --> GestorFeedback : enviar feedback
 GestorFeedback --> SesionEjecucion : consulta sesion
 GestorFeedback --> Feedback : crea
-GestorFeedback --> AnalizadorIA : solicitar analisis
-AnalizadorIA --> ServicioIAExterno : transcribir + sentimiento
-ServicioIAExterno --> AnalizadorIA : resultado
-AnalizadorIA --> AnalisisIA : crea
-AnalizadorIA --> Feedback : enlaza analisis
+GestorFeedback --> PuntoDolor : registra zonas de dolor
+GestorFeedback --> AnalizadorIA : transcribir + resumir
+AnalizadorIA --> ServicioIA : Whisper (STT) + Ollama (LLM)
+ServicioIA --> AnalizadorIA : transcripcion + resumen
+AnalizadorIA --> Feedback : escribe transcripcion y resumen
+GestorFeedback --> GestorNotificaciones : alerta de dolor alto
+
+ActorPaciente --> UIMensajeria : escribe mensaje
+UIMensajeria --> GestorMensajeria : enviar mensaje
+GestorMensajeria --> Conversacion : ubica/crea
+GestorMensajeria --> Mensaje : crea
+GestorMensajeria --> ServicioTiempoReal : message:new
+ServicioTiempoReal --> ActorTerapeuta : entrega en vivo
+GestorMensajeria --> GestorNotificaciones : notifica al receptor
 
 ActorTerapeuta --> UIPlanTratamiento
 UIPlanTratamiento --> GestorPlanTratamiento : crear / editar plan
@@ -84,16 +100,13 @@ GestorPlanTratamiento --> Paciente : selecciona paciente
 GestorPlanTratamiento --> PlanTratamiento : crea
 GestorPlanTratamiento --> FaseTratamiento : agrega fases
 GestorPlanTratamiento --> AsignacionRutina : prescribe rutinas
-GestorPlanTratamiento --> HistorialClinico : vincula historial
 
-ActorTerapeuta --> UIConsultaPaciente : abre expediente paciente
-UIConsultaPaciente --> GestorNotasClinicas : agregar nota
-GestorNotasClinicas --> HistorialClinico : ubica historial
-GestorNotasClinicas --> NotaClinica : crea
-GestorNotasClinicas --> PlanTratamiento : adjunta al plan
-
-ActorTerapeuta --> UIAgendaTerapeuta : revisa agenda del dia
+ActorTerapeuta --> UIAgendaTerapeuta : revisa agenda y mensajes
 UIAgendaTerapeuta --> GestorCitas : listar citas
 GestorCitas --> Cita : consulta
+ActorTerapeuta --> UIMensajeria : responde
+ActorTerapeuta --> GestorNotasClinicas : agregar nota
+GestorNotasClinicas --> HistorialClinico : ubica historial
+GestorNotasClinicas --> NotaClinica : crea
 
 @enduml

@@ -5,66 +5,86 @@ El diagrama Entidad-Relación (ERD) representa el modelo de datos relacional de 
 
 \section{Tablas del modelo}
 
-El modelo consta de \textbf{20 tablas} organizadas en cinco dominios funcionales:
+El modelo consta de \textbf{30 tablas} gestionadas con Prisma ORM sobre PostgreSQL, organizadas en siete dominios funcionales. Las claves primarias son identificadores de texto tipo \codeinline{cuid} y los campos con valores acotados se almacenan como \codeinline{TEXT} validados por la aplicación (Zod), no como \codeinline{ENUM} de base de datos.
 
 \subsection{Dominio de Usuarios}
 
 \begin{itemize}
-  \item \codeinline{usuarios}: tabla central que almacena los datos comunes a todos los roles del sistema (nombre, email, contraseña hasheada, rol, avatar, teléfono). El campo \codeinline{rol} es un enumerado con valores \codeinline{PACIENTE}, \codeinline{TERAPEUTA} y \codeinline{ADMIN}.
+  \item \codeinline{usuarios}: tabla central con los datos comunes a todos los roles (nombre, email único, contraseña hasheada, rol, avatar, teléfono, verificación de email y consentimiento de audio). El campo \codeinline{rol} toma los valores \codeinline{PATIENT}, \codeinline{THERAPIST} y \codeinline{ADMIN}.
 
-  \item \codeinline{pacientes}: extensión de \codeinline{usuarios} para el perfil de paciente. Almacena edad, condición clínica, fecha de nacimiento, género, dirección y contacto de emergencia. La clave primaria es \codeinline{usuario\_id} (FK hacia \codeinline{usuarios}), implementando una relación 1:1 de especialización.
+  \item \codeinline{perfiles\_paciente}: extensión 1:1 de \codeinline{usuarios} con edad, condición clínica y el terapeuta asignado (\codeinline{terapeuta\_id}). Su PK es \codeinline{usuario\_id}.
 
-  \item \codeinline{terapeutas}: extensión de \codeinline{usuarios} para el perfil de terapeuta. Incluye especialidad, cédula profesional (única), años de experiencia, horario de atención y máximo de pacientes asignables.
+  \item \codeinline{perfiles\_terapeuta}: extensión 1:1 de \codeinline{usuarios} con cédula y especialidad.
 
-  \item \codeinline{administradores}: extensión de \codeinline{usuarios} para el perfil de administrador. Define nivel de acceso (TOTAL o PARCIAL) y área de responsabilidad.
+  \item \codeinline{disponibilidad\_terapeuta}: franjas horarias semanales de atención del terapeuta (día, hora inicio/fin), únicas por día.
 \end{itemize}
 
 \subsection{Dominio Clínico}
 
 \begin{itemize}
-  \item \codeinline{historial\_clinico}: expediente clínico del paciente con antecedentes personales y familiares, alergias, medicamentos actuales y estado (ACTIVO/CERRADO). Cada paciente tiene exactamente un historial.
+  \item \codeinline{historial\_clinico}: expediente único por paciente con tipo de sangre, alergias y antecedentes.
 
-  \item \codeinline{diagnosticos}: diagnósticos registrados por terapeutas, vinculados al historial clínico. Incluyen código CIE-10, descripción, fecha, severidad (LEVE, MODERADO, SEVERO) y estado activo.
+  \item \codeinline{diagnosticos}: diagnósticos del historial con código CIE-10, descripción y estado (\codeinline{ACTIVE}/\codeinline{RESOLVED}).
 
-  \item \codeinline{notas\_clinicas}: notas de evolución, interconsulta o alta que el terapeuta registra durante las consultas. Vinculadas al historial clínico con fecha y tipo.
+  \item \codeinline{notas\_clinicas}: notas de seguimiento con autor, contenido y bandera de visibilidad para el paciente.
 
-  \item \codeinline{planes\_tratamiento}: planes terapéuticos que vinculan un paciente, un terapeuta y un diagnóstico. Definen título, objetivo, fechas y estado (ACTIVO, PAUSADO, COMPLETADO, CANCELADO).
+  \item \codeinline{documentos\_clinicos}: archivos adjuntos al expediente (radiografías, laboratorios, consentimientos) con tipo MIME, tamaño, categoría y visibilidad.
 
-  \item \codeinline{fases\_tratamiento}: fases secuenciales que componen un plan de tratamiento. Cada fase tiene nombre, número de orden, objetivo específico, duración estimada y estado.
+  \item \codeinline{planes\_tratamiento}: planes que vinculan paciente y terapeuta, con objetivo clínico, fechas y estado (\codeinline{ACTIVE}, \codeinline{COMPLETED}, \codeinline{SUSPENDED}).
+
+  \item \codeinline{fases\_tratamiento}: fases secuenciales del plan con nombre, orden, duración en semanas y objetivos.
 \end{itemize}
 
 \subsection{Dominio de Rutinas y Ejercicios}
 
 \begin{itemize}
-  \item \codeinline{rutinas}: plantillas de rutinas de ejercicio. El campo \codeinline{paciente\_id} es nullable: cuando es \codeinline{NULL}, la rutina es un template de biblioteca; cuando tiene valor, es una rutina asignada a un paciente específico. El tipo puede ser \codeinline{TRATAMIENTO} o \codeinline{RELAJACION}.
+  \item \codeinline{plantillas\_actividad}: catálogo de ejercicios reutilizables con tipo (\codeinline{PHYSICAL}/\codeinline{BREATHING}), parte del cuerpo y URLs de video/imagen.
 
-  \item \codeinline{ejercicios}: catálogo de ejercicios reutilizables con título, descripción, tipo (FISICO/RESPIRACION), parte del cuerpo objetivo, y URLs opcionales de video e imagen demostrativa.
+  \item \codeinline{rutinas}: rutinas de ejercicio. \codeinline{paciente\_id} es nullable: \codeinline{NULL} indica plantilla de biblioteca; con valor, es una rutina asignada. Tipo \codeinline{TREATMENT} o \codeinline{RELAXATION}.
 
-  \item \codeinline{parametros\_ejercicio}: tabla intermedia que vincula ejercicios con rutinas, agregando parámetros contextuales: orden dentro de la rutina, duración en minutos, repeticiones, descanso en segundos e instrucciones adicionales.
+  \item \codeinline{actividades}: ejercicios concretos de una rutina (instancian opcionalmente una plantilla) con duración, repeticiones, descanso y orden.
 
-  \item \codeinline{asignaciones\_rutina}: registro de la asignación de una rutina template a un paciente por parte de un terapeuta. Incluye fechas de inicio y fin, estado (ACTIVA, PAUSADA, COMPLETADA, CANCELADA) y notas del terapeuta.
+  \item \codeinline{asignaciones\_rutina}: asignación de una rutina a un paciente por un terapeuta, con frecuencia (\codeinline{DAILY}, \codeinline{EVERY\_OTHER\_DAY}, \codeinline{WEEKLY}), fechas, estado y vínculo opcional a una fase.
 
-  \item \codeinline{sesiones\_ejecucion}: registro de cada ejecución de una rutina asignada. Almacena fecha de inicio/fin, estado, porcentaje de progreso, ejercicios completados y tiempo total.
+  \item \codeinline{sesiones} y \codeinline{sesion\_ejercicios}: registro de cada ejecución de una rutina y el detalle por ejercicio (\codeinline{COMPLETED}/\codeinline{SKIPPED}).
 \end{itemize}
 
 \subsection{Dominio de Seguimiento}
 
 \begin{itemize}
-  \item \codeinline{feedback}: feedback post-sesión del paciente. Incluye nivel de dolor (1--10 con restricción \codeinline{CHECK}), estado emocional (enumerado de 5 valores), URL de audio opcional y comentario de texto.
+  \item \codeinline{feedback}: feedback del paciente con nivel de dolor (1--10), estado emocional (5 valores), URL de audio opcional y, en línea, la \codeinline{transcripcion} (Whisper) y el \codeinline{resumen\_ia} (Ollama). No existe una tabla separada de análisis de IA.
 
-  \item \codeinline{analisis\_ia}: resultado del procesamiento de IA sobre el feedback. Relación 1:1 con \codeinline{feedback} (FK única). Almacena transcripción del audio, resumen, sentimiento detectado, alertas, recomendaciones, score de confianza (0--1) y versión del modelo utilizado.
+  \item \codeinline{puntos\_dolor}: zonas del mapa corporal marcadas junto al feedback (parte del cuerpo, lado, intensidad).
 
-  \item \codeinline{modulos\_bienestar}: registro diario de métricas de bienestar del paciente: horas de sueño, nivel de estrés (1--10), nivel de energía (1--10), hidratación y notas personales.
+  \item \codeinline{escalas\_resultado}: mediciones clínicas registradas por el terapeuta (\codeinline{ROM}, \codeinline{STRENGTH}, \codeinline{FUNCTIONAL}, \codeinline{VAS}) con valor y unidad.
 \end{itemize}
 
 \subsection{Dominio de Agenda}
 
 \begin{itemize}
-  \item \codeinline{citas}: citas programadas entre paciente y terapeuta. Vinculadas a una sala física. Incluyen estado (PROGRAMADA, CANCELADA, COMPLETADA), notas y flag de recordatorio enviado.
+  \item \codeinline{citas}: citas entre paciente y terapeuta con estado (\codeinline{SCHEDULED}, \codeinline{CONFIRMED}, \codeinline{CANCELLED}, \codeinline{COMPLETED}), sala y plan opcionales, y \codeinline{grupo\_recurrencia\_id} para series recurrentes.
 
-  \item \codeinline{salas}: catálogo de salas o consultorios disponibles con nombre, capacidad, equipamiento, piso y estado de disponibilidad.
+  \item \codeinline{salas}: consultorios disponibles con nombre, ubicación, capacidad y equipamiento.
 
-  \item \codeinline{recordatorios}: recordatorios asociados a citas, enviados a usuarios por distintos canales (EMAIL, SMS, PUSH). Registran mensaje, fecha programada, estado de envío, fecha real de envío e intentos realizados.
+  \item \codeinline{lista\_espera}: inscripciones del paciente para avisarle cuando se libere un hueco con su terapeuta dentro de un rango de fechas.
+\end{itemize}
+
+\subsection{Dominio de Comunicación}
+
+\begin{itemize}
+  \item \codeinline{conversaciones} y \codeinline{mensajes}: hilo de mensajería en tiempo real entre un paciente y su terapeuta (única por par), con marca de leído.
+
+  \item \codeinline{notificaciones}: centro de notificaciones in-app por usuario (tipo, título, cuerpo, enlace y estado de lectura).
+
+  \item \codeinline{preferencias\_notificacion}: preferencias de correo, recordatorios y horario silencioso por usuario.
+\end{itemize}
+
+\subsection{Dominio de Plataforma}
+
+\begin{itemize}
+  \item \codeinline{auditoria}: bitácora de acciones sensibles (inicio de sesión, consulta de historial, subida de documentos) con usuario, entidad, IP y metadatos.
+
+  \item \codeinline{tokens\_refresco} y \codeinline{tokens\_revocados}: soporte de la sesión JWT (refresh de 7 días y revocación al cerrar sesión).
 \end{itemize}
 
 \section{Diagrama ERD}
@@ -72,24 +92,24 @@ El modelo consta de \textbf{20 tablas} organizadas en cinco dominios funcionales
 \begin{sidewaysfigure}
   \centering
   \includegraphics[width=\textheight,height=\textwidth,keepaspectratio]{FisioManager_ERD.png}
-  \caption{Modelo de Base de Datos ERD de FisioManager: 20 tablas con claves primarias, claves foráneas y restricciones.}
+  \caption{Modelo de Base de Datos ERD de FisioManager: 30 tablas con claves primarias, claves foráneas y restricciones.}
   \label{fig:modelo-erd}
 \end{sidewaysfigure}
 
 \section{Convenciones aplicadas}
 
 \begin{itemize}
-  \item \textbf{Claves primarias (PK):} todas las tablas usan \codeinline{id} autoincremental como clave primaria, excepto las tablas de especialización (\codeinline{pacientes}, \codeinline{terapeutas}, \codeinline{administradores}) que usan \codeinline{usuario\_id} como PK y FK simultáneamente.
+  \item \textbf{Claves primarias (PK):} todas las tablas usan un \codeinline{id} de texto tipo \codeinline{cuid} generado por Prisma, excepto las extensiones de perfil (\codeinline{perfiles\_paciente}, \codeinline{perfiles\_terapeuta}) que usan \codeinline{usuario\_id} como PK y FK simultáneamente.
 
-  \item \textbf{Claves foráneas (FK):} se definen restricciones de integridad referencial en todas las relaciones. Las FK siguen la convención \codeinline{tabla\_id} (e.g., \codeinline{paciente\_id}, \codeinline{terapeuta\_id}).
+  \item \textbf{Claves foráneas (FK):} se definen restricciones de integridad referencial en todas las relaciones, con borrado en cascada donde corresponde (p. ej. perfiles, fases, mensajes).
 
   \item \textbf{Timestamps:} las tablas principales incluyen \codeinline{created\_at} y \codeinline{updated\_at} para auditoría temporal.
 
-  \item \textbf{Enumerados:} los campos con valores acotados se definen como \codeinline{ENUM} para garantizar integridad a nivel de base de datos.
+  \item \textbf{Valores acotados:} los campos enumerados (rol, estados, tipos) se almacenan como \codeinline{TEXT} y se validan en la capa de aplicación con esquemas Zod.
 
-  \item \textbf{Restricciones CHECK:} campos numéricos acotados (nivel de dolor 1--10, score de confianza 0--1) incluyen restricciones \codeinline{CHECK} para validación a nivel de base de datos.
+  \item \textbf{Unicidad:} \codeinline{email} en \codeinline{usuarios}, \codeinline{paciente\_id} en \codeinline{historial\_clinico}, el par (\codeinline{paciente\_id}, \codeinline{terapeuta\_id}) en \codeinline{conversaciones} y el par (\codeinline{terapeuta\_id}, \codeinline{dia\_semana}) en \codeinline{disponibilidad\_terapeuta} tienen restricción \codeinline{UNIQUE}.
 
-  \item \textbf{Unicidad:} campos como \codeinline{email} en \codeinline{usuarios} y \codeinline{cedula\_profesional} en \codeinline{terapeutas} tienen restricción \codeinline{UNIQUE}. La relación 1:1 entre \codeinline{feedback} y \codeinline{analisis\_ia} se garantiza con FK única.
+  \item \textbf{Índices:} se añaden índices sobre las claves foráneas y los campos de filtrado frecuente (auditoría por usuario/entidad/fecha, notificaciones por usuario y estado de lectura).
 \end{itemize}
 
 \section{Código PlantUML del diagrama}

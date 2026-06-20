@@ -20,50 +20,53 @@ package "Usuarios" {
 
     abstract class Usuario {
         nombre
-        apellidos
         email
         telefono
-        fechaRegistro
+        avatarUrl
+        rol
         activo
+        consentimientoAudio
     }
 
     class Paciente {
-        fechaNacimiento
-        genero
-        peso
-        altura
+        edad
+        condicion
     }
 
     class Terapeuta {
-        cedulaProfesional
+        cedula
         especialidad
     }
 
     class Administrador {
-        nivelAcceso
     }
 }
 
 package "Clinico" {
 
     class HistorialClinico {
-        fechaCreacion
-        antecedentes
+        tipoSangre
         alergias
-        medicamentos
+        antecedentes
     }
 
     class Diagnostico {
-        fecha
-        descripcion
         codigoCIE10
-        severidad
+        descripcion
+        estado
     }
 
     class NotaClinica {
-        fecha
         contenido
-        tipo
+        visibleParaPaciente
+        fecha
+    }
+
+    class DocumentoClinico {
+        nombreArchivo
+        urlArchivo
+        mimeType
+        categoria
         visibleParaPaciente
     }
 
@@ -73,7 +76,6 @@ package "Clinico" {
         fechaInicio
         fechaFinEstimada
         estado
-        observaciones
     }
 
     class FaseTratamiento {
@@ -87,11 +89,10 @@ package "Clinico" {
 package "Agenda" {
 
     class Cita {
-        fechaHoraInicio
-        fechaHoraFin
-        motivo
-        modalidad
+        fechaHora
         estado
+        notas
+        grupoRecurrencia
     }
 
     class Sala {
@@ -105,15 +106,11 @@ package "Agenda" {
         diaSemana
         horaInicio
         horaFin
-        vigenteDesde
-        vigenteHasta
     }
 
-    class Recordatorio {
-        canal
-        fechaEnvioProgramada
-        fechaEnvioReal
-        mensaje
+    class ListaEspera {
+        desde
+        hasta
         estado
     }
 }
@@ -121,36 +118,34 @@ package "Agenda" {
 package "Rutinas" {
 
     class Rutina {
-        nombre
-        descripcion
-        duracionEstimada
-        nivel
-        fechaCreacion
+        titulo
+        tipo
+        completada
+        fechaAsignacion
     }
 
-    class Ejercicio {
-        nombre
+    class PlantillaActividad {
+        titulo
         descripcion
+        tipo
+        parteCuerpo
         videoUrl
         imagenUrl
-        zonaCorporal
-        tipo
     }
 
-    class ParametrosEjercicio {
+    class Actividad {
+        titulo
+        descripcion
+        duracionMinutos
         repeticiones
-        series
-        duracionSegundos
         descansoSegundos
         orden
-        notasTerapeuta
     }
 
     class AsignacionRutina {
-        fechaAsignacion
         fechaInicio
         fechaFin
-        frecuenciaSemanal
+        frecuencia
         estado
     }
 }
@@ -158,46 +153,74 @@ package "Rutinas" {
 package "Seguimiento" {
 
     class SesionEjecucion {
-        fechaInicio
-        fechaFin
-        completada
-        porcentajeCumplimiento
+        estado
+        tasaCumplimiento
+        iniciadaEn
+        finalizadaEn
     }
 
     class Feedback {
-        fechaRegistro
         nivelDolor
         estadoEmocional
         audioUrl
-        duracionAudioSegundos
         transcripcion
+        resumenIA
+        fecha
     }
 
-    class AnalisisIA {
-        sentimientoDetectado
-        palabrasClave
-        alertas
-        resumenSugerido
-        confianza
-        fechaProcesamiento
+    class PuntoDolor {
+        parteCuerpo
+        lado
+        intensidad
+        nota
     }
 
-    class ReporteProgreso {
-        rangoFechas
-        sesionesCompletadas
-        sesionesProgramadas
-        adherenciaPorcentaje
-        evolucionDolor
+    class EscalaResultado {
+        tipo
+        etiqueta
+        valor
+        unidad
+        medidoEn
     }
 }
 
-package "Bienestar" {
+package "Comunicacion" {
 
-    class ModuloBienestar {
-        titulo
+    class Conversacion {
+        ultimoMensajeEn
+    }
+
+    class Mensaje {
+        contenido
+        leidoEn
+        fecha
+    }
+
+    class Notificacion {
         tipo
-        contenidoUrl
-        duracionMinutos
+        titulo
+        cuerpo
+        linkUrl
+        leida
+    }
+
+    class PreferenciaNotificacion {
+        emailHabilitado
+        recordatoriosRutina
+        recordatoriosCita
+        silencioInicio
+        silencioFin
+    }
+}
+
+package "Plataforma" {
+
+    class RegistroAuditoria {
+        accion
+        entidad
+        entidadId
+        ip
+        fecha
     }
 }
 
@@ -206,42 +229,47 @@ Usuario <|-- Paciente
 Usuario <|-- Terapeuta
 Usuario <|-- Administrador
 
+Usuario "1" -- "0..1" PreferenciaNotificacion : configura
+Usuario "1" -- "*" Notificacion : recibe
+
 Paciente "*" -- "1" Terapeuta : atendido por
 Paciente "1" -- "1" HistorialClinico : posee
 HistorialClinico "1" -- "*" Diagnostico : contiene
 HistorialClinico "1" -- "*" NotaClinica : registra
+Paciente "1" -- "*" DocumentoClinico : adjunta
 Diagnostico "*" -- "1" Terapeuta : registrado por
 NotaClinica "*" -- "1" Terapeuta : redactada por
 
 Paciente "1" -- "*" PlanTratamiento : tiene
 PlanTratamiento "*" -- "1" Terapeuta : elaborado por
 PlanTratamiento "1" -- "*" FaseTratamiento : compuesto por
-PlanTratamiento "1" -- "*" NotaClinica : documentado por
 PlanTratamiento "1" -- "*" AsignacionRutina : prescribe
 
 Terapeuta "1" -- "*" Rutina : crea
-Rutina "1" *-- "*" ParametrosEjercicio : compone
-ParametrosEjercicio "*" -- "1" Ejercicio : referencia
+PlantillaActividad "1" -- "*" Actividad : instancia
+Rutina "1" *-- "*" Actividad : compone
 
 AsignacionRutina "*" -- "1" Rutina : asigna
 AsignacionRutina "*" -- "1" Paciente : a paciente
 AsignacionRutina "*" -- "1" Terapeuta : asignada por
 
 AsignacionRutina "1" -- "*" SesionEjecucion : genera
-SesionEjecucion "1" -- "0..1" Feedback : produce
-Feedback "1" -- "0..1" AnalisisIA : analizada por
-
-Paciente "1" -- "*" SesionEjecucion : ejecuta
-Paciente "*" -- "*" ModuloBienestar : accede
+SesionEjecucion "*" -- "1" Paciente : ejecuta
+Paciente "1" -- "*" Feedback : registra
+Feedback "1" -- "*" PuntoDolor : localiza
+Paciente "1" -- "*" EscalaResultado : medido en
+EscalaResultado "*" -- "1" Terapeuta : evaluada por
 
 Cita "*" -- "1" Paciente : agendada para
 Cita "*" -- "1" Terapeuta : atendida por
 Cita "*" -- "0..1" Sala : ocupa
-Cita "1" -- "*" Recordatorio : notificada por
 Cita "*" -- "0..1" PlanTratamiento : asociada a
 Terapeuta "1" -- "*" HorarioDisponible : ofrece
-Sala "1" -- "*" HorarioDisponible : disponible en
+Paciente "1" -- "*" ListaEspera : se inscribe en
+ListaEspera "*" -- "1" Terapeuta : cola de
 
-Paciente "1" -- "*" ReporteProgreso : descrito por
+Conversacion "*" -- "1" Paciente : participa
+Conversacion "*" -- "1" Terapeuta : participa
+Conversacion "1" *-- "*" Mensaje : contiene
 
 @enduml
