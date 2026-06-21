@@ -79,3 +79,30 @@ Durante el desarrollo del proyecto se emplearon herramientas de Inteligencia Art
 \end{itemize}
 
 \noindent El análisis, las decisiones de diseño y el contenido técnico de este documento son autoría del equipo.
+
+\subsection{Inteligencia Artificial integrada en el producto}
+
+Además del apoyo durante el desarrollo, el propio sistema FisioManager incorpora componentes de Inteligencia Artificial para el procesamiento del feedback de voz del paciente. A diferencia de las herramientas anteriores, estas se ejecutan \textbf{de forma local}, sin depender de proveedores externos en la nube, lo que favorece la privacidad de los datos clínicos:
+
+\begin{itemize}
+  \item \textbf{Whisper} (modelo de transcripción de voz, ejecutado en Python dentro del propio sistema): convierte automáticamente a texto en español el audio que graba el paciente al registrar su feedback (RF-040).
+  \item \textbf{Ollama} (LLM local): genera el resumen clínico y el análisis de sentimiento del feedback transcrito, facilitando su lectura por parte del terapeuta (RF-041, RF-044).
+\end{itemize}
+
+\noindent Ambos resultados (transcripción y resumen) se almacenan asociados al feedback del paciente. La capa de IA del sistema procesa el audio de forma asíncrona, de modo que el paciente no espera la respuesta del modelo.
+
+\subsection{Ejemplos de prompts}
+
+A modo de evidencia del tipo de interacción que se tuvo con las herramientas de IA durante el desarrollo, se incluyen algunos ejemplos representativos de los prompts empleados:
+
+\begin{infobox}[title=Resolución de errores (bugs)]
+\textit{``Este endpoint REST devuelve un error 500 al subir el audio del feedback del paciente. Te comparto el controlador y el log. Ayúdame a identificar qué está fallando en el manejo del archivo.''}
+\end{infobox}
+
+\begin{infobox}[title=Dockerización del proyecto]
+\textit{``Tengo una aplicación web con frontend, un BFF y una base de datos. Quiero dockerizarla para estandarizar el entorno de desarrollo del equipo. Genérame un Dockerfile para cada servicio y un docker-compose.yml que los maneje, incluyendo la base de datos con volumen persistente.''}
+\end{infobox}
+
+\begin{infobox}[title=Dockerización del proyecto]
+\textit{``Explícame cómo configurar variables de entorno y redes en docker-compose para que el frontend se comunique con el BFF y este con la base de datos, sin exponer puertos innecesarios al host.''}
+\end{infobox}
